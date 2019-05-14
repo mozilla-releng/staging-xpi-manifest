@@ -7,6 +7,7 @@ tasks:
     taskgraph:
       branch: taskgraph-try
       revision: 9d80671b43bc7f4d2ed5302fe6894e681a8b6acd
+      latest: false
     trustDomain: garbage
     # Github events have this stuff in different places...
     repo_url: {$if: 'tasks_for == "github-push"',
