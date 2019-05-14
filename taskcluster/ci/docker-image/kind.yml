@@ -17,4 +17,4 @@ jobs:
     node-latest:
         definition: node
         args:
-            PYTHON_VERSION: "latest"
+            NODE_VERSION: "latest"
