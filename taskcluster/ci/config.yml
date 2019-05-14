@@ -1,0 +1,18 @@
+---
+trust-domain: garbage
+scheduler-id: taskcluster-github
+
+task-priority: lowest
+
+workers:
+    aliases:
+        images:
+            provisioner: aws-provisioner-v1
+            implementation: docker-worker
+            os: linux
+            worker-type: 'github-worker'
+        github-worker:
+            provisioner: aws-provisioner-v1
+            implementation: docker-worker
+            os: linux
+            worker-type: 'github-worker'

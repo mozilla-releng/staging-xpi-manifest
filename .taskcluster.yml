@@ -1,0 +1,94 @@
+---
+version: 1
+policy:
+  pullRequests: public
+tasks:
+- $let:
+    taskgraph:
+      branch: taskgraph-try
+      revision: 9d80671b43bc7f4d2ed5302fe6894e681a8b6acd
+    trustDomain: garbage
+    # Github events have this stuff in different places...
+    repo_url: {$if: 'tasks_for == "github-push"',
+               then: '${event.repository.clone_url}',
+               # Assume Pull Request
+               else: '${event.pull_request.head.repo.clone_url}'}
+    head_sha: {$if: 'tasks_for == "github-push"',
+               then: '${event.after}',
+               # Assume Pull Request
+               else: '${event.pull_request.head.sha}'}
+    owner_email: {$if: 'tasks_for == "github-push"',
+                  then: '${event.pusher.email}',
+                  # Assume Pull Request
+                  else: '${event.pull_request.user.login}@users.noreply.github.com'}
+  in:
+    $if: 'tasks_for in ["github-pull-request"]'
+    then:
+      $let: {}
+      in:
+        taskId: '${as_slugid("decision")}'
+        taskGroupId: '${as_slugid("decision")}'
+        schedulerId: 'taskcluster-github'
+        created: {$fromNow: ''}
+        deadline: {$fromNow: '1 day'}
+        expires: {$fromNow: '1 year 1 second'}  # 1 second so artifacts expire first, despite rounding errors
+        provisionerId: "aws-provisioner-v1"
+        workerType: "github-worker"
+        scopes:
+          - assume:repo:github.com/${event.pull_request.base.repo.full_name}:pull-request
+        metadata:
+          name: XPI Test Manifest Pull Request
+          description: Pull Request
+          owner: '${owner_email}'
+          source: "${repo_url}"
+
+        payload:
+          maxRunTime: 3600
+          env:
+            # run-task uses these to check out the source; the inputs
+            # to `mach taskgraph decision` are all on the command line.
+            $merge:
+              - VCS_BASE_REPOSITORY: '${event.pull_request.base.repo.clone_url}'
+                VCS_HEAD_REPOSITORY: '${event.pull_request.head.repo.clone_url}'
+                VCS_HEAD_REF: '${event.pull_request.head.ref}'
+                VCS_HEAD_REV: '${event.pull_request.head.sha}'
+                VCS_REPOSITORY_TYPE: git
+          features:
+            taskclusterProxy: true
+          # Note: This task is built server side without the context or tooling that
+          # exist in tree so we must hard code the hash
+          image:
+            type: indexed-image
+            namespace:
+              $if: 'taskgraph["latest"]'
+              then: taskgraph.v2.${taskgraph.branch}.latest.taskgraph.decision-image
+              else: taskgraph.v2.${taskgraph.branch}.revision.${taskgraph.revision}.taskgraph.decision-image
+            path: public/image.tar.zst
+          command:
+            - /usr/local/bin/run-task
+            - '--vcs-checkout=/builds/worker/checkouts/src'
+            - '--'
+            - bash
+            - -cx
+            - >-
+                cd /builds/worker/checkouts/src &&
+                ln -s /builds/worker/artifacts artifacts &&
+                taskgraph decision
+                --project='${event.pull_request.head.repo.name}'
+                --owner='${owner_email}'
+                --level='1'
+                --tasks-for='${tasks_for}'
+                --pushdate='0'
+                --pushlog-id='0'
+                --message ''
+                --base-repository="$VCS_BASE_REPOSITORY"
+                --head-repository="$VCS_HEAD_REPOSITORY"
+                --head-ref="$VCS_HEAD_REF"
+                --head-rev="$VCS_HEAD_REV"
+                --repository-type="$VCS_REPOSITORY_TYPE"
+
+          artifacts:
+            'public':
+              type: 'directory'
+              path: '/builds/worker/artifacts'
+              expires: {$fromNow: '1 year'}
