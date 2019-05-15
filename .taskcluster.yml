@@ -6,7 +6,7 @@ tasks:
 - $let:
     taskgraph:
       branch: taskgraph-try
-      revision: 9d80671b43bc7f4d2ed5302fe6894e681a8b6acd
+      revision: 65cb0e6095dd1546f8df3665af45da99316b37df
       latest: false
     trustDomain: garbage
     # Github events have this stuff in different places...
