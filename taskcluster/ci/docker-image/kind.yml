@@ -18,3 +18,4 @@ jobs:
         definition: node
         args:
             NODE_VERSION: "latest"
+        symbol: node

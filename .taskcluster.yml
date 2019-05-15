@@ -94,3 +94,6 @@ tasks:
               type: 'directory'
               path: '/builds/worker/artifacts'
               expires: {$fromNow: '1 year'}
+        extra:
+          treeherder:
+            symbol: D-PR
