@@ -1,6 +1,6 @@
 ---
 trust-domain: garbage
-scheduler-id: taskcluster-github
+scheduler-id: garbage-level-1
 
 treeherder:
     group-names:
