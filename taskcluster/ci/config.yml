@@ -2,6 +2,10 @@
 trust-domain: garbage
 scheduler-id: taskcluster-github
 
+treeherder:
+    group-names:
+        'I': 'Docker Image Builds'
+
 task-priority: lowest
 
 workers:

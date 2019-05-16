@@ -6,7 +6,7 @@ tasks:
 - $let:
     taskgraph:
       branch: taskgraph-try
-      revision: 9d80671b43bc7f4d2ed5302fe6894e681a8b6acd
+      revision: f37967cae6497e9857f6e3485d835e443815f9f0
       latest: false
     trustDomain: garbage
     # Github events have this stuff in different places...
@@ -56,6 +56,7 @@ tasks:
                 VCS_REPOSITORY_TYPE: git
           features:
             taskclusterProxy: true
+            chainOfTrust: true
           # Note: This task is built server side without the context or tooling that
           # exist in tree so we must hard code the hash
           image:
@@ -93,3 +94,6 @@ tasks:
               type: 'directory'
               path: '/builds/worker/artifacts'
               expires: {$fromNow: '1 year'}
+        extra:
+          treeherder:
+            symbol: D-PR
