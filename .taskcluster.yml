@@ -6,9 +6,9 @@ policy:
 tasks:
     - $let:
           taskgraph:
-              branch: taskgraph
-              revision: 0c5a68749f9a7672a7e56604b69a7bd41b036614
-          trustDomain: mobile
+              branch: taskgraph-try
+              revision: 70fc131af8e4892c51a8ff1a077d0cbfa24f5d49
+          trustDomain: xpi
       in:
           $if: 'tasks_for in ["github-pull-request", "github-push", "action", "cron"]'
           then:
@@ -78,7 +78,7 @@ tasks:
               in:
                   $let:
                       level:
-                          $if: 'tasks_for in ["github-push"] && repoUrl == "https://github.com/mozilla-mobile/reference-browser"'
+                          $if: 'tasks_for in ["github-push"] && repoUrl == "https://github.com/escapewindow/xpitest-manifest"'
                           then: '3'
                           else:
                               $if: 'tasks_for in ["cron", "action"]'
@@ -113,7 +113,7 @@ tasks:
                                         name: "Decision Task for cron job ${cron.job_name}"
                                         description: 'Created by a [cron task](https://tools.taskcluster.net/tasks/${cron.task_id})'
                       provisionerId: "aws-provisioner-v1"
-                      workerType: "mobile-${level}-decision"
+                      workerType: "xpi-${level}-decision"
                       tags:
                           $if: 'tasks_for in ["github-push", "github-pull-request"]'
                           then:
@@ -168,21 +168,21 @@ tasks:
                               # run-task uses these to check out the source; the inputs
                               # to `mach taskgraph decision` are all on the command line.
                               $merge:
-                                  - MOBILE_BASE_REPOSITORY: '${baseRepoUrl}'
-                                    MOBILE_HEAD_REPOSITORY: '${repoUrl}'
-                                    MOBILE_HEAD_REF: '${head_branch}'
-                                    MOBILE_HEAD_REV: '${head_sha}'
-                                    MOBILE_REPOSITORY_TYPE: git
+                                  - XPI_BASE_REPOSITORY: '${baseRepoUrl}'
+                                    XPI_HEAD_REPOSITORY: '${repoUrl}'
+                                    XPI_HEAD_REF: '${head_branch}'
+                                    XPI_HEAD_REV: '${head_sha}'
+                                    XPI_REPOSITORY_TYPE: git
                                     TASKGRAPH_BASE_REPOSITORY: https://hg.mozilla.org/ci/taskgraph
                                     TASKGRAPH_HEAD_REPOSITORY: https://hg.mozilla.org/ci/${taskgraph.branch}
                                     TASKGRAPH_HEAD_REV: ${taskgraph.revision}
                                     TASKGRAPH_REPOSITORY_TYPE: hg
-                                    REPOSITORIES: {$json: {mobile: "Reference Browser", taskgraph: "Taskgraph"}}
+                                    REPOSITORIES: {$json: {xpi: "XPI Manifest", taskgraph: "Taskgraph"}}
                                     HG_STORE_PATH: /builds/worker/checkouts/hg-store
                                     ANDROID_SDK_ROOT: /builds/worker/android-sdk
                                   - $if: 'tasks_for in ["github-pull-request"]'
                                     then:
-                                        MOBILE_PULL_REQUEST_NUMBER: '${event.pull_request.number}'
+                                        XPI_PULL_REQUEST_NUMBER: '${event.pull_request.number}'
                                   - $if: 'tasks_for == "action"'
                                     then:
                                         ACTION_TASK_GROUP_ID: '${action.taskGroupId}'  # taskGroupId of the target task
@@ -195,13 +195,13 @@ tasks:
                           # Note: This task is built server side without the context or tooling that
                           # exist in tree so we must hard code the hash
                           image:
-                              mozillareleases/taskgraph:decision-mobile-6020473b1a928d8df50e234a7ca2e81ade2220a4fb5fbe16b02477dd64a49728@sha256:98d226736b7d03907114bf37938002b90e8a37cbe3a297690e349f1ddddb1d7c
+                              mozillareleases/taskgraph:decision-bd477b55732fc5f5d55a78e6162355af8bc81805b415a9ea8dbe42c020f840db
 
                           maxRunTime: 1800
 
                           command:
                               - /usr/local/bin/run-task
-                              - '--mobile-checkout=/builds/worker/checkouts/src'
+                              - '--xpi-checkout=/builds/worker/checkouts/src'
                               - '--taskgraph-checkout=/builds/worker/checkouts/taskgraph'
                               - '--task-cwd=/builds/worker/checkouts/src'
                               - '--'
@@ -226,11 +226,11 @@ tasks:
                                         --message=""
                                         --owner='${ownerEmail}'
                                         --level='${level}'
-                                        --base-repository="$MOBILE_BASE_REPOSITORY"
-                                        --head-repository="$MOBILE_HEAD_REPOSITORY"
-                                        --head-ref="$MOBILE_HEAD_REF"
-                                        --head-rev="$MOBILE_HEAD_REV"
-                                        --repository-type="$MOBILE_REPOSITORY_TYPE"
+                                        --base-repository="$XPI_BASE_REPOSITORY"
+                                        --head-repository="$XPI_HEAD_REPOSITORY"
+                                        --head-ref="$XPI_HEAD_REF"
+                                        --head-rev="$XPI_HEAD_REV"
+                                        --repository-type="$XPI_REPOSITORY_TYPE"
                                         --tasks-for='${tasks_for}'
                                         ${extraArgs}
 
