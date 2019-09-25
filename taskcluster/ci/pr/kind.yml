@@ -2,14 +2,19 @@
 # License, v. 2.0. If a copy of the MPL was not distributed with this
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 ---
-
 loader: taskgraph.loader.transform:loader
 
+kind-dependencies:
+    - lint
+    - build
+    - test
+
 transforms:
-    - taskgraph.transforms.docker_image:transforms
-    - taskgraph.transforms.cached_tasks:transforms
+    - taskgraph.transforms.code_review:transforms
     - taskgraph.transforms.task:transforms
 
 jobs:
-    base:
-        symbol: I(base)
+    complete:
+        description: PR Summary Task
+        run-on-tasks-for: [github-pull-request]
+        worker-type: succeed

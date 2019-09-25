@@ -1,0 +1,44 @@
+# This Source Code Form is subject to the terms of the Mozilla Public
+# License, v. 2.0. If a copy of the MPL was not distributed with this
+# file, You can obtain one at http://mozilla.org/MPL/2.0/.
+---
+loader: taskgraph.loader.transform:loader
+
+transforms:
+    - xpi_taskgraph.variant:transforms
+    - xpi_taskgraph.build:transforms
+    - taskgraph.transforms.job:transforms
+    - taskgraph.transforms.task:transforms
+
+job-defaults:
+    description: Build XPI from source code.
+    treeherder:
+        kind: build
+        symbol: B
+        tier: 2
+    worker-type: b-linux
+    worker:
+        docker-image: {in-tree: base}
+        max-run-time: 7200
+        chain-of-trust: true
+    run:
+        using: yarn
+        use-caches: false
+    xpi-artifact-template:
+        type: file
+        name: public/target.xpi
+        path: '/builds/worker/checkouts/src/app/build/outputs/xpi/{fileName}'
+
+jobs:
+    release:
+        attributes:
+            release: true
+        run-on-tasks-for: []
+        run:
+            yarn: ["build"]
+    debug:
+        attributes:
+            code-review: true
+        run-on-tasks-for: [github-push, github-pull-request]
+        run:
+            yarn: ["build"]

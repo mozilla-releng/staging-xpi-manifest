@@ -1,22 +1,43 @@
 ---
-trust-domain: garbage
-scheduler-id: taskcluster-github
-
+trust-domain: xpi
 treeherder:
     group-names:
         'I': 'Docker Image Builds'
 
 task-priority: lowest
 
+taskgraph:
+    register: xpi_taskgraph:register
+    repositories:
+        xpi:
+            name: "XPI manifest"
+    cached-task-prefix: project.xpi.xpi-manifest
+
 workers:
     aliases:
+        b-linux:
+            provisioner: aws-provisioner-v1
+            implementation: docker-worker
+            os: linux
+            worker-type: 'xpi-{level}-b-linux'
         images:
             provisioner: aws-provisioner-v1
             implementation: docker-worker
             os: linux
-            worker-type: 'github-worker'
-        github-worker:
-            provisioner: aws-provisioner-v1
-            implementation: docker-worker
-            os: linux
-            worker-type: 'github-worker'
+            worker-type: 'xpi-{level}-images'
+        dep-signing:
+            provisioner: scriptworker-prov-v1
+            implementation: scriptworker-signing
+            os: scriptworker
+            worker-type: xpi-signing-dep-v1
+        signing:
+            provisioner: scriptworker-prov-v1
+            implementation: scriptworker-signing
+            os: scriptworker
+            worker-type:
+                by-level:
+                    "3": xpi-signing-v1
+                    default: xpi-signing-dep-v1
+
+scriptworker:
+    scope-prefix: project:xpi:releng
