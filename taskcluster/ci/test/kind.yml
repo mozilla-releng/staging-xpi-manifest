@@ -1,0 +1,33 @@
+# This Source Code Form is subject to the terms of the Mozilla Public
+# License, v. 2.0. If a copy of the MPL was not distributed with this
+# file, You can obtain one at http://mozilla.org/MPL/2.0/.
+---
+loader: taskgraph.loader.transform:loader
+
+transforms:
+    - xpi_taskgraph.variant:transforms
+    - taskgraph.transforms.job:transforms
+    - taskgraph.transforms.task:transforms
+
+job-defaults:
+    description: Test Reference Browser
+    treeherder:
+        kind: test
+        symbol: T
+        tier: 2
+    worker-type: b-linux
+    worker:
+        docker-image: {in-tree: base}
+        max-run-time: 7200
+        chain-of-trust: true
+    run:
+        using: yarn
+        use-caches: false
+
+jobs:
+    debug:
+        attributes:
+            code-review: true
+        run-on-tasks-for: [github-push, github-pull-request]
+        run:
+            yarn: ['clean', 'testDebugUnitTest']
