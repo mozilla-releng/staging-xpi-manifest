@@ -35,10 +35,10 @@ jobs:
             release: true
         run-on-tasks-for: []
         run:
-            yarn: ["build"]
+            yarn: ["npm-install", "build"]
     debug:
         attributes:
             code-review: true
         run-on-tasks-for: [github-push, github-pull-request]
         run:
-            yarn: ["build"]
+            yarn: ["npm-install", "build"]
