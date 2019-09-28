@@ -11,14 +11,19 @@ xpis:
             # TODO standardize name
             # softlink pointing at @qa-shield-study-helper-1.0.0.zpi
             - linked-addon.xpi
+        # TODO naming? standard/system-addon enum, switch signing key
+        # based on value
+        xpi-type: standard
     multipreffer:
         repo: https://github.com/mozilla/multipreffer
         active: true
         artifacts:
             # TODO standardize name
             - dist/multipreffer-2.0.zip
+        xpi-type: standard
     fingerprinting-and-cryptomining-protections-retention-study:
         repo: https://github.com/mozilla/fingerprinting-cryptomining-retention-study
         active: true
         artifacts:
             - dist/fingerprinting_and_cryptomining_protections_retention_study-1.1.zip
+        xpi-type: standard
