@@ -41,3 +41,9 @@ workers:
 
 scriptworker:
     scope-prefix: project:xpi:releng
+
+github_clone_secret:
+    name: project/xpi/github_clone_ssh_key
+    key: ssh_key
+    path: ssh_key
+    json: true
