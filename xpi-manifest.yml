@@ -1,29 +1,29 @@
 ---
 xpis:
-    # TODO: create a manifest during the build.
-    # repository, revision, name, version/metadata from package.json,
-    # artifact shas + filesize?
-    shield-study-helper-addon:
-        repo: https://github.com/mozilla/shield-studies-addon-utils
-        directory: misc/shield-study-helper-addon
-        active: true
-        artifacts:
-            # TODO standardize name
-            # softlink pointing at @qa-shield-study-helper-1.0.0.zpi
-            - linked-addon.xpi
-        # TODO naming? standard/system-addon enum, switch signing key
-        # based on value
-        xpi-type: standard
-    multipreffer:
-        repo: https://github.com/mozilla/multipreffer
-        active: true
-        artifacts:
-            # TODO standardize name
-            - dist/multipreffer-2.0.zip
-        xpi-type: standard
-    fingerprinting-and-cryptomining-protections-retention-study:
-        repo: https://github.com/mozilla/fingerprinting-cryptomining-retention-study
-        active: true
-        artifacts:
-            - dist/fingerprinting_and_cryptomining_protections_retention_study-1.1.zip
-        xpi-type: standard
+  # TODO: create a manifest during the build.
+  # repository, revision, name, version/metadata from package.json,
+  # artifact shas + filesize?
+  - name: shield-study-helper-addon
+    repo: https://github.com/mozilla/shield-studies-addon-utils
+    directory: misc/shield-study-helper-addon
+    active: true
+    # private-repo: defaults to false
+    artifacts:
+      # TODO standardize name
+      # softlink pointing at @qa-shield-study-helper-1.0.0.zpi
+      - linked-addon.xpi
+    # TODO naming? switch signing key based on value
+    addon-type: standard
+  - name: multipreffer
+    repo: https://github.com/mozilla/multipreffer
+    active: true
+    artifacts:
+      # TODO standardize name
+      - dist/multipreffer-2.0.zip
+    addon-type: standard
+  - name: fingerprinting-and-cryptomining-protections-retention-study
+    repo: https://github.com/mozilla/fingerprinting-cryptomining-retention-study
+    active: true
+    artifacts:
+      - dist/fingerprinting_and_cryptomining_protections_retention_study-1.1.zip
+    addon-type: standard

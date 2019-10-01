@@ -24,21 +24,11 @@ job-defaults:
     run:
         using: yarn
         use-caches: false
-    xpi-artifact-template:
-        type: file
-        name: public/target.xpi
-        path: '/builds/worker/checkouts/src/app/build/outputs/xpi/{fileName}'
 
 jobs:
     release:
         attributes:
             release: true
-        run-on-tasks-for: []
-        run:
-            yarn: ["npm-install", "build"]
-    debug:
-        attributes:
-            code-review: true
-        run-on-tasks-for: [github-push, github-pull-request]
+        run-on-tasks-for: [github-push]
         run:
             yarn: ["npm-install", "build"]
