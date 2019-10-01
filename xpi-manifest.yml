@@ -10,7 +10,7 @@ xpis:
     # private-repo: defaults to false
     artifacts:
       # TODO standardize name
-      # softlink pointing at @qa-shield-study-helper-1.0.0.zpi
+      # softlink pointing at @qa-shield-study-helper-1.0.0.xpi
       - linked-addon.xpi
     # TODO naming? switch signing key based on value
     addon-type: standard
