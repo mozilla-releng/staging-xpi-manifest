@@ -1,6 +1,8 @@
 #!/usr/bin/env python
 from __future__ import print_function
 
+import functools
+import hashlib
 import json
 import os
 from pathlib import Path
@@ -48,6 +50,14 @@ def get_package_info():
 def cd(path):
     print("Changing directory to {} ...".format(path))
     os.chdir(path)
+
+
+def get_hash(path, hash_alg="sha256"):
+    h = hashlib.new(hash_alg)
+    with open(path, "rb") as fh:
+        for chunk in iter(functools.partial(fh.read, 4096), b''):
+            h.update(chunk)
+    return h.hexdigest()
 
 
 def main():
@@ -99,8 +109,9 @@ def main():
         "addon-type": xpi_type,
         "repo": xpi_source_repo,
         "revision": revision,
+        "directory": os.path.relpath(source_dir, os.getcwd()),
         "version": package_info["version"],
-        "artifacts": {},
+        "artifacts": [],
     }
 
     if os.environ.get("XPI_INSTALL_TYPE", "yarn") == "yarn":
@@ -116,12 +127,16 @@ def main():
             raise Exception("Missing artifact {}".format(artifact))
         test_is_subdir(os.getcwd(), artifact)
         print("Copying {} to {}".format(artifact, target_path))
-        # filesize
-        # hash
+        artifact_info = {
+            "path": os.path.relpath(artifact_dir, target_path),
+            "filesize_bytes": int(os.path.getsize(target_path)),
+            "sha256": get_hash(target_path),
+        }
+        build_manifest.append(artifact_info)
         shutil.copyfile(artifact, target_path)
 
-    # TODO create manifest
-    # TODO copy artifacts
+    with open(os.path.join(artifact_prefix_dir, "manifest.json")) as fh:
+        fh.write(json.dumps(build_manifest, indent=2, sort_keys=True))
 
 
 __name__ == '__main__' and main()
