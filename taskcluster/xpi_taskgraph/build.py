@@ -28,18 +28,29 @@ def tasks_from_manifest(config, jobs):
             task.setdefault("env", {})
             task["env"]["XPI_SOURCE_REPO"] = xpi_config["repo"]
             task["label"] = "build-{}".format(xpi_config["name"])
+            task["env"]["XPI_NAME"] = xpi_config["repo"]
+            task["env"]["XPI_TYPE"] = xpi_config["addon-type"]
             if xpi_config.get("directory"):
                 task["env"]["XPI_SOURCE_DIR"] = xpi_config["directory"]
             if xpi_config.get("private-repo"):
                 task["secrets"] = [config["github_clone_secret"]]
+                task["env"]["XPI_SOURCE_SECRET_NAME"] = config["github_clone_secret"]
+                # TODO xpi/* getArtifact scopes
+                artifact_prefix = "xpi/build"
+            else:
+                artifact_prefix = "public/build"
+            task["env"]["ARTIFACT_PREFIX"] = artifact_prefix
+            if xpi_config.get("install-type"):
+                task["env"]["XPI_INSTALL_TYPE"] = xpi_config["install-type"]
             task.setdefault("attributes", {})["addon-type"] = xpi_config["addon-type"]
             artifacts = task.setdefault("worker", {}).setdefault("artifacts", [])
             for artifact in xpi_config["artifacts"]:
                 artifact_name = os.path.basename(artifact),
                 artifacts.append({
                     "type": "file",
-                    "name": "public/build/{}".format(artifact_name),
+                    "name": "{}/{}".format(artifact_prefix, artifact_name),
                     "path": artifact,
                 })
+            task["env"]["XPI_ARTIFACTS"] = ";".join(xpi_config["artifacts"])
 
             yield task

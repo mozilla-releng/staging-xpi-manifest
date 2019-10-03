@@ -38,6 +38,7 @@ base_schema = Schema({
         Optional('active'): bool,
         Required('artifacts'): [basestring],
         Required('addon-type'): Any('system', 'standard'),
+        Optional('install-type'): Any('npm', 'yarn'),
     }],
 })
 

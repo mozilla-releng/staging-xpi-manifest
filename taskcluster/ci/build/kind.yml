@@ -18,11 +18,10 @@ job-defaults:
         tier: 2
     worker-type: b-linux
     worker:
-        docker-image: {in-tree: base}
+        docker-image: {in-tree: node}
         max-run-time: 7200
         chain-of-trust: true
     run:
-        using: yarn
         use-caches: false
 
 jobs:
