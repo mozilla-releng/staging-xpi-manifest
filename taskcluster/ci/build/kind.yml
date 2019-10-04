@@ -30,4 +30,8 @@ jobs:
             release: true
         run-on-tasks-for: [github-push]
         run:
-            yarn: ["npm-install", "build"]
+            using: run-task
+            cwd: '{checkout}'
+            cache-dotcache: false
+            command: >-
+                python3 /usr/local/bin/build.py
