@@ -17,6 +17,7 @@ xpis:
     # TODO naming? switch signing key based on value
     addon-type: standard
     install-type: npm
+    treeherder-symbol: helper
   - name: multipreffer
     repo: https://github.com/mozilla/multipreffer
     active: true
@@ -32,3 +33,4 @@ xpis:
       - dist/fingerprinting_and_cryptomining_protections_retention_study-1.1.zip
     addon-type: standard
     install-type: npm
+    treeherder-symbol: fingerprint

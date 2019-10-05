@@ -28,7 +28,10 @@ def tasks_from_manifest(config, jobs):
             task.setdefault("worker", {}).setdefault("env", {})
             task["worker"]["env"]["XPI_SOURCE_REPO"] = xpi_config["repo"]
             task["label"] = "build-{}".format(xpi_config["name"])
-            task["worker"]["env"]["XPI_NAME"] = xpi_config["repo"]
+            task["treeherder"]["symbol"] = "B({})".format(
+                xpi_config.get("treeherder-symbol", xpi_config["name"])
+            )
+            task["worker"]["env"]["XPI_NAME"] = xpi_config["name"]
             task["worker"]["env"]["XPI_TYPE"] = xpi_config["addon-type"]
             if xpi_config.get("directory"):
                 task["worker"]["env"]["XPI_SOURCE_DIR"] = xpi_config["directory"]

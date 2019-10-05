@@ -14,22 +14,32 @@ transforms:
 
 job-template:
     description: Sign XPI
-    index:
-        type: signing
-    treeherder:
-        kind: build
-        symbol: S
-        tier: 2
-    worker-type:
-        by-variant:
-            release: signing
-            default: dep-signing
     worker:
         max-run-time: 3600
-        signing-type:
+
+jobs:
+    development-signing:
+        index:
+            type: dep-signing
+        treeherder:
+            groupSymbol: Ds
+        worker-type: dep-signing
+        worker:
+            signing-type: dep-signing
+    release-signing:
+        index:
+            type: release-signing
+        treeherder:
+            groupSymbol: Rs
+        worker-type:
             by-variant:
-                release:
-                    by-level:
-                        '3': release-signing
-                        default: dep-signing
+                release: signing
                 default: dep-signing
+        worker:
+            signing-type:
+                by-variant:
+                    release:
+                        by-level:
+                            '3': release-signing
+                            default: dep-signing
+                    default: dep-signing
