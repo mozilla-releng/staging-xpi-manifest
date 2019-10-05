@@ -9,7 +9,7 @@ kind.
 from __future__ import absolute_import, print_function, unicode_literals
 
 from taskgraph.transforms.base import TransformSequence
-from taskgraph.util.treeherder import inherit_treeherder_from_dep
+from taskgraph.util.treeherder import inherit_treeherder_from_dep, replace_group
 from taskgraph.util.schema import resolve_keyed_by
 
 
@@ -36,7 +36,11 @@ def define_signing_flags(config, tasks):
             )
         group_symbol = task["treeherder"]["groupSymbol"]
         task["treeherder"] = inherit_treeherder_from_dep(task, dep)
-        task["treeherder"][group_symbol] = group_symbol
+        task["treeherder"]["symbol"] = replace_group(
+            dep.task["extra"]["treeherder"]["symbol"], group_symbol
+        )
+        if "groupSymbol" in task["treeherder"]:
+            del task["treeherder"]["groupSymbol"]
         yield task
 
 
