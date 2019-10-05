@@ -32,10 +32,11 @@ def define_signing_flags(config, tasks):
                 task,
                 key,
                 item_name=task["name"],
-                variant=task["attributes"]["build-type"],
                 level=config.params["level"],
             )
+        group_symbol = task["treeherder"]["groupSymbol"]
         task["treeherder"] = inherit_treeherder_from_dep(task, dep)
+        task["treeherder"][group_symbol] = group_symbol
         yield task
 
 

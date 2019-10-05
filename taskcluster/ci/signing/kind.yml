@@ -12,13 +12,9 @@ transforms:
     - xpi_taskgraph.signing:transforms
     - taskgraph.transforms.task:transforms
 
-job-template:
-    description: Sign XPI
-    worker:
-        max-run-time: 3600
-
 jobs:
     development-signing:
+        description: Development-sign XPI
         index:
             type: dep-signing
         treeherder:
@@ -26,20 +22,20 @@ jobs:
         worker-type: dep-signing
         worker:
             signing-type: dep-signing
+            max-run-time: 3600
     release-signing:
+        description: Release-sign XPI
         index:
             type: release-signing
         treeherder:
             groupSymbol: Rs
         worker-type:
-            by-variant:
-                release: signing
+            by-level:
+                '3': signing
                 default: dep-signing
         worker:
             signing-type:
-                by-variant:
-                    release:
-                        by-level:
-                            '3': release-signing
-                            default: dep-signing
+                by-level:
+                    '3': release-signing
                     default: dep-signing
+            max-run-time: 3600

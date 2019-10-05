@@ -38,9 +38,10 @@ def loader(kind, path, config, params, loaded_tasks):
                 # make sure any attribute exists
                 continue
 
-        job = {"primary-dependency": task}
+        for job in config.get("jobs", [{}]):
+            job["primary-dependency"] = task
 
-        if job_template:
-            job.update(copy.deepcopy(job_template))
+            if job_template:
+                job.update(copy.deepcopy(job_template))
 
-        yield job
+            yield job
