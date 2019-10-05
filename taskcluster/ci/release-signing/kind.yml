@@ -12,7 +12,7 @@ transforms:
     - xpi_taskgraph.signing:transforms
     - taskgraph.transforms.task:transforms
 
-jobs:
+job-template:
     description: Release-sign XPI
     index:
         type: release-signing

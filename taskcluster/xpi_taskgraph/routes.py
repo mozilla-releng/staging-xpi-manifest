@@ -9,14 +9,13 @@ import time
 from taskgraph.transforms.task import index_builder
 
 SIGNING_ROUTE_TEMPLATES = [
-    "index.project.{trust-domain}.{project}.v3.{variant}.{build_date}.revision.{head_rev}",
-    "index.project.{trust-domain}.{project}.v3.{variant}.{build_date}.latest",
-    "index.project.{trust-domain}.{project}.v3.{variant}.latest",
+    "index.project.{trust-domain}.{project}.v3.{name}.{variant}.{build_date}.revision.{head_rev}",
+    "index.project.{trust-domain}.{project}.v3.{name}.{variant}.{build_date}.latest",
+    "index.project.{trust-domain}.{project}.v3.{name}.{variant}.latest",
 ]
 
 
-@index_builder("signing")
-def add_signing_indexes(config, task):
+def add_signing_indexes(config, task, variant):
     routes = task.setdefault("routes", [])
 
     if config.params["level"] != "3":
@@ -27,8 +26,19 @@ def add_signing_indexes(config, task):
         "%Y.%m.%d", time.gmtime(config.params["build_date"])
     )
     subs["trust-domain"] = config.graph_config["trust-domain"]
-    subs["variant"] = task["attributes"]["build-type"]
+    subs["variant"] = variant
+    subs["name"] = task.get("payload", {}).get("env", {}).get("XPI_NAME", "unknown")
 
     for tpl in SIGNING_ROUTE_TEMPLATES:
         routes.append(tpl.format(**subs))
     return task
+
+
+@index_builder("dep-signing")
+def add_dep_signing_indexes(config, task):
+    return add_signing_indexes(config, task, "dep-signing")
+
+
+@index_builder("release-signing")
+def add_release_signing_indexes(config, task):
+    return add_signing_indexes(config, task, "release-signing")
