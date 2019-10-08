@@ -14,6 +14,7 @@ job-defaults:
         kind: test
         symbol: T
         tier: 2
+        platform: linux64/opt
     worker-type: b-linux
     worker:
         docker-image: {in-tree: base}

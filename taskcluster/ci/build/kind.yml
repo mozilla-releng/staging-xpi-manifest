@@ -15,6 +15,7 @@ job-defaults:
         kind: build
         symbol: B
         tier: 2
+        platform: linux64/opt
     worker-type: b-linux
     worker:
         docker-image: {in-tree: node-latest}
