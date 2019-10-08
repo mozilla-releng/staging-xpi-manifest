@@ -25,19 +25,24 @@ def tasks_from_manifest(config, jobs):
             if not xpi_config.get("active"):
                 continue
             task = deepcopy(job)
-            task.setdefault("worker", {}).setdefault("env", {})
-            task["worker"]["env"]["XPI_SOURCE_REPO"] = xpi_config["repo"]
+            env = task.setdefault("worker", {}).setdefault("env", {})
+            env["XPI_REPOSITORY_TYPE"] = "git"
+            env["XPI_BASE_REPOSITORY"] = xpi_config["repo"]
+            env["XPI_HEAD_REPOSITORY"] = xpi_config["repo"]
+            # TODO
+            env["XPI_HEAD_REV"] = "master"
+            env["XPI_HEAD_REF"] = "master"
             task["label"] = "build-{}".format(xpi_config["name"])
             task["treeherder"]["symbol"] = "B({})".format(
                 xpi_config.get("treeherder-symbol", xpi_config["name"])
             )
-            task["worker"]["env"]["XPI_NAME"] = xpi_config["name"]
-            task["worker"]["env"]["XPI_TYPE"] = xpi_config["addon-type"]
+            env["XPI_NAME"] = xpi_config["name"]
+            env["XPI_TYPE"] = xpi_config["addon-type"]
             if xpi_config.get("directory"):
                 task["worker"]["env"]["XPI_SOURCE_DIR"] = xpi_config["directory"]
             if xpi_config.get("private-repo"):
                 task["secrets"] = [config["github_clone_secret"]]
-                task["worker"]["env"]["XPI_SOURCE_SECRET_NAME"] = config["github_clone_secret"]
+                task["worker"]["env"]["XPI_SSH_SECRET_NAME"] = config["github_clone_secret"]
                 # TODO xpi/* getArtifact scopes
                 artifact_prefix = "xpi/build"
             else:
