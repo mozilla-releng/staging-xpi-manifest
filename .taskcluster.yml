@@ -179,7 +179,6 @@ tasks:
                                     TASKGRAPH_REPOSITORY_TYPE: hg
                                     REPOSITORIES: {$json: {xpi: "XPI Manifest", taskgraph: "Taskgraph"}}
                                     HG_STORE_PATH: /builds/worker/checkouts/hg-store
-                                    ANDROID_SDK_ROOT: /builds/worker/android-sdk
                                   - $if: 'tasks_for in ["github-pull-request"]'
                                     then:
                                         XPI_PULL_REQUEST_NUMBER: '${event.pull_request.number}'
@@ -217,7 +216,6 @@ tasks:
                                         taskgraph action-callback
                                     else: >
                                         PIP_IGNORE_INSTALLED=0 pip install --user /builds/worker/checkouts/taskgraph &&
-                                        taskcluster/scripts/install-sdk.sh &&
                                         ln -s /builds/worker/artifacts artifacts &&
                                         ~/.local/bin/taskgraph decision
                                         --pushlog-id='0'
