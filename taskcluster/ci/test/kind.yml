@@ -2,13 +2,17 @@
 # License, v. 2.0. If a copy of the MPL was not distributed with this
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 ---
-loader: taskgraph.loader.transform:loader
+loader: xpi_taskgraph.single_dep:loader
+
+kind-dependencies:
+    - build
 
 transforms:
+    - taskgraph.transforms.test:transforms
     - taskgraph.transforms.job:transforms
     - taskgraph.transforms.task:transforms
 
-job-defaults:
+job-template:
     description: Test XPI
     treeherder:
         kind: test
@@ -22,13 +26,7 @@ job-defaults:
     run:
         using: run-task
         use-caches: false
-
-jobs:
-    debug:
-        run-on-tasks-for: [github-push]
-        run:
-            using: run-task
-            cwd: '{checkout}'
-            cache-dotcache: false
-            command: >-
-                python3 /usr/local/bin/test.py
+        cwd: '{checkout}'
+        cache-dotcache: false
+        command: >-
+            python3 /usr/local/bin/test.py
