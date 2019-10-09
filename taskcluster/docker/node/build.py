@@ -135,7 +135,7 @@ def main():
         artifact_info = {
             "path": os.path.relpath(artifact_dir, target_path),
             "filesize_bytes": int(os.path.getsize(artifact)),
-            "sha256": get_hash(artifact),
+            "sha256": str(get_hash(artifact)),
         }
         build_manifest["artifacts"].append(artifact_info)
         mkdir(os.path.dirname(target_path))
