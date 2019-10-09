@@ -6,6 +6,10 @@
 FROM          node:$NODE_VERSION
 MAINTAINER    Aki Sasaki <aki@mozilla.com>
 
+RUN apt-get update -qq \
+    && apt-get install -y zip \
+    && apt-get clean
+
 # Add worker user
 RUN mkdir /builds && \
     useradd -d /builds/worker -s /bin/bash -m worker -g 1000 -o -u 1000 && \
