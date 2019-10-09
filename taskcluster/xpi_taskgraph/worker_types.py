@@ -51,12 +51,6 @@ def build_scriptworker_signing_payload(config, task, task_def):
     task_def["scopes"].append(
         "{}:signing:cert:{}".format(scope_prefix, worker["signing-type"])
     )
-    task_def["scopes"].extend(
-        [
-            "{}:signing:format:{}".format(scope_prefix, format)
-            for format in sorted(formats)
-        ]
-    )
 
 
 @payload_builder(
