@@ -113,7 +113,7 @@ def main():
         "name": xpi_name,
         "addon-type": xpi_type,
         "repo": xpi_source_repo,
-        "revision": revision,
+        "revision": revision.decode("utf-8"),
         "directory": os.path.relpath(source_dir, os.getcwd()),
         "version": package_info["version"],
         "artifacts": [],
