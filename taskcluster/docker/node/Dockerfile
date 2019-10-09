@@ -9,6 +9,7 @@ MAINTAINER    Aki Sasaki <aki@mozilla.com>
 # Add worker user
 RUN mkdir /builds && \
     useradd -d /builds/worker -s /bin/bash -m worker -g 1000 -o -u 1000 && \
+    groupadd -g 1000 -o worker && \
     mkdir /builds/worker/artifacts && \
     chown worker:worker /builds/worker/artifacts
 
