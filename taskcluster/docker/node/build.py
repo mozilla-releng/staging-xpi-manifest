@@ -52,6 +52,11 @@ def cd(path):
     os.chdir(path)
 
 
+def mkdir(path):
+    print("mkdir {}".format(path))
+    os.makedirs(path, exist_ok=True)
+
+
 def get_hash(path, hash_alg="sha256"):
     h = hashlib.new(hash_alg)
     with open(path, "rb") as fh:
@@ -78,7 +83,7 @@ def main():
     parent_source_dir = "/builds/worker/checkouts"
     source_dir = "/builds/worker/checkouts/xpi-source"
     artifact_prefix_dir = "{}/{}".format(artifact_dir, artifact_prefix)
-    os.makedirs(artifact_prefix_dir)
+    mkdir(artifact_prefix_dir)
 
     test_is_subdir(artifact_dir, artifact_prefix_dir)
 
@@ -133,7 +138,7 @@ def main():
             "sha256": get_hash(target_path),
         }
         build_manifest.append(artifact_info)
-        os.makedirs(os.path.dirname(target_path), exist_ok=True)
+        mkdir(os.path.dirname(target_path)
         shutil.copyfile(artifact, target_path)
 
     with open(os.path.join(artifact_prefix_dir, "manifest.json")) as fh:
