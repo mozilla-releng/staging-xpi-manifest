@@ -137,7 +137,7 @@ def main():
             "filesize_bytes": int(os.path.getsize(artifact)),
             "sha256": get_hash(artifact),
         }
-        build_manifest.append(artifact_info)
+        build_manifest["artifacts"].append(artifact_info)
         mkdir(os.path.dirname(target_path))
         shutil.copyfile(artifact, target_path)
 
