@@ -9,7 +9,7 @@ transforms:
     - taskgraph.transforms.task:transforms
 
 job-defaults:
-    description: Test Reference Browser
+    description: Test XPI
     treeherder:
         kind: test
         symbol: T
@@ -19,15 +19,16 @@ job-defaults:
     worker:
         docker-image: {in-tree: base}
         max-run-time: 7200
-        chain-of-trust: true
     run:
-        using: yarn
+        using: run-task
         use-caches: false
 
 jobs:
     debug:
-        attributes:
-            code-review: true
-        run-on-tasks-for: [github-push, github-pull-request]
+        run-on-tasks-for: [github-push]
         run:
-            yarn: ['clean', 'testDebugUnitTest']
+            using: run-task
+            cwd: '{checkout}'
+            cache-dotcache: false
+            command: >-
+                python3 /usr/local/bin/test.py
