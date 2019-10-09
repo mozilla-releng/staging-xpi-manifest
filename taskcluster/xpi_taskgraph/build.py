@@ -27,11 +27,14 @@ def tasks_from_manifest(config, jobs):
             task = deepcopy(job)
             env = task.setdefault("worker", {}).setdefault("env", {})
             env["XPI_REPOSITORY_TYPE"] = "git"
-            env["XPI_BASE_REPOSITORY"] = xpi_config["repo"]
-            env["XPI_HEAD_REPOSITORY"] = xpi_config["repo"]
-            # TODO
-            env["XPI_HEAD_REV"] = "master"
-            env["XPI_HEAD_REF"] = "master"
+#            env["XPI_BASE_REPOSITORY"] = xpi_config["repo"]
+#            env["XPI_HEAD_REPOSITORY"] = xpi_config["repo"]
+            # TODO - check out in run-task, by overriding the repository config
+            env["XPI_SOURCE_REPO"] = xpi_config["repo"]
+            # TODO - allow for specifying the revision
+            env["XPI_SOURCE_REVISION"] = "master"
+#            env["XPI_HEAD_REV"] = "master"
+#            env["XPI_HEAD_REF"] = "master"
             task["label"] = "build-{}".format(xpi_config["name"])
             task["treeherder"]["symbol"] = "B({})".format(
                 xpi_config.get("treeherder-symbol", xpi_config["name"])

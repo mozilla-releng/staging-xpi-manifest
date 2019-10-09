@@ -82,7 +82,7 @@ def main():
 
     test_is_subdir(artifact_dir, artifact_prefix_dir)
 
-    if "XPI_SOURCE_SECRET_NAME" in os.environ:
+    if "XPI_SSH_SECRET_NAME" in os.environ:
         cd(parent_source_dir)
         run_command(
             ["git", "clone", xpi_source_repo, "xpi-source"]
