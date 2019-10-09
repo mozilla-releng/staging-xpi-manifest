@@ -32,15 +32,15 @@ workers:
             provisioner: scriptworker-prov-v1
             implementation: scriptworker-signing
             os: scriptworker
-            worker-type: xpi-signing-dep-v1
+            worker-type: xpi-t-signing
         signing:
             provisioner: scriptworker-prov-v1
             implementation: scriptworker-signing
             os: scriptworker
             worker-type:
                 by-level:
-                    "3": xpi-signing-v1
-                    default: xpi-signing-dep-v1
+                    "3": xpi-3-signing
+                    default: xpi-t-signing
 
 scriptworker:
     scope-prefix: project:xpi:releng
