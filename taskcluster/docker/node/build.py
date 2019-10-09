@@ -134,8 +134,8 @@ def main():
         print("Copying {} to {}".format(artifact, target_path))
         artifact_info = {
             "path": os.path.relpath(artifact_dir, target_path),
-            "filesize_bytes": int(os.path.getsize(target_path)),
-            "sha256": get_hash(target_path),
+            "filesize_bytes": int(os.path.getsize(artifact)),
+            "sha256": get_hash(artifact),
         }
         build_manifest.append(artifact_info)
         mkdir(os.path.dirname(target_path))
