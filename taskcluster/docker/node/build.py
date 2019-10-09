@@ -133,6 +133,7 @@ def main():
             "sha256": get_hash(target_path),
         }
         build_manifest.append(artifact_info)
+        os.makedirs(os.path.dirname(target_path), exist_ok=True)
         shutil.copyfile(artifact, target_path)
 
     with open(os.path.join(artifact_prefix_dir, "manifest.json")) as fh:
