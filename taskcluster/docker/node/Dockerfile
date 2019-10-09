@@ -6,11 +6,9 @@
 FROM          node:$NODE_VERSION
 MAINTAINER    Aki Sasaki <aki@mozilla.com>
 
-# Add worker user
 RUN mkdir /builds && \
-    useradd -d /builds/worker -s /bin/bash -m worker && \
-    mkdir /builds/worker/artifacts && \
-    chown worker:worker /builds/worker/artifacts
+    mkdir -p /builds/worker/artifacts && \
+    chown -R node:node /builds/worker
 
 # %include-run-task
 
@@ -25,6 +23,7 @@ ENV SHELL=/bin/bash \
 
 VOLUME /builds/worker/checkouts
 VOLUME /builds/worker/.cache
+USER node
 
 # Set a default command useful for debugging
 CMD ["/bin/bash", "--login"]
