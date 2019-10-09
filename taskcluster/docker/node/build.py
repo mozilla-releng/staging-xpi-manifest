@@ -141,7 +141,7 @@ def main():
         mkdir(os.path.dirname(target_path))
         shutil.copyfile(artifact, target_path)
 
-    with open(os.path.join(artifact_prefix_dir, "manifest.json")) as fh:
+    with open(os.path.join(artifact_prefix_dir, "manifest.json"), "w") as fh:
         fh.write(json.dumps(build_manifest, indent=2, sort_keys=True))
 
 
