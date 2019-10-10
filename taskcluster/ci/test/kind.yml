@@ -21,7 +21,7 @@ job-template:
         platform: linux64/opt
     worker-type: b-linux
     worker:
-        docker-image: {in-tree: base}
+        docker-image: {in-tree: node-latest}
         max-run-time: 7200
     run:
         using: run-task
