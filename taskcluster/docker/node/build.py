@@ -82,10 +82,6 @@ def main():
     artifact_dir = "/builds/worker/artifacts"
     parent_source_dir = "/builds/worker/checkouts"
     source_dir = "/builds/worker/checkouts/xpi-source"
-    artifact_prefix_dir = "{}/{}".format(artifact_dir, artifact_prefix)
-    mkdir(artifact_prefix_dir)
-
-    test_is_subdir(artifact_dir, artifact_prefix_dir)
 
     if "XPI_SSH_SECRET_NAME" not in os.environ:
         cd(parent_source_dir)
@@ -127,13 +123,13 @@ def main():
     run_command(["yarn", "build"])
 
     for artifact in xpi_artifacts:
-        target_path = os.path.join(artifact_prefix_dir, artifact)
+        target_path = os.path.join(artifact_dir, os.path.basename(artifact))
         if not os.path.exists(artifact):
             raise Exception("Missing artifact {}".format(artifact))
         test_is_subdir(os.getcwd(), artifact)
         print("Copying {} to {}".format(artifact, target_path))
         artifact_info = {
-            "path": os.path.relpath(artifact_dir, target_path),
+            "path": os.path.join(artifact_prefix, os.path.basename(artifact)),
             "filesize_bytes": int(os.path.getsize(artifact)),
             "sha256": str(get_hash(artifact)),
         }

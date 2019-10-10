@@ -61,9 +61,9 @@ def tasks_from_manifest(config, jobs):
                     artifact_prefix, os.path.basename(artifact)
                 )
                 artifacts.append({
-                    "type": "file",
-                    "name": artifact_name,
-                    "path": artifact,
+                    "type": "directory",
+                    "name": artifact_prefix,
+                    "path": "/builds/worker/artifacts",
                 })
                 task["attributes"]["xpis"][artifact] = artifact_name
             task["worker"]["env"]["XPI_ARTIFACTS"] = ";".join(xpi_config["artifacts"])
