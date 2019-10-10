@@ -25,6 +25,7 @@ def test_tasks_from_manifest(config, tasks):
         dep = task["primary-dependency"]
         task["attributes"] = dep.attributes.copy()
         del(task["primary-dependency"])
+        task["dependencies"] = {"build": dep.label}
         xpi_name = dep.task["extra"]["xpi-name"]
         task.setdefault("extra", {})["xpi-name"] = xpi_name
         # TODO find the xpi_config
