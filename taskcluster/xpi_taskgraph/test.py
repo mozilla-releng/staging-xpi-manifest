@@ -48,19 +48,19 @@ def test_tasks_from_manifest(config, tasks):
             task["secrets"] = [config["github_clone_secret"]]
             # TODO xpi/* getArtifact scopes
             artifact_prefix = "xpi/build"
+            use_proxy = True
         else:
             artifact_prefix = "public/build"
             task["worker"]["env"]["ARTIFACT_PREFIX"] = artifact_prefix
+            use_proxy = False
 
         upstream_artifact_urls = []
         for artifact in xpi_config["artifacts"]:
             artifact_name = "{}/{}".format(
                 artifact_prefix, os.path.basename(artifact)
             )
-            upstream_artifact_urls.append(
-                get_artifact_url('<{}>'.format(dep.label), artifact_name)
-            )
+            upstream_artifact_urls.append(get_artifact_url('<build>', artifact_name, use_proxy=use_proxy))
 
-        task["worker"]["env"]["XPI_UPSTREAM_URLS"] = "|".join(xpi_config["artifacts"])
+        task["worker"]["env"]["XPI_UPSTREAM_URLS"] = "|".join(upstream_artifact_urls)
 
         yield task
