@@ -40,6 +40,7 @@ def tasks_from_manifest(config, jobs):
                 xpi_config.get("treeherder-symbol", xpi_config["name"])
             )
             env["XPI_NAME"] = xpi_config["name"]
+            task.setdefault("extra", {})["xpi-name"] = xpi_config["name"]
             env["XPI_TYPE"] = xpi_config["addon-type"]
             if xpi_config.get("directory"):
                 task["worker"]["env"]["XPI_SOURCE_DIR"] = xpi_config["directory"]

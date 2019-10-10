@@ -58,6 +58,7 @@ def build_signing_task(config, tasks):
                 "formats": ["autograph_xpi"],
             }
         ]
+        task.setdefault("extra", {})["xpi-name"] = dep.task["extra"]["xpi-name"]
         del task["primary-dependency"]
         yield task
 
