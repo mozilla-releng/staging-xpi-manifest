@@ -20,6 +20,7 @@ RUN mkdir /builds && \
 # %include-run-task
 
 COPY build.py /usr/local/bin/build.py
+COPY test.py /usr/local/bin/test.py
 
 RUN apt-get update && apt-get install -y --force-yes --no-install-recommends \
     mercurial
