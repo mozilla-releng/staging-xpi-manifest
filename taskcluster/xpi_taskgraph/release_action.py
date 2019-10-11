@@ -11,14 +11,14 @@ import os
 
 from taskgraph.actions.registry import register_callback_action
 
-from taskgraph.util.hg import find_hg_revision_push_info
 from taskgraph.util.taskcluster import get_artifact
 from taskgraph.util.taskgraph import find_decision_task, find_existing_tasks_from_previous_kinds
 from taskgraph.taskgraph import TaskGraph
 from taskgraph.decision import taskgraph_decision
 from taskgraph.parameters import Parameters
-from taskgraph.util.attributes import RELEASE_PROMOTION_PROJECTS, release_level
+# from taskgraph.util.attributes import RELEASE_PROMOTION_PROJECTS
 
+RELEASE_PROMOTION_PROJECTS = []
 
 def is_release_promotion_available(parameters):
     return parameters['project'] in RELEASE_PROMOTION_PROJECTS
