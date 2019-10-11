@@ -16,6 +16,8 @@ taskgraph:
         xpi:
             name: "XPI manifest"
     cached-task-prefix: project.xpi.xpi-manifest
+    actions:
+        - xpi_taskgraph.release_action
 
 workers:
     aliases:
