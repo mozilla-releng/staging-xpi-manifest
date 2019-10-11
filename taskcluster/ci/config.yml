@@ -13,8 +13,18 @@ task-priority: lowest
 taskgraph:
     register: xpi_taskgraph:register
     repositories:
-        xpi:
+        xpi-manifest:
             name: "XPI manifest"
+            project-regex: \/xpi-manifest$
+            default-repository: https://github.com/escapewindow/xpi-manifest
+            default-ref: master
+            type: git
+        private-helper:
+            name: "Test Private Shield Study Helper Addon"
+            project-regex: \/test-xpi$
+            default-repository: https://github.com/escapewindow/test-xpi
+            default-ref: master
+            type: git
     cached-task-prefix: project.xpi.xpi-manifest
 
 workers:
