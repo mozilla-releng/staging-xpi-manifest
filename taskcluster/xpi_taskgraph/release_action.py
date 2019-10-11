@@ -12,10 +12,10 @@ import os
 from taskgraph.actions.registry import register_callback_action
 
 from taskgraph.util.taskcluster import get_artifact
-from taskgraph.util.taskgraph import find_decision_task, find_existing_tasks_from_previous_kinds
 from taskgraph.taskgraph import TaskGraph
 from taskgraph.decision import taskgraph_decision
 from taskgraph.parameters import Parameters
+#from taskgraph.util.taskgraph import find_decision_task, find_existing_tasks_from_previous_kinds
 # from taskgraph.util.attributes import RELEASE_PROMOTION_PROJECTS
 
 RELEASE_PROMOTION_PROJECTS = []
@@ -128,8 +128,9 @@ def release_promotion_action(parameters, graph_config, input, task_group_id, tas
     previous_graph_ids = input.get('previous_graph_ids')
     if not previous_graph_ids:
         revision = input.get('revision')
+        previous_graph_ids = []
         # TODO find the build, even without the pushlog
-        previous_graph_ids = [find_decision_task(parameters, graph_config)]
+        # previous_graph_ids = [find_decision_task(parameters, graph_config)]
 
     # Download parameters from the first decision task
     parameters = get_artifact(previous_graph_ids[0], "public/parameters.yml")
@@ -143,9 +144,11 @@ def release_promotion_action(parameters, graph_config, input, task_group_id, tas
         full_task_graph = get_artifact(graph_id, "public/full-task-graph.json")
         combined_full_task_graph.update(full_task_graph)
     _, combined_full_task_graph = TaskGraph.from_json(combined_full_task_graph)
-    parameters['existing_tasks'] = find_existing_tasks_from_previous_kinds(
-        combined_full_task_graph, previous_graph_ids, rebuild_kinds
-    )
+    # TODO fix
+#    parameters['existing_tasks'] = find_existing_tasks_from_previous_kinds(
+#        combined_full_task_graph, previous_graph_ids, rebuild_kinds
+#    )
+    parameters['existing_tasks'] = {}
     parameters['do_not_optimize'] = do_not_optimize
     parameters['target_tasks_method'] = target_tasks_method
     parameters['build_number'] = int(input['build_number'])
