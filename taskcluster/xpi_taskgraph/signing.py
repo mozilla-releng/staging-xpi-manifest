@@ -55,7 +55,7 @@ def build_signing_task(config, tasks):
                 "taskType": "build",
                 "paths": dep.attributes["xpis"].values(),
                 # TODO change depending on type of xpi
-                "formats": ["autograph_xpi"],
+                "formats": ["autograph_langpack"],
             }
         ]
         task.setdefault("extra", {})["xpi-name"] = dep.task["extra"]["xpi-name"]
