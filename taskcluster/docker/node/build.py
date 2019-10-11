@@ -89,13 +89,10 @@ def main():
     if "XPI_SSH_SECRET_NAME" in os.environ:
         ssh_dir = Path("~/.ssh-run-task").expanduser()
         ssh_key_file = ssh_dir.joinpath('private_ssh_key')
-        ssh_known_hosts_file = ssh_dir.joinpath("known_hosts")
 
         os.environ['GIT_SSH_COMMAND'] = " ".join([
             "ssh",
             "-oIdentityFile={}".format(ssh_key_file.as_posix()),
-            "-oStrictHostKeyChecking=yes",
-            "-oUserKnownHostsFile={}".format(ssh_known_hosts_file.as_posix()),
         ])
     run_command(
         ["git", "clone", xpi_source_repo, "xpi-source"]
