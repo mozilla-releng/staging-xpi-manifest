@@ -25,7 +25,7 @@ def define_signing_flags(config, tasks):
         task["attributes"] = dep.attributes.copy()
         task["attributes"]["signed"] = True
         if "run_on_tasks_for" in task["attributes"]:
-            task["run-on-tasks-for"] = task["attributes"]["run_on_tasks_for"]
+            task.setdefault("run-on-tasks-for", task["attributes"]["run_on_tasks_for"])
 
         for key in ("worker-type", "worker.signing-type"):
             resolve_keyed_by(
