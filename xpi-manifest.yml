@@ -19,7 +19,7 @@ xpis:
     install-type: npm
     treeherder-symbol: helper
   - name: private-helper
-    repo: https://github.com/escapewindow/test-xpi
+    repo: git@github.com/escapewindow/test-xpi
     directory: misc/shield-study-helper-addon
     active: true
     private-repo: true
