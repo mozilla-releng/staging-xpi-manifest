@@ -6,8 +6,10 @@
 FROM          node:$NODE_VERSION
 MAINTAINER    Aki Sasaki <aki@mozilla.com>
 
+RUN echo "deb http://deb.debian.org/debian testing main" >> /etc/apt/sources.list
 RUN apt-get update -qq \
     && apt-get install -y zip \
+    && apt-get install -y python3.7 \
     && apt-get clean
 
 # Add worker user
