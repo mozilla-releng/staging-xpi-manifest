@@ -43,17 +43,21 @@ def tasks_from_manifest(config, jobs):
             task.setdefault("extra", {})["xpi-name"] = xpi_config["name"]
             env["XPI_TYPE"] = xpi_config["addon-type"]
             if xpi_config.get("directory"):
-                task["worker"]["env"]["XPI_SOURCE_DIR"] = xpi_config["directory"]
+                env["XPI_SOURCE_DIR"] = xpi_config["directory"]
             if xpi_config.get("private-repo"):
-                task["secrets"] = [config["github_clone_secret"]]
-                task["worker"]["env"]["XPI_SSH_SECRET_NAME"] = config["github_clone_secret"]
+                task.setdefault("scopes", []).append(
+                    "secrets:get:{}".format(
+                        config.graph_config["github_clone_secret"],
+                    )
+                )
+                env["XPI_SSH_SECRET_NAME"] = config.graph_config["github_clone_secret"]
                 # TODO xpi/* getArtifact scopes
                 artifact_prefix = "xpi/build"
             else:
                 artifact_prefix = "public/build"
-            task["worker"]["env"]["ARTIFACT_PREFIX"] = artifact_prefix
+            env["ARTIFACT_PREFIX"] = artifact_prefix
             if xpi_config.get("install-type"):
-                task["worker"]["env"]["XPI_INSTALL_TYPE"] = xpi_config["install-type"]
+                env["XPI_INSTALL_TYPE"] = xpi_config["install-type"]
             task.setdefault("attributes", {})["addon-type"] = xpi_config["addon-type"]
             task.setdefault("attributes", {})["xpis"] = {}
             artifacts = task.setdefault("worker", {}).setdefault("artifacts", [])
@@ -67,6 +71,6 @@ def tasks_from_manifest(config, jobs):
                     "path": "/builds/worker/artifacts",
                 })
                 task["attributes"]["xpis"][artifact] = artifact_name
-            task["worker"]["env"]["XPI_ARTIFACTS"] = ";".join(xpi_config["artifacts"])
+            env["XPI_ARTIFACTS"] = ";".join(xpi_config["artifacts"])
 
             yield task

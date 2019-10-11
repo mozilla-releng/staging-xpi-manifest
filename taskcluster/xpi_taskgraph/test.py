@@ -8,10 +8,10 @@ kind.
 
 from __future__ import absolute_import, print_function, unicode_literals
 from copy import deepcopy
+import json
 import os
 
 from taskgraph.transforms.base import TransformSequence
-from taskgraph.util.taskcluster import get_artifact_url
 from xpi_taskgraph.xpi_manifest import get_manifest
 
 
@@ -28,7 +28,6 @@ def test_tasks_from_manifest(config, tasks):
         task["dependencies"] = {"build": dep.label}
         xpi_name = dep.task["extra"]["xpi-name"]
         task.setdefault("extra", {})["xpi-name"] = xpi_name
-        # TODO find the xpi_config
         for xpi_config in manifest.get("xpis", []):
             if not xpi_config.get("active"):
                 continue
@@ -45,22 +44,30 @@ def test_tasks_from_manifest(config, tasks):
             xpi_config.get("treeherder-symbol", xpi_config["name"])
         )
         if xpi_config.get("private-repo"):
-            task["secrets"] = [config["github_clone_secret"]]
+            task.setdefault("scopes", []).append(
+                "secrets:get:{}".format(
+                    config.graph_config["github_clone_secret"]
+                )
+            )
+            env["XPI_SSH_SECRET_NAME"] = config.graph_config["github_clone_secret"]
             # TODO xpi/* getArtifact scopes
             artifact_prefix = "xpi/build"
-            use_proxy = True
+            # TODO put this in decision task?
+            os.environ["TASKCLUSTER_PROXY_URL"] = "http://taskcluster"
+            task["worker"]["taskcluster-proxy"] = True
         else:
             artifact_prefix = "public/build"
-            task["worker"]["env"]["ARTIFACT_PREFIX"] = artifact_prefix
-            use_proxy = False
+            env["ARTIFACT_PREFIX"] = artifact_prefix
 
-        upstream_artifact_urls = []
+        paths = []
         for artifact in xpi_config["artifacts"]:
             artifact_name = "{}/{}".format(
                 artifact_prefix, os.path.basename(artifact)
             )
-            upstream_artifact_urls.append(get_artifact_url('<build>', artifact_name, use_proxy=use_proxy))
-
-        task["worker"]["env"]["XPI_UPSTREAM_URLS"] = "|".join(upstream_artifact_urls)
+            paths.append(artifact_name)
+        upstreamArtifacts = [
+            {"taskId": "<build>", "paths": paths},
+        ]
+        env["XPI_UPSTREAM_URLS"] = json.dumps(upstreamArtifacts)
 
         yield task

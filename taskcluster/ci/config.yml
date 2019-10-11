@@ -43,5 +43,7 @@ workers:
                     "3": xpi-3-signing
                     default: xpi-t-signing
 
+github_clone_secret: project/xpi/xpi-github-clone-ssh
+
 scriptworker:
     scope-prefix: project:xpi:releng
