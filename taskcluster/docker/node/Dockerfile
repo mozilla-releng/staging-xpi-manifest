@@ -13,6 +13,8 @@ RUN apt-get update -qq \
     && apt-get install -y python3.7 \
     && apt-get clean
 
+RUN rm /usr/bin/python3 && ln -s /usr/local/bin/python3.7 /usr/bin/python3
+
 # Add worker user
 RUN mkdir /builds && \
     useradd -d /builds/worker -s /bin/bash -m worker -g 1000 -o -u 1000 && \
