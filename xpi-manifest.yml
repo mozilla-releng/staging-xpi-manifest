@@ -18,21 +18,21 @@ xpis:
     addon-type: standard
     install-type: npm
     treeherder-symbol: helper
-  - name: private-helper
-    repo: git@github.com:escapewindow/test-xpi
-    directory: misc/shield-study-helper-addon
-    active: true
-    private-repo: true
-    # TODO allowed-branches
-    # TODO allow-reviewed-pr
-    artifacts:
-      # TODO standardize name
-      # softlink pointing at @qa-shield-study-helper-1.0.0.xpi
-      - linked-addon.xpi
-    # TODO naming? switch signing key based on value
-    addon-type: standard
-    install-type: npm
-    treeherder-symbol: private-helper
+#  - name: private-helper
+#    repo: git@github.com:escapewindow/test-xpi
+#    directory: misc/shield-study-helper-addon
+#    active: true
+#    private-repo: true
+#    # TODO allowed-branches
+#    # TODO allow-reviewed-pr
+#    artifacts:
+#      # TODO standardize name
+#      # softlink pointing at @qa-shield-study-helper-1.0.0.xpi
+#      - linked-addon.xpi
+#    # TODO naming? switch signing key based on value
+#    addon-type: standard
+#    install-type: npm
+#    treeherder-symbol: private-helper
   - name: multipreffer
     repo: https://github.com/mozilla/multipreffer
     active: true
