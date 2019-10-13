@@ -147,6 +147,8 @@ tasks:
                                           else: ${head_branch}
                               in:
                                   - 'assume:repo:${repoUrl[8:]}:branch:${short_head_branch}'
+                                  - 'in-tree:hook-action:project-xpi/in-tree-action-${repository.level}-*'
+
                           else:
                               $if: 'tasks_for == "github-pull-request"'
                               then:
