@@ -49,11 +49,14 @@ def build_signing_task(config, tasks):
     for task in tasks:
         dep = task["primary-dependency"]
         task["dependencies"] = {"build": dep.label}
+        paths = [p for p in dep.attributes["xpis"].values() if p.endswith(".xpi")]
+        if not paths:
+            continue
         task["worker"]["upstream-artifacts"] = [
             {
                 "taskId": {"task-reference": "<build>"},
                 "taskType": "build",
-                "paths": dep.attributes["xpis"].values(),
+                "paths": paths,
                 # TODO change depending on type of xpi
                 "formats": ["autograph_langpack"],
             }
