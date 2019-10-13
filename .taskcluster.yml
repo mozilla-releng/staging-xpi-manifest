@@ -7,7 +7,7 @@ tasks:
     - $let:
           taskgraph:
               branch: taskgraph-try
-              revision: 2399940112c825013225f6a384577c31c66b2f38
+              revision: 6f7243893e1b4a25501135b115bd0ddd3c07a5a7
           trustDomain: xpi
       in:
           $if: 'tasks_for in ["github-pull-request", "github-push", "action", "cron"]'
@@ -133,6 +133,9 @@ tasks:
                                 then:
                                     - "tc-treeherder.v2.${project}.${head_sha}"
                                 else: []
+                              - $if: 'tasks_for == "github_push"'
+                                then:
+                                    - "index.${trustDomain}.v2.${project}.revision.${event.ref}.taskgraph.decision"
                       scopes:
                           # `https://` is 8 characters so, ${repoUrl[8:]} is the repository without the protocol.
                           $if: 'tasks_for == "github-push"'
