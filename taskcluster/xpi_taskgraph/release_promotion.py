@@ -121,35 +121,26 @@ def release_promotion_action(parameters, graph_config, input, task_group_id, tas
 
     # make parameters read-write
     parameters = dict(parameters)
-    if promotion_config.get("use-previous-graphs"):
-        # Build previous_graph_ids from ``previous_graph_ids`` or ``revision``.
-        previous_graph_ids = input.get('previous_graph_ids')
-        if not previous_graph_ids:
-            previous_graph_ids = [find_decision_task(parameters, graph_config)]
+    # Build previous_graph_ids from ``previous_graph_ids`` or ``revision``.
+    previous_graph_ids = input.get('previous_graph_ids')
+    if not previous_graph_ids:
+        previous_graph_ids = [find_decision_task(parameters, graph_config)]
 
-        # Download parameters from the first decision task
-        parameters = get_artifact(previous_graph_ids[0], "public/parameters.yml")
-        # Download and combine full task graphs from each of the previous_graph_ids.
-        # Sometimes previous relpro action tasks will add tasks, like partials,
-        # that didn't exist in the first full_task_graph, so combining them is
-        # important. The rightmost graph should take precedence in the case of
-        # conflicts.
-        combined_full_task_graph = {}
-        for graph_id in previous_graph_ids:
-            full_task_graph = get_artifact(graph_id, "public/full-task-graph.json")
-            combined_full_task_graph.update(full_task_graph)
-        _, combined_full_task_graph = TaskGraph.from_json(combined_full_task_graph)
-        parameters['existing_tasks'] = find_existing_tasks_from_previous_kinds(
-            combined_full_task_graph, previous_graph_ids, rebuild_kinds
-        )
-    else:
-        if input.get('previous_graph_ids'):
-            raise Exception(
-                "Can't specify `previous_graph_ids` in flavor {}!".format(
-                    input.release_promotion_flavor
-                )
-            )
-        parameters['existing_tasks'] = {}
+    # Download parameters from the first decision task
+    parameters = get_artifact(previous_graph_ids[0], "public/parameters.yml")
+    # Download and combine full task graphs from each of the previous_graph_ids.
+    # Sometimes previous relpro action tasks will add tasks, like partials,
+    # that didn't exist in the first full_task_graph, so combining them is
+    # important. The rightmost graph should take precedence in the case of
+    # conflicts.
+    combined_full_task_graph = {}
+    for graph_id in previous_graph_ids:
+        full_task_graph = get_artifact(graph_id, "public/full-task-graph.json")
+        combined_full_task_graph.update(full_task_graph)
+    _, combined_full_task_graph = TaskGraph.from_json(combined_full_task_graph)
+    parameters['existing_tasks'] = find_existing_tasks_from_previous_kinds(
+        combined_full_task_graph, previous_graph_ids, rebuild_kinds
+    )
     parameters['do_not_optimize'] = do_not_optimize
     parameters['target_tasks_method'] = target_tasks_method
     parameters['build_number'] = int(input['build_number'])
