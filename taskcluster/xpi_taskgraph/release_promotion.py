@@ -148,7 +148,11 @@ def release_promotion_action(parameters, graph_config, input, task_group_id, tas
     # previous graphs.
     parameters['optimize_target_tasks'] = True
     parameters['xpi_name'] = input['xpi_name']
-    parameters['xpi_revision'] = input.get('revision')
+    # TODO
+    #  - require this is a specific revision
+    #  - possibly also check that this is on a reviewed PR or merged into
+    #    a trusted branch. this will require an oauth token
+    parameters['xpi_revision'] = input.get('revision', parameters['head_rev'])
 
     if input.get('version'):
         parameters['version'] = input['version']
