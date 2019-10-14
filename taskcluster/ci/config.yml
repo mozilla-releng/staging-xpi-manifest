@@ -54,5 +54,7 @@ release-promotion:
     flavors:
         build:
             target-tasks-method: default
+            rebuild-kinds:
+                - build
         promote:
             target-tasks-method: promote_xpi
