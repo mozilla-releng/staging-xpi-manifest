@@ -51,3 +51,15 @@ def get_manifest():
     validate_schema(base_schema, manifest.copy(), 'Invalid manifest:')
     # any other checks?
     return manifest
+
+
+def get_xpi_config(xpi_name):
+    manifest = get_manifest()
+    xpi_configs = [xpi for xpi in manifest["xpis"] if xpi["name"] == xpi_name]
+    if len(xpi_configs) != 1:
+        raise Exception(
+            "Unable to find a single xpi matching name {}: found {}".format(
+                input.xpi_name, len(xpi_configs)
+            )
+        )
+    return xpi_configs[0]

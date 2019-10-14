@@ -51,9 +51,8 @@ scriptworker:
     scope-prefix: project:xpi:releng
 
 release-promotion:
-    products:
-        - 'xpi'
     flavors:
+        build:
+            target-tasks-method: build_xpi
         promote:
-            product: xpi
             target-tasks-method: promote_xpi

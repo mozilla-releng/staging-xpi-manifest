@@ -15,30 +15,24 @@ from taskgraph.util.taskcluster import get_artifact
 from taskgraph.taskgraph import TaskGraph
 from taskgraph.decision import taskgraph_decision
 from taskgraph.parameters import Parameters
-#from taskgraph.util.taskgraph import find_decision_task, find_existing_tasks_from_previous_kinds
-# from taskgraph.util.attributes import RELEASE_PROMOTION_PROJECTS
+from taskgraph.util.taskgraph import find_decision_task, find_existing_tasks_from_previous_kinds
+from xpi_taskgraph.xpi_manifest import get_manifest, get_xpi_config
 
-RELEASE_PROMOTION_PROJECTS = []
+RELEASE_PROMOTION_PROJECTS = (
+    "https://github.com/escapewindow/xpi-manifest",
+)
+
+XPI_MANIFEST = get_manifest()
+
 
 def is_release_promotion_available(parameters):
-    return parameters['project'] in RELEASE_PROMOTION_PROJECTS
-
-
-def get_flavors(graph_config, param):
-    """
-    Get all flavors with the given parameter enabled.
-    """
-    promotion_flavors = graph_config['release-promotion']['flavors']
-    return sorted([
-        flavor for (flavor, config) in promotion_flavors.items()
-        if config.get(param, False)
-    ])
+    return parameters['head_repository'] in RELEASE_PROMOTION_PROJECTS
 
 
 @register_callback_action(
-    name='promote-xpi',
+    name='release-promotion',
     title='Promote a XPI',
-    symbol='${input.release_promotion_flavor}',
+    symbol='${input.release_promotion_flavor}_${input.xpi_name}',
     description="Promote a XPI.",
     generic=False,
     order=500,
@@ -64,13 +58,18 @@ def get_flavors(graph_config, param):
                     'type': 'string',
                 },
             },
+            'xpi_name': {
+                'type': 'string',
+                'title': 'The XPI to promote',
+                'description': ('The XPI to promote.'),
+                'enum': sorted(
+                    [xpi["name"] for xpi in XPI_MANIFEST["xpis"]]
+                ),
+            },
             'revision': {
                 'type': 'string',
                 'title': 'Optional: revision to promote',
-                'description': ('Optional: the revision to promote. If specified, '
-                                'and if neither `pushlog_id` nor `previous_graph_kinds` '
-                                'is specified, find the `pushlog_id using the '
-                                'revision.'),
+                'description': ('Optional: the revision to promote.'),
             },
             'release_promotion_flavor': {
                 'type': 'string',
@@ -96,21 +95,17 @@ def get_flavors(graph_config, param):
             },
             'version': {
                 'type': 'string',
-                'description': ('Optional: override the version for release promotion. '
-                                "Occasionally we'll land a taskgraph fix in a later "
-                                'commit, but want to act on a build from a previous '
-                                'commit. If a version bump has landed in the meantime, '
-                                'relying on the in-tree version will break things.'),
+                'description': ('The expected version to promote.'),
                 'default': '',
             },
         },
-        "required": ['release_promotion_flavor', 'build_number'],
+        "required": ['release_promotion_flavor', 'xpi_name', 'build_number'],
     }
 )
 def release_promotion_action(parameters, graph_config, input, task_group_id, task_id):
     release_promotion_flavor = input['release_promotion_flavor']
     promotion_config = graph_config['release-promotion']['flavors'][release_promotion_flavor]
-    product = promotion_config['product']
+    xpi_config = get_xpi_config(input.xpi_name)
 
     target_tasks_method = promotion_config['target-tasks-method'].format(
         project=parameters['project']
@@ -128,9 +123,7 @@ def release_promotion_action(parameters, graph_config, input, task_group_id, tas
     previous_graph_ids = input.get('previous_graph_ids')
     if not previous_graph_ids:
         revision = input.get('revision')
-        previous_graph_ids = []
-        # TODO find the build, even without the pushlog
-        # previous_graph_ids = [find_decision_task(parameters, graph_config)]
+        previous_graph_ids = [find_decision_task(parameters, graph_config)]
 
     # Download parameters from the first decision task
     parameters = get_artifact(previous_graph_ids[0], "public/parameters.yml")
@@ -144,16 +137,12 @@ def release_promotion_action(parameters, graph_config, input, task_group_id, tas
         full_task_graph = get_artifact(graph_id, "public/full-task-graph.json")
         combined_full_task_graph.update(full_task_graph)
     _, combined_full_task_graph = TaskGraph.from_json(combined_full_task_graph)
-    # TODO fix
-#    parameters['existing_tasks'] = find_existing_tasks_from_previous_kinds(
-#        combined_full_task_graph, previous_graph_ids, rebuild_kinds
-#    )
-    parameters['existing_tasks'] = {}
+    parameters['existing_tasks'] = find_existing_tasks_from_previous_kinds(
+        combined_full_task_graph, previous_graph_ids, rebuild_kinds
+    )
     parameters['do_not_optimize'] = do_not_optimize
     parameters['target_tasks_method'] = target_tasks_method
     parameters['build_number'] = int(input['build_number'])
-    parameters['release_eta'] = input.get('release_eta', '')
-    parameters['release_product'] = product
     # When doing staging releases on try, we still want to re-use tasks from
     # previous graphs.
     parameters['optimize_target_tasks'] = True
