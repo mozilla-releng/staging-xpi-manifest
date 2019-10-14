@@ -9,6 +9,7 @@ from __future__ import absolute_import, print_function, unicode_literals
 from taskgraph.parameters import extend_parameters_schema
 from voluptuous import (
     Any,
+    Optional,
     Required,
 )
 
