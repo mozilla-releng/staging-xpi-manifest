@@ -15,8 +15,8 @@ from voluptuous import (
 
 # Please keep this list sorted and in sync with taskcluster/docs/parameters.rst
 xpi_schema = {
-    Required('xpi_name'): Any(basestring, None),
-    Required('xpi_revision'): Any(basestring, None),
+    Optional('xpi_name'): Any(basestring, None),
+    Optional('xpi_revision'): Any(basestring, None),
 }
 
 extend_parameters_schema(xpi_schema)
