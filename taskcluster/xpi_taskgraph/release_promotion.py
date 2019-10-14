@@ -61,6 +61,7 @@ def is_release_promotion_available(parameters):
             'xpi_name': {
                 'type': 'string',
                 'title': 'The XPI to promote',
+                'default': 'FILLMEIN',
                 'description': ('The XPI to promote.'),
                 'enum': sorted(
                     [xpi["name"] for xpi in XPI_MANIFEST["xpis"]]
@@ -74,6 +75,7 @@ def is_release_promotion_available(parameters):
             'release_promotion_flavor': {
                 'type': 'string',
                 'description': 'The flavor of release promotion to perform.',
+                'default': 'build',
                 'enum': sorted(graph_config['release-promotion']['flavors'].keys()),
             },
             'rebuild_kinds': {
