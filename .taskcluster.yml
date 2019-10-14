@@ -7,7 +7,7 @@ tasks:
     - $let:
           taskgraph:
               branch: taskgraph-try
-              revision: 210c9447b170fc8ef2b903bc6037696202542397
+              revision: ddcf2b0b02f89b5b4aac07851cc70c63821924cf
           trustDomain: xpi
       in:
           $if: 'tasks_for in ["github-pull-request", "github-push", "action", "cron"]'
@@ -73,7 +73,7 @@ tasks:
                       $if: '"github" in tasks_for'
                       then: {$eval: as_slugid("decision_task")}
                       else:
-                          $if: 'tasks_for == "cron"'
+                          $if: 'tasks_for in ["cron", "action"]'
                           then: '${ownTaskId}'
               in:
                   $let:
