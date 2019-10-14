@@ -5,6 +5,7 @@
 from __future__ import absolute_import, print_function, unicode_literals
 
 from taskgraph.target_tasks import _target_task as target_task
+from taskgraph.target_tasks import standard_filter
 
 # TODO add shipping-phase support
 PROMOTE_KINDS = (
@@ -28,6 +29,9 @@ def target_tasks_promote_xpi(full_task_graph, parameters, graph_config):
     """Select the set of tasks required for promoting a xpi."""
 
     def filter(task, parameters):
+        if not standard_filter(t, parameters):
+            return False
+
         # TODO phase
         return task.attributes['kind'] not in PROMOTE_KINDS
 
