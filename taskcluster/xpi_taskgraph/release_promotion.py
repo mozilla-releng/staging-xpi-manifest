@@ -150,7 +150,7 @@ def release_promotion_action(parameters, graph_config, input, task_group_id, tas
     parameters['xpi_name'] = input['xpi_name']
     parameters['xpi_revision'] = input.get('revision')
 
-    if input['version']:
+    if input.get('version'):
         parameters['version'] = input['version']
 
     # make parameters read-only
