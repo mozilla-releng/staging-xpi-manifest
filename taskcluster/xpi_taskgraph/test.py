@@ -50,7 +50,6 @@ def test_tasks_from_manifest(config, tasks):
                 )
             )
             env["XPI_SSH_SECRET_NAME"] = config.graph_config["github_clone_secret"]
-            # TODO xpi/* getArtifact scopes
             artifact_prefix = "xpi/build"
             # TODO put this in decision task?
             os.environ["TASKCLUSTER_PROXY_URL"] = "http://taskcluster"

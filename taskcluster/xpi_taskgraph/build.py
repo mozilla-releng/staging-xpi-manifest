@@ -56,7 +56,6 @@ def tasks_from_manifest(config, jobs):
                     )
                 )
                 env["XPI_SSH_SECRET_NAME"] = config.graph_config["github_clone_secret"]
-                # TODO xpi/* getArtifact scopes
                 artifact_prefix = "xpi/build"
             else:
                 artifact_prefix = "public/build"
