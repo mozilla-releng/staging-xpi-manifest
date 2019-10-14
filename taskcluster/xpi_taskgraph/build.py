@@ -20,9 +20,15 @@ transforms = TransformSequence()
 @transforms.add
 def tasks_from_manifest(config, jobs):
     manifest = get_manifest()
+    xpi_name = config.params.get("xpi_name")
+    xpi_revision = None
+    if xpi_name:
+        xpi_revision = config.params.get("xpi_revision")
     for job in jobs:
         for xpi_config in manifest.get("xpis", []):
             if not xpi_config.get("active"):
+                continue
+            if xpi_name and xpi_config["name"] != xpi_name:
                 continue
             task = deepcopy(job)
             env = task.setdefault("worker", {}).setdefault("env", {})
@@ -31,8 +37,7 @@ def tasks_from_manifest(config, jobs):
 #            env["XPI_HEAD_REPOSITORY"] = xpi_config["repo"]
             # TODO - check out in run-task, by overriding the repository config
             env["XPI_SOURCE_REPO"] = xpi_config["repo"]
-            # TODO - allow for specifying the revision
-            env["XPI_SOURCE_REVISION"] = "master"
+            env["XPI_SOURCE_REVISION"] = xpi_revision or "master"
 #            env["XPI_HEAD_REV"] = "master"
 #            env["XPI_HEAD_REF"] = "master"
             task["label"] = "build-{}".format(xpi_config["name"])

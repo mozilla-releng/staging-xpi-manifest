@@ -54,5 +54,6 @@ release-promotion:
     flavors:
         build:
             target-tasks-method: build_xpi
+            use-previous-graphs: false
         promote:
             target-tasks-method: promote_xpi
