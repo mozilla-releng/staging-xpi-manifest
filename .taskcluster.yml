@@ -7,7 +7,7 @@ tasks:
     - $let:
           taskgraph:
               branch: taskgraph-try
-              revision: 1d286d3e73bb34a488336648d7441817cc3b8d4e
+              revision: 6e2c17d140f9c654bcd23f074395e5e6d52a96e7
           trustDomain: xpi
       in:
           $if: 'tasks_for in ["github-pull-request", "github-push", "action", "cron"]'
@@ -58,8 +58,11 @@ tasks:
                           $if: 'tasks_for == "github-push"'
                           then: ${event.ref}
                           else:
-                              $if: 'tasks_for in ["cron", "action"]'
+                              $if: 'tasks_for == "cron"'
                               then: '${push.branch}'
+                              else:
+                                  $if: 'tasks_for == "action"'
+                                  then: 'refs/heads/master'  # TODO fix
                   head_sha:
                       $if: 'tasks_for == "github-push"'
                       then: '${event.after}'
