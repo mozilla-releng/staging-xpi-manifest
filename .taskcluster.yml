@@ -85,7 +85,9 @@ tasks:
                               then: '${repository.level}'
                               else: 1
                   in:
-                      taskId: '${ownTaskId}'
+                      taskId:
+                          $if: 'tasks_for != "action"'
+                          then: '${ownTaskId}'
                       taskGroupId:
                           $if: 'tasks_for == "action"'
                           then:
