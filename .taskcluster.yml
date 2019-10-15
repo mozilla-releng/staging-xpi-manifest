@@ -182,7 +182,7 @@ tasks:
                                     XPI_REPOSITORY_TYPE: git
                                     TASKGRAPH_BASE_REPOSITORY: https://hg.mozilla.org/ci/taskgraph
                                     TASKGRAPH_HEAD_REPOSITORY: https://hg.mozilla.org/ci/${taskgraph.branch}
-                                    TASKGRAPH_HEAD_REV: ${taskgraph.revision}
+                                    TASKGRAPH_HEAD_REV: '${taskgraph.revision}'
                                     TASKGRAPH_REPOSITORY_TYPE: hg
                                     REPOSITORIES: {$json: {xpi: "XPI Manifest", taskgraph: "Taskgraph"}}
                                     HG_STORE_PATH: /builds/worker/checkouts/hg-store
