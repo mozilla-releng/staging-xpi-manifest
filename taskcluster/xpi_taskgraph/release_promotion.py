@@ -6,9 +6,6 @@
 
 from __future__ import absolute_import, print_function, unicode_literals
 
-import json
-import os
-
 from taskgraph.actions.registry import register_callback_action
 
 from taskgraph.util.taskcluster import get_artifact
@@ -16,7 +13,7 @@ from taskgraph.taskgraph import TaskGraph
 from taskgraph.decision import taskgraph_decision
 from taskgraph.parameters import Parameters
 from taskgraph.util.taskgraph import find_decision_task, find_existing_tasks_from_previous_kinds
-from xpi_taskgraph.xpi_manifest import get_manifest, get_xpi_config
+from xpi_taskgraph.xpi_manifest import get_manifest
 
 RELEASE_PROMOTION_PROJECTS = (
     "https://github.com/escapewindow/xpi-manifest",
@@ -107,13 +104,12 @@ def is_release_promotion_available(parameters):
 def release_promotion_action(parameters, graph_config, input, task_group_id, task_id):
     release_promotion_flavor = input['release_promotion_flavor']
     promotion_config = graph_config['release-promotion']['flavors'][release_promotion_flavor]
-    xpi_config = get_xpi_config(input['xpi_name'])
 
     target_tasks_method = promotion_config['target-tasks-method'].format(
         project=parameters['project']
     )
     rebuild_kinds = input.get('rebuild_kinds') or promotion_config.get('rebuild-kinds', [])
-    do_not_optimize = input.get('do_not_optimize') or promotion_config.get('do-not-optimize', []
+    do_not_optimize = input.get('do_not_optimize') or promotion_config.get('do-not-optimize', [])
 
     # make parameters read-write
     parameters = dict(parameters)
