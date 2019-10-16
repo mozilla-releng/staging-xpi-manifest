@@ -16,7 +16,9 @@ job-template:
     description: Release-sign XPI
     index:
         type: release-signing
-    run-on-tasks-for: [github-push, action]
+    attributes:
+        shipping-phase: promote
+    run-on-tasks-for: [action]
     treeherder:
         groupSymbol: Rs
     worker-type:

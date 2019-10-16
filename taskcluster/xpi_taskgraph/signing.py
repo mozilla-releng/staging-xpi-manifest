@@ -22,7 +22,10 @@ def define_signing_flags(config, tasks):
         dep = task["primary-dependency"]
         # Current kind will be prepended later in the transform chain.
         task["name"] = _get_dependent_job_name_without_its_kind(dep)
-        task["attributes"] = dep.attributes.copy()
+        attributes = dep.attributes.copy()
+        if task.get("attributes"):
+            attributes.update(task["attributes"])
+        task["attributes"] = attributes
         task["attributes"]["signed"] = True
         if "run_on_tasks_for" in task["attributes"]:
             task.setdefault("run-on-tasks-for", task["attributes"]["run_on_tasks_for"])

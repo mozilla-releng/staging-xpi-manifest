@@ -53,8 +53,10 @@ scriptworker:
 release-promotion:
     flavors:
         build:
-            target-tasks-method: default
+            target-tasks-method: build_xpi
             rebuild-kinds:
                 - build
+                - test
+                - dep-signing
         promote:
             target-tasks-method: promote_xpi

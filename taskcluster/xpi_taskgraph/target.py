@@ -18,21 +18,16 @@ def target_tasks_promote_xpi(full_task_graph, parameters, graph_config):
     """Select the set of tasks required for promoting a xpi."""
 
     def filter(task, parameters):
-        # TODO phase
-        return standard_filter(task, parameters)
+        return task.attributes.get('shipping-phase') in ('build', 'promote')
 
     return [l for l, t in full_task_graph.tasks.iteritems() if filter(t, parameters)]
 
 
-@target_task("default")
-def target_tasks_promote_xpi(full_task_graph, parameters, graph_config):
+@target_task("build_xpi")
+def target_tasks_build_xpi(full_task_graph, parameters, graph_config):
     """Select the set of tasks required for promoting a xpi."""
 
     def filter(task, parameters):
-        if not standard_filter(task, parameters):
-            return False
-
-        # TODO phase
-        return task.attributes['kind'] not in PROMOTE_KINDS
+        return task.attributes.get('shipping-phase') in ('build', )
 
     return [l for l, t in full_task_graph.tasks.iteritems() if filter(t, parameters)]

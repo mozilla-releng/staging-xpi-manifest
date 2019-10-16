@@ -27,8 +27,7 @@ job-defaults:
 jobs:
     release:
         attributes:
-            release: true
-        run-on-tasks-for: [github-push, action]
+            shipping-phase: build
         run:
             using: run-task
             cwd: '{checkout}'
