@@ -144,7 +144,7 @@ def release_promotion_action(parameters, graph_config, input, task_group_id, tas
     #  - require this is a specific revision
     #  - possibly also check that this is on a reviewed PR or merged into
     #    a trusted branch. this will require an oauth token
-    parameters['xpi_revision'] = input.get('revision', parameters['head_rev'])
+    parameters['xpi_revision'] = input.get('revision', 'master')
 
     if input.get('version'):
         parameters['version'] = input['version']
