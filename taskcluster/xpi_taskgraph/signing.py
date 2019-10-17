@@ -54,9 +54,9 @@ def build_signing_task(config, tasks):
         task["dependencies"] = {"build": dep.label}
         paths = dep.attributes["xpis"].values()
         if task["attributes"]["addon-type"] == "standard":
-            format = "autograph_privileged_xpi"
+            format = "xpi_privileged_webextension"
         elif task["attributes"]["addon-type"] == "system":
-            format = "autograph_system_addon"
+            format = "xpi_system_addon"
         else:
             raise Exception("Unknown addon-type {}".format(
                 task["attributes"]["addon-type"]
