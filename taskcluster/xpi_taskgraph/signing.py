@@ -11,9 +11,18 @@ from __future__ import absolute_import, print_function, unicode_literals
 from taskgraph.transforms.base import TransformSequence
 from taskgraph.util.treeherder import inherit_treeherder_from_dep, replace_group
 from taskgraph.util.schema import resolve_keyed_by
+from taskgraph.util.keyed_by import evaluate_keyed_by
 
 
 transforms = TransformSequence()
+
+KNOWN_FORMATS = (
+    "extension_rsa",
+    "extension_rsa_dep",
+    "extension_rsa_rel",
+    "systemaddon_rsa_dep",
+    "systemaddon_rsa_rel",
+)
 
 
 @transforms.add
@@ -53,14 +62,16 @@ def build_signing_task(config, tasks):
         dep = task["primary-dependency"]
         task["dependencies"] = {"build": dep.label}
         paths = dep.attributes["xpis"].values()
-        if task["attributes"]["addon-type"] == "standard":
-            format = "xpi_privileged_webextension"
-        elif task["attributes"]["addon-type"] == "system":
-            format = "xpi_system_addon"
-        else:
-            raise Exception("Unknown addon-type {}".format(
-                task["attributes"]["addon-type"]
-            ))
+        format = evaluate_keyed_by(
+            config.graph_config["scriptworker"]["signing-format"],
+            "signing-format",
+            {
+                "xpi-type": task["attributes"]["addon-type"],
+                "kind": config.kind,
+                "level": config.params["level"],
+            }
+        )
+        assert format in KNOWN_FORMATS
         task["worker"]["upstream-artifacts"] = [
             {
                 "taskId": {"task-reference": "<build>"},
