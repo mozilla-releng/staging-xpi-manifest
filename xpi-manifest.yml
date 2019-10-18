@@ -13,7 +13,8 @@ xpis:
     artifacts:
       # TODO standardize name
       # softlink pointing at @qa-shield-study-helper-1.0.0.xpi
-      - linked-addon.xpi
+      #- linked-addon.xpi
+      - qa-shield-study-helper-1.0.0.xpi
     # TODO naming? switch signing key based on value
     addon-type: standard
     install-type: npm
