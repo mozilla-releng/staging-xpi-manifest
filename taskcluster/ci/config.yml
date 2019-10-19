@@ -28,7 +28,7 @@ taskgraph:
         private:
             name: "Private repo test"
             project-regex: test-xpi$
-            default-repository: https://github.com/escapewindow/test-xpi
+            default-repository: git@github.com/escapewindow/test-xpi
             default-ref: master
             type: git
         multipreffer:
