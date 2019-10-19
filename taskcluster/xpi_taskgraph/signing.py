@@ -61,6 +61,11 @@ def build_signing_task(config, tasks):
     for task in tasks:
         dep = task["primary-dependency"]
         task["dependencies"] = {"build": dep.label}
+        if not dep.task["payload"]["env"]["ARTIFACT_PREFIX"].startswith("public"):
+            scopes = task.setdefault('scopes', [])
+            scopes.append(
+                "queue:getArtifact:{}/*".format(dep.task["payload"]["env"]["ARTIFACT_PREFIX"].rstrip('/'))
+            )
         paths = dep.attributes["xpis"].values()
         format = evaluate_keyed_by(
             config.graph_config["scriptworker"]["signing-format"],
