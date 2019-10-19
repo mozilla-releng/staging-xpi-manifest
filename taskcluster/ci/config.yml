@@ -15,6 +15,34 @@ taskgraph:
     repositories:
         xpi:
             name: "XPI manifest"
+            project-regex: xpi-manifest
+            default-repository: https://github.com/escapewindow/xpi-manifest
+            default-ref: master
+            type: git
+        helper:
+            name: "Shield study helper addon"
+            project-regex: shield-study-helper-addon
+            default-repository: https://github.com/mozilla/shield-studies-addon-utils
+            default-ref: master
+            type: git
+        private-helper:
+            name: "Private repo test"
+            project-regex: test-xpi$
+            default-repository: https://github.com/escapewindow/test-xpi
+            default-ref: master
+            type: git
+        multipreffer:
+            name: "Multipreffer"
+            project-regex: multipreffer
+            default-repository: https://github.com/mozilla/multipreffer
+            default-ref: master
+            type: git
+        fingerprinting:
+            name: "Fingerprinting and cryptomining protections retention study"
+            project-regex: fingerprinting-cryptomining-retention-study
+            default-repository: https://github.com/mozilla/fingerprinting-cryptomining-retention-study
+            default-ref: master
+            type: git
     cached-task-prefix: xpi.xpi-manifest
 
 workers:

@@ -32,14 +32,14 @@ def tasks_from_manifest(config, jobs):
                 continue
             task = deepcopy(job)
             env = task.setdefault("worker", {}).setdefault("env", {})
-            env["XPI_REPOSITORY_TYPE"] = "git"
-#            env["XPI_BASE_REPOSITORY"] = xpi_config["repo"]
-#            env["XPI_HEAD_REPOSITORY"] = xpi_config["repo"]
-            # TODO - check out in run-task, by overriding the repository config
-            env["XPI_SOURCE_REPO"] = xpi_config["repo"]
-            env["XPI_SOURCE_REVISION"] = xpi_revision or "master"
-#            env["XPI_HEAD_REV"] = "master"
-#            env["XPI_HEAD_REF"] = "master"
+            run = task.setdefault("run", {})
+            checkout = run.setdefault("checkout", {})
+            checkout_config = checkout.setdefault(xpi_config['repo-prefix'], {})
+            checkout_config['path'] = '/builds/worker/checkouts/src'
+            if 'directory' in xpi_config:
+                run['cwd'] = '{checkout}/%s' % xpi_config['directory']
+            if xpi_revision:
+                checkout_config['head_rev'] = xpi_revision
             task["label"] = "build-{}".format(xpi_config["name"])
             task["treeherder"]["symbol"] = "B({})".format(
                 xpi_config.get("treeherder-symbol", xpi_config["name"])
@@ -47,15 +47,13 @@ def tasks_from_manifest(config, jobs):
             env["XPI_NAME"] = xpi_config["name"]
             task.setdefault("extra", {})["xpi-name"] = xpi_config["name"]
             env["XPI_TYPE"] = xpi_config["addon-type"]
-            if xpi_config.get("directory"):
-                env["XPI_SOURCE_DIR"] = xpi_config["directory"]
             if xpi_config.get("private-repo"):
                 task.setdefault("scopes", []).append(
                     "secrets:get:{}".format(
                         config.graph_config["github_clone_secret"],
                     )
                 )
-                env["XPI_SSH_SECRET_NAME"] = config.graph_config["github_clone_secret"]
+                checkout_config['ssh_secret_name'] = config.graph_config["github_clone_secret"]
                 artifact_prefix = "xpi/build"
             else:
                 artifact_prefix = "public/build"

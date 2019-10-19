@@ -4,7 +4,7 @@ xpis:
   # repository, revision, name, version/metadata from package.json,
   # artifact shas + filesize?
   - name: shield-study-helper-addon
-    repo: https://github.com/mozilla/shield-studies-addon-utils
+    repo-prefix: helper
     directory: misc/shield-study-helper-addon
     active: true
     # private-repo: defaults to false
@@ -19,23 +19,23 @@ xpis:
     addon-type: standard
     install-type: npm
     treeherder-symbol: helper
-#  - name: private-helper
-#    repo: git@github.com:escapewindow/test-xpi
-#    directory: misc/shield-study-helper-addon
-#    active: true
-#    private-repo: true
-#    # TODO allowed-branches
-#    # TODO allow-reviewed-pr
-#    artifacts:
-#      # TODO standardize name
-#      # softlink pointing at @qa-shield-study-helper-1.0.0.xpi
-#      - linked-addon.xpi
-#    # TODO naming? switch signing key based on value
-#    addon-type: standard
-#    install-type: npm
-#    treeherder-symbol: private-helper
+  - name: private-helper
+    repo-prefix: private-helper
+    directory: misc/shield-study-helper-addon
+    active: true
+    private-repo: true
+    # TODO allowed-branches
+    # TODO allow-reviewed-pr
+    artifacts:
+      # TODO standardize name
+      # softlink pointing at @qa-shield-study-helper-1.0.0.xpi
+      - linked-addon.xpi
+    # TODO naming? switch signing key based on value
+    addon-type: standard
+    install-type: npm
+    treeherder-symbol: private-helper
   - name: multipreffer
-    repo: https://github.com/mozilla/multipreffer
+    repo-prefix: multipreffer
     active: true
     artifacts:
       # TODO standardize name
@@ -43,7 +43,7 @@ xpis:
     addon-type: standard
     install-type: npm
   - name: fingerprinting-and-cryptomining-protections-retention-study
-    repo: https://github.com/mozilla/fingerprinting-cryptomining-retention-study
+    repo-prefix: fingerprinting
     active: true
     artifacts:
       - dist/fingerprinting_and_cryptomining_protections_retention_study-1.1.zip

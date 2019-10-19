@@ -6,11 +6,13 @@
 
 from __future__ import absolute_import, print_function, unicode_literals
 
+from copy import deepcopy
 import json
 import os
 import time
 from datetime import datetime
 
+from taskgraph.config import load_graph_config
 from taskgraph.util.schema import validate_schema
 from taskgraph.util.vcs import calculate_head_rev, get_repo_path, get_repository_type
 from taskgraph.util import yaml
@@ -24,16 +26,15 @@ from voluptuous import (
     Any,
 )
 
-MANIFEST_PATH = os.path.join(
-    os.path.dirname(os.path.dirname(os.path.dirname(__file__))),
-    "xpi-manifest.yml"
-)
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.dirname(__file__)))
+ROOT = os.path.join(BASE_DIR, 'taskcluster', 'ci')
+MANIFEST_PATH = os.path.join(BASE_DIR, "xpi-manifest.yml")
 
 
 base_schema = Schema({
     Required('xpis'): [{
         Required('name'): basestring,
-        Required('repo'): basestring,
+        Required('repo-prefix'): basestring,
         Optional('directory'): basestring,
         Optional('active'): bool,
         Optional('private-repo'): bool,
@@ -47,10 +48,14 @@ base_schema = Schema({
 
 @memoize
 def get_manifest():
-    manifest = ReadOnlyDict(yaml.load_yaml(MANIFEST_PATH))
-    validate_schema(base_schema, manifest.copy(), 'Invalid manifest:')
+    rw_manifest = yaml.load_yaml(MANIFEST_PATH)
+    graph_config = load_graph_config(ROOT)
+    validate_schema(base_schema, deepcopy(rw_manifest), 'Invalid manifest:')
+    for xpi_config in rw_manifest['xpis']:
+        assert xpi_config['repo-prefix'] in graph_config['taskgraph']['repositories']
     # any other checks?
-    return manifest
+    # TODO make read-only recursively
+    return ReadOnlyDict(rw_manifest)
 
 
 def get_xpi_config(xpi_name):

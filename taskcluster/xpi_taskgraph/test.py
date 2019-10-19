@@ -22,11 +22,12 @@ transforms = TransformSequence()
 def test_tasks_from_manifest(config, tasks):
     manifest = get_manifest()
     for task in tasks:
-        dep = task["primary-dependency"]
+        dep = task.pop("primary-dependency")
         task["attributes"] = dep.attributes.copy()
-        del(task["primary-dependency"])
         task["dependencies"] = {"build": dep.label}
         xpi_name = dep.task["extra"]["xpi-name"]
+        if xpi_name:
+            xpi_revision = config.params.get('xpi_revision')
         task.setdefault("extra", {})["xpi-name"] = xpi_name
         for xpi_config in manifest.get("xpis", []):
             if not xpi_config.get("active"):
@@ -36,9 +37,14 @@ def test_tasks_from_manifest(config, tasks):
         else:
             raise Exception("Can't determine the upstream xpi_config for {}!".format(xpi_name))
         env = task.setdefault("worker", {}).setdefault("env", {})
-        for k, v in dep.task["payload"]["env"].items():
-            if k.startswith("XPI_"):
-                env[k] = v
+        run = task.setdefault("run", {})
+        checkout = run.setdefault("checkout", {})
+        checkout_config = checkout.setdefault(xpi_config['repo-prefix'], {})
+        checkout_config['path'] = '/builds/worker/checkouts/src'
+        if 'directory' in xpi_config:
+            run['cwd'] = '{checkout}/%s' % xpi_config['directory']
+        if xpi_revision:
+            checkout_config['head_rev'] = xpi_revision
         task["label"] = "test-{}".format(xpi_name)
         task["treeherder"]["symbol"] = "T({})".format(
             xpi_config.get("treeherder-symbol", xpi_config["name"])
@@ -49,14 +55,12 @@ def test_tasks_from_manifest(config, tasks):
                     config.graph_config["github_clone_secret"]
                 )
             )
-            env["XPI_SSH_SECRET_NAME"] = config.graph_config["github_clone_secret"]
+            checkout_config['ssh_secret_name'] = config.graph_config["github_clone_secret"]
             artifact_prefix = "xpi/build"
-            # TODO put this in decision task?
-            os.environ["TASKCLUSTER_PROXY_URL"] = "http://taskcluster"
             task["worker"]["taskcluster-proxy"] = True
         else:
             artifact_prefix = "public/build"
-            env["ARTIFACT_PREFIX"] = artifact_prefix
+        env["ARTIFACT_PREFIX"] = artifact_prefix
 
         paths = []
         for artifact in xpi_config["artifacts"]:
