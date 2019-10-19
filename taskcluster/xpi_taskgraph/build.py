@@ -35,6 +35,7 @@ def tasks_from_manifest(config, jobs):
             run = task.setdefault("run", {})
             checkout = run.setdefault("checkout", {})
             checkout_config = checkout.setdefault(xpi_config['repo-prefix'], {})
+            env['REPO_PREFIX'] = xpi_config['repo-prefix']
             checkout_config['path'] = '/builds/worker/checkouts/src'
             if 'directory' in xpi_config:
                 run['cwd'] = '{checkout}/%s' % xpi_config['directory']

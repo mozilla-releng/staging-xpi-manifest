@@ -70,52 +70,33 @@ def main():
         "ARTIFACT_PREFIX",
         "XPI_ARTIFACTS",
         "XPI_NAME",
-        "XPI_SOURCE_REPO",
         "XPI_TYPE",
+        "REPO_PREFIX",
     ])
 
     artifact_prefix = os.environ["ARTIFACT_PREFIX"]
-    xpi_source_repo = os.environ["XPI_SOURCE_REPO"]
     xpi_artifacts = os.environ["XPI_ARTIFACTS"].split(";")
     xpi_name = os.environ["XPI_NAME"]
     xpi_type = os.environ["XPI_TYPE"]
+    repo_prefix = os.environ["REPO_PREFIX"]
+    head_repo_env_var = "{}_HEAD_REPOSITORY".format(repo_prefix.upper())
+    test_var_set([head_repo_env_var])
+
     artifact_dir = "/builds/worker/artifacts"
-    parent_source_dir = "/builds/worker/checkouts"
-    source_dir = "/builds/worker/checkouts/xpi-source"
+    base_src_dir = "/builds/worker/checkouts/src"
 
     # TODO move this clone to run-task, once we no longer require
     # hardcoding repository configs in config.yml
-    cd(parent_source_dir)
-    if "XPI_SSH_SECRET_NAME" in os.environ:
-        ssh_dir = Path("~/.ssh-run-task").expanduser()
-        ssh_key_file = ssh_dir.joinpath('private_ssh_key')
-
-        os.environ['GIT_SSH_COMMAND'] = " ".join([
-            "ssh",
-            "-oIdentityFile={}".format(ssh_key_file.as_posix()),
-        ])
-    run_command(
-        ["git", "clone", xpi_source_repo, "xpi-source"]
-    )
-
-    cd(source_dir)
-    if "XPI_SOURCE_REVISION" in os.environ:
-        run_command(["git", "checkout", os.environ["XPI_SOURCE_REVISION"]])
-    revision = get_output(["git", "rev-parse", "HEAD"])
-
-    if "XPI_SOURCE_DIR" in os.environ:
-        xpi_source_dir = os.environ["XPI_SOURCE_DIR"]
-        test_is_subdir(source_dir, xpi_source_dir)
-        cd(xpi_source_dir)
-
     package_info = get_package_info()
+
+    revision = get_output(["git", "rev-parse", "HEAD"])
 
     build_manifest = {
         "name": xpi_name,
         "addon-type": xpi_type,
-        "repo": xpi_source_repo,
+        "repo": os.environ[head_repo_env_var],
         "revision": revision.decode("utf-8"),
-        "directory": os.path.relpath(source_dir, os.getcwd()),
+        "directory": os.path.relpath(base_src_dir, os.getcwd()),
         "version": package_info["version"],
         "artifacts": [],
     }
