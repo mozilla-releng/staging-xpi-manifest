@@ -20,7 +20,7 @@ xpis:
     install-type: npm
     treeherder-symbol: helper
   - name: private-helper
-    repo-prefix: private-helper
+    repo-prefix: private
     directory: misc/shield-study-helper-addon
     active: true
     private-repo: true

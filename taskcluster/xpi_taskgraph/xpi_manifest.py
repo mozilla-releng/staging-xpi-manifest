@@ -53,6 +53,7 @@ def get_manifest():
     validate_schema(base_schema, deepcopy(rw_manifest), 'Invalid manifest:')
     for xpi_config in rw_manifest['xpis']:
         assert xpi_config['repo-prefix'] in graph_config['taskgraph']['repositories']
+        assert '-' not in xpi_config['repo-prefix']
     # any other checks?
     # TODO make read-only recursively
     return ReadOnlyDict(rw_manifest)
