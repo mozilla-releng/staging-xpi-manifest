@@ -46,7 +46,7 @@ xpis:
     # TODO naming? switch signing key based on value
     addon-type: standard
     install-type: npm
-    treeherder-symbol: private-helper
+    treeherder-symbol: template-example
   - name: multipreffer
     repo-prefix: multipreffer
     active: true
