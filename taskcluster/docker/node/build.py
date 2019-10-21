@@ -2,6 +2,7 @@
 from __future__ import print_function
 
 import functools
+import glob
 import hashlib
 import json
 import os
@@ -68,14 +69,12 @@ def get_hash(path, hash_alg="sha256"):
 def main():
     test_var_set([
         "ARTIFACT_PREFIX",
-        "XPI_ARTIFACTS",
         "XPI_NAME",
         "XPI_TYPE",
         "REPO_PREFIX",
     ])
 
     artifact_prefix = os.environ["ARTIFACT_PREFIX"]
-    xpi_artifacts = os.environ["XPI_ARTIFACTS"].split(";")
     xpi_name = os.environ["XPI_NAME"]
     xpi_type = os.environ["XPI_TYPE"]
     repo_prefix = os.environ["REPO_PREFIX"]
@@ -107,6 +106,11 @@ def main():
         run_command(["npm", "install"])
 
     run_command(["yarn", "build"])
+
+    if 'XPI_ARTIFACTS' in os.environ:
+        xpi_artifacts = os.environ["XPI_ARTIFACTS"].split(";")
+    else:
+        xpi_artifacts = glob.glob('*.xpi')
 
     for artifact in xpi_artifacts:
         target_path = os.path.join(artifact_dir, os.path.basename(artifact))
