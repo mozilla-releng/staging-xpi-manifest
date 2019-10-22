@@ -34,7 +34,7 @@ taskgraph:
         template:
             name: "template repo test"
             project-regex: test-xpi-public$
-            default-repository: git@github.com:escapewindow/test-xpi-public
+            default-repository: https://github.com/escapewindow/test-xpi-public
             default-ref: master
             type: git
         multipreffer:
