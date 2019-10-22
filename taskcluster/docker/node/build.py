@@ -70,14 +70,12 @@ def main():
     test_var_set([
         "ARTIFACT_PREFIX",
         "XPI_NAME",
-        "XPI_TYPE",
-        "REPO_PREFIX",
     ])
 
     artifact_prefix = os.environ["ARTIFACT_PREFIX"]
     xpi_name = os.environ["XPI_NAME"]
-    xpi_type = os.environ["XPI_TYPE"]
-    repo_prefix = os.environ["REPO_PREFIX"]
+    xpi_type = os.environ.get("XPI_TYPE")
+    repo_prefix = os.environ.get("REPO_PREFIX", "xpi")
     head_repo_env_var = "{}_HEAD_REPOSITORY".format(repo_prefix.upper())
     test_var_set([head_repo_env_var])
 
