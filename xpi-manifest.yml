@@ -1,20 +1,14 @@
 ---
 xpis:
-  # TODO: create a manifest during the build.
-  # repository, revision, name, version/metadata from package.json,
-  # artifact shas + filesize?
   - name: private-helper
     repo-prefix: private
-    directory: misc/shield-study-helper-addon
     active: true
     private-repo: true
     # TODO allowed-branches
     # TODO allow-reviewed-pr
     artifacts:
-      # TODO standardize name
-      # softlink pointing at @qa-shield-study-helper-1.0.0.xpi
-      - linked-addon.xpi
-    # TODO naming? switch signing key based on value
+      - dist/multipreffer-2.0.zip
+    # TODO naming?
     addon-type: standard
     install-type: npm
     treeherder-symbol: private-helper
@@ -24,10 +18,7 @@ xpis:
     # TODO allowed-branches
     # TODO allow-reviewed-pr
     artifacts:
-      # TODO standardize name
-      # softlink pointing at @qa-shield-study-helper-1.0.0.xpi
-      - target.xpi
-    # TODO naming? switch signing key based on value
+      - dist/multipreffer-2.0.zip
     addon-type: standard
     install-type: npm
     treeherder-symbol: template-example
@@ -35,7 +26,6 @@ xpis:
     repo-prefix: multipreffer
     active: true
     artifacts:
-      # TODO standardize name
       - dist/multipreffer-2.0.zip
     addon-type: standard
     install-type: npm
