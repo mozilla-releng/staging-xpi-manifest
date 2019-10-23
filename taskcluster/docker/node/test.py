@@ -65,9 +65,12 @@ def main():
     else:
         run_command(["npm", "install"])
 
-    # If wanted, the upstream xpi(s) are available in os.environ["XPI_UPSTREAM_URLS"]
-    # TODO when we get `yarn test` or some other real test working, remove the echo
-    run_command(["echo", "yarn", "test"])
+    commands = ["test"]
+    if len(sys.argv) != 1:
+        commands = sys.argv[1:]
+
+    for command in commands:
+        run_command(["yarn", command])
 
 
 __name__ == '__main__' and main()
