@@ -112,8 +112,6 @@ def main():
 
     for artifact in xpi_artifacts:
         target_path = os.path.join(artifact_dir, os.path.basename(artifact))
-        if target_path.endswith(".zip"):
-            target_path = target_path.replace(".zip", ".xpi")
         if not os.path.exists(artifact):
             raise Exception("Missing artifact {}".format(artifact))
         test_is_subdir(os.getcwd(), artifact)
