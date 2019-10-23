@@ -19,12 +19,6 @@ taskgraph:
             default-repository: https://github.com/escapewindow/xpi-manifest
             default-ref: master
             type: git
-        helper:
-            name: "Shield study helper addon"
-            project-regex: shield-study-helper-addon
-            default-repository: https://github.com/mozilla/shield-studies-addon-utils
-            default-ref: master
-            type: git
         private:
             name: "Private repo test"
             project-regex: test-xpi-private$
