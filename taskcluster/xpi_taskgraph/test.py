@@ -26,8 +26,7 @@ def test_tasks_from_manifest(config, tasks):
         task["attributes"] = dep.attributes.copy()
         task["dependencies"] = {"build": dep.label}
         xpi_name = dep.task["extra"]["xpi-name"]
-        if xpi_name:
-            xpi_revision = config.params.get('xpi_revision')
+        xpi_revision = config.params.get('xpi_revision')
         task.setdefault("extra", {})["xpi-name"] = xpi_name
         for xpi_config in manifest.get("xpis", []):
             if not xpi_config.get("active"):
