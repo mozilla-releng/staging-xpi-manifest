@@ -4,8 +4,6 @@ xpis:
     repo-prefix: private
     active: true
     private-repo: true
-    # TODO allowed-branches
-    # TODO allow-reviewed-pr
     artifacts:
       - dist/multipreffer-2.0.zip
     # TODO naming?
@@ -15,8 +13,6 @@ xpis:
   - name: template-example
     repo-prefix: template
     active: true
-    # TODO allowed-branches
-    # TODO allow-reviewed-pr
     artifacts:
       - dist/multipreffer-2.0.zip
     addon-type: standard

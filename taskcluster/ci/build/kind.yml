@@ -23,6 +23,7 @@ job-defaults:
         chain-of-trust: true
     run:
         use-caches: false
+    run-on-tasks-for: [action]
 
 jobs:
     release:
@@ -34,4 +35,3 @@ jobs:
             cache-dotcache: false
             command: >-
                 python3 /usr/local/bin/build.py
-        run-on-tasks-for: [action]
