@@ -10,6 +10,7 @@ xpis:
     addon-type: standard
     install-type: npm
     treeherder-symbol: private-helper
+    notify: aki@mozilla.com
   - name: template-example
     repo-prefix: template
     active: true
@@ -18,6 +19,7 @@ xpis:
     addon-type: standard
     install-type: npm
     treeherder-symbol: template-example
+    notify: aki@mozilla.com
   - name: multipreffer
     repo-prefix: multipreffer
     active: true
@@ -25,6 +27,7 @@ xpis:
       - dist/multipreffer-2.0.zip
     addon-type: standard
     install-type: npm
+    notify: aki@mozilla.com
   - name: fingerprinting-and-cryptomining-protections-retention-study
     repo-prefix: fingerprinting
     active: true
@@ -33,3 +36,4 @@ xpis:
     addon-type: standard
     install-type: npm
     treeherder-symbol: fingerprint
+    notify: aki@mozilla.com

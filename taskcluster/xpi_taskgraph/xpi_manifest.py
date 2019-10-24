@@ -42,6 +42,7 @@ base_schema = Schema({
         Required('addon-type'): Any('system', 'standard'),
         Optional('install-type'): Any('npm', 'yarn'),
         Optional('treeherder-symbol'): basestring,
+        Optional('notify'): basestring,
     }],
 })
 

@@ -24,11 +24,13 @@ def tasks_from_manifest(config, jobs):
     xpi_revision = None
     if xpi_name:
         xpi_revision = config.params.get("xpi_revision")
+    else:
+        return
     for job in jobs:
         for xpi_config in manifest.get("xpis", []):
             if not xpi_config.get("active"):
                 continue
-            if xpi_name and xpi_config["name"] != xpi_name:
+            if xpi_config["name"] != xpi_name:
                 continue
             task = deepcopy(job)
             env = task.setdefault("worker", {}).setdefault("env", {})
