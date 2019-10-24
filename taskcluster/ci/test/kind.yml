@@ -33,3 +33,4 @@ job-template:
         # `yarn test`. For now, default to `yarn test`.
         command: >-
             python3 /usr/local/bin/test.py
+    run-on-tasks-for: [action]
