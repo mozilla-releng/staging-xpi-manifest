@@ -27,6 +27,8 @@ def tasks_from_manifest(config, jobs):
     else:
         return
     for job in jobs:
+        # TODO if we continue only building on build relpro, we can use
+        # `get_xpi_config` rather than looping through
         for xpi_config in manifest.get("xpis", []):
             if not xpi_config.get("active"):
                 continue
