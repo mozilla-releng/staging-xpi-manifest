@@ -1,6 +1,7 @@
 ---
 xpis:
   - name: private-helper
+    description: an example private repo, with a multipreffer
     repo-prefix: private
     active: true
     private-repo: true
@@ -12,6 +13,7 @@ xpis:
     treeherder-symbol: private-helper
     notify: aki@mozilla.com
   - name: template-example
+    description: an example template repo, with 2 multipreffers
     repo-prefix: template
     active: true
     artifacts:
@@ -21,6 +23,7 @@ xpis:
     treeherder-symbol: template-example
     notify: aki@mozilla.com
   - name: multipreffer
+    description: The Multipreffer
     repo-prefix: multipreffer
     active: true
     artifacts:
@@ -29,6 +32,7 @@ xpis:
     install-type: npm
     notify: aki@mozilla.com
   - name: fingerprinting-and-cryptomining-protections-retention-study
+    description: The fingerprinting and cryptomining protections retention study
     repo-prefix: fingerprinting
     active: true
     artifacts:

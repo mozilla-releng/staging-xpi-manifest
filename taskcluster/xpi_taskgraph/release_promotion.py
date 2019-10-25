@@ -28,9 +28,9 @@ def is_release_promotion_available(parameters):
 
 @register_callback_action(
     name='release-promotion',
-    title='Promote a XPI',
+    title='Release promotion: ${input.release_promotion_flavor} ${input.xpi_name}',
     symbol='${input.release_promotion_flavor}_${input.xpi_name}',
-    description="Promote a XPI.",
+    description='Release promotion: ${input.release_promotion_flavor} ${input.xpi_name}.',
     generic=False,
     order=500,
     context=[],
