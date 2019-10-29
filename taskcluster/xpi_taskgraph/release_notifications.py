@@ -49,7 +49,6 @@ def add_notifications(config, jobs):
         job.setdefault('routes', []).extend(
             ['notify.email.{}.on-completed'.format(email)]
         )
-        job.setdefault('attributes', {})['shipping-phase'] = shipping_phase
 
         job.setdefault('extra', {}).update(
             {
