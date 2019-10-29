@@ -26,11 +26,22 @@ def add_notifications(config, jobs):
         return
 
     for job in jobs:
-        label = '{}-{}'.format(config.kind, job['name'])
+        if "primary-dependency" in job:
+            dep = job.pop("primary-dependency")
+            if dep.task.get("extra", {}).get("xpi-name") != xpi_name:
+                continue
+            attributes = dep.attributes.copy()
+            if job.get("attributes"):
+                attributes.update(job["attributes"])
+            job["attributes"] = attributes
+            job.setdefault("dependencies", {}).update({"signing": dep.label})
+        if job.get("attributes", {}).get("shipping-phase") != shipping_phase:
+            continue
+        job['label'] = '{}-{}'.format(config.kind, shipping_phase)
         xpi_config = get_xpi_config(xpi_name)
         xpi_type = xpi_config['addon-type']
 
-        email = evaluate_keyed_by(
+        emails = evaluate_keyed_by(
             config.graph_config['release-promotion']['notifications'][xpi_type],
             'email', dict(phase=shipping_phase, )
         )
@@ -47,7 +58,7 @@ def add_notifications(config, jobs):
         # We only send mail on success to avoid messages like 'blah is in the
         # candidates dir' when cancelling graphs, dummy job failure, etc
         job.setdefault('routes', []).extend(
-            ['notify.email.{}.on-completed'.format(email)]
+            ['notify.email.{}.on-completed'.format(email) for email in emails]
         )
 
         job.setdefault('extra', {}).update(
