@@ -37,3 +37,11 @@ xpis:
     addon-type: standard
     install-type: npm
     treeherder-symbol: fingerprint
+  - name: fingerprinting-and-cryptomining-protections-retention-study
+    repo-prefix: fingerprinting-x
+    active: true
+    artifacts:
+      - dist/fingerprinting_and_cryptomining_protections_retention_study-1.1.zip
+    addon-type: standard
+    install-type: npm
+    treeherder-symbol: fingerprint2
