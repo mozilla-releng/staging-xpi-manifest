@@ -15,6 +15,7 @@ xpis:
   - name: template-example
     repo-prefix: template
     active: true
+    directory: one
     # TODO allowed-branches
     # TODO allow-reviewed-pr
     artifacts:
