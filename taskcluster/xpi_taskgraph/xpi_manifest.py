@@ -18,43 +18,62 @@ from taskgraph.util.vcs import calculate_head_rev, get_repo_path, get_repository
 from taskgraph.util import yaml
 from taskgraph.util.memoize import memoize
 from taskgraph.util.readonlydict import ReadOnlyDict
-from voluptuous import (
-    ALLOW_EXTRA,
-    Optional,
-    Required,
-    Schema,
-    Any,
-)
+from voluptuous import ALLOW_EXTRA, Optional, Required, Schema, Any
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.dirname(__file__)))
-ROOT = os.path.join(BASE_DIR, 'taskcluster', 'ci')
+ROOT = os.path.join(BASE_DIR, "taskcluster", "ci")
 MANIFEST_PATH = os.path.join(BASE_DIR, "xpi-manifest.yml")
 
 
-base_schema = Schema({
-    Required('xpis'): [{
-        Required('name'): basestring,
-        Required('repo-prefix'): basestring,
-        Optional('directory'): basestring,
-        Optional('active'): bool,
-        Optional('private-repo'): bool,
-        Required('artifacts'): [basestring],
-        Required('addon-type'): Any('system', 'standard'),
-        Optional('install-type'): Any('npm', 'yarn'),
-        Optional('treeherder-symbol'): basestring,
-    }],
-})
+base_schema = Schema(
+    {
+        Required("xpis"): [
+            {
+                Required("name"): basestring,
+                Required("repo-prefix"): basestring,
+                Optional("directory"): basestring,
+                Optional("active"): bool,
+                Optional("private-repo"): bool,
+                Required("artifacts"): [basestring],
+                Required("addon-type"): Any("system", "standard"),
+                Optional("install-type"): Any("npm", "yarn"),
+                Optional("treeherder-symbol"): basestring,
+            }
+        ]
+    }
+)
+
+
+def check_manifest(manifest, graph_config):
+    xpi_names = []
+    for xpi_config in manifest["xpis"]:
+        # Every xpi_config has a '-' in it
+        if xpi_config["repo-prefix"] not in graph_config["taskgraph"]["repositories"]:
+            raise Exception(
+                "{} repo-prefix not in graph_config!".format(xpi_config["name"])
+            )
+        # No '-' allowed in repo-prefixes
+        if "-" in xpi_config["repo-prefix"]:
+            raise Exception(
+                "{} repo-prefix contains a '-': {}".format(
+                    xpi_config["name"], xpi_config["repo-prefix"]
+                )
+            )
+        xpi_names.append(xpi_config["name"])
+    # check for duplicate xpi names
+    duplicate_xpi_names = set(
+        [name for name in set(xpi_names) if xpi_names.count(name) > 1]
+    )
+    if duplicate_xpi_names:
+        raise Exception("Duplicate xpi names! {}".format(duplicate_xpi_names))
 
 
 @memoize
 def get_manifest():
     rw_manifest = yaml.load_yaml(MANIFEST_PATH)
     graph_config = load_graph_config(ROOT)
-    validate_schema(base_schema, deepcopy(rw_manifest), 'Invalid manifest:')
-    for xpi_config in rw_manifest['xpis']:
-        assert xpi_config['repo-prefix'] in graph_config['taskgraph']['repositories']
-        assert '-' not in xpi_config['repo-prefix']
-    # any other checks?
+    validate_schema(base_schema, deepcopy(rw_manifest), "Invalid manifest:")
+    check_manifest(deepcopy(rw_manifest), graph_config)
     # TODO make read-only recursively
     return ReadOnlyDict(rw_manifest)
 
