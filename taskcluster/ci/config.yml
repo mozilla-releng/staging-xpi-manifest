@@ -83,7 +83,7 @@ scriptworker:
                     release-signing:
                         by-level:
                             "3": extension_rsa_rel
-                            default: extension_rsa_dep
+                            default: extension_rsa
             system:
                 by-kind:
                     dep-signing: systemaddon_rsa_dep
