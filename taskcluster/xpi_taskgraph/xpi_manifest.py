@@ -30,6 +30,7 @@ base_schema = Schema(
         Required("xpis"): [
             {
                 Required("name"): basestring,
+                Optional("description"): basestring,
                 Required("repo-prefix"): basestring,
                 Optional("directory"): basestring,
                 Optional("active"): bool,
