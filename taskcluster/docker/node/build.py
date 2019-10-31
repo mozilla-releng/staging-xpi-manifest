@@ -82,8 +82,6 @@ def main():
     artifact_dir = "/builds/worker/artifacts"
     base_src_dir = "/builds/worker/checkouts/src"
 
-    # TODO move this clone to run-task, once we no longer require
-    # hardcoding repository configs in config.yml
     package_info = get_package_info()
 
     revision = get_output(["git", "rev-parse", "HEAD"])
