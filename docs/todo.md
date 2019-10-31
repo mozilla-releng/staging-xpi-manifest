@@ -7,3 +7,7 @@
 - require a specific revision in release-promotion.py
 
 - remove the `echo` from `yarn test`. I just added it because all my example repos had busted `yarn test`s.
+
+- add an easy link to the release graph artifacts
+
+...
