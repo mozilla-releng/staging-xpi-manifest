@@ -7,11 +7,6 @@ from __future__ import absolute_import, print_function, unicode_literals
 from taskgraph.target_tasks import _target_task as target_task
 from taskgraph.target_tasks import standard_filter
 
-# TODO add shipping-phase support
-PROMOTE_KINDS = (
-    "release-signing",
-)
-
 
 @target_task("promote_xpi")
 def target_tasks_promote_xpi(full_task_graph, parameters, graph_config):
