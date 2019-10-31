@@ -24,7 +24,7 @@ Ideally we can add some sort of regex or wildcard for all future repos underneat
 
 ### Private repos
 
-To enable cloning private repos, uncomment the `github_clone_secret` line in [taskcluster/ci/config.yml](https://github.com/escapewindow/test-xpi-public/blob/735cf30/taskcluster/ci/config.yml#L24-L25). This will move the artifact generated into `xpi/build/...` rather than `public/build/...`, and you will need Taskcluster scopes to be able to download the build. The logs will remain public for anyone viewing the task, however.
+To enable cloning private repos, uncomment the `github_clone_secret` line in the source repo's [taskcluster/ci/config.yml](https://github.com/escapewindow/test-xpi-public/blob/735cf30/taskcluster/ci/config.yml#L24-L25). This will move the artifact generated into `xpi/build/...` rather than `public/build/...`, and you will need Taskcluster scopes to be able to download the build. The logs will remain public for anyone viewing the task, however.
 
 ## Using taskcluster CI automation
 
@@ -81,9 +81,9 @@ Once Taskcluster CI automation is enabled, we'll generate a decision task and ta
 
 To enable releases for your new repo, go to the xpi manifest repo (this one).
 
-The source repository must be added to `taskgraph.repositories` in [taskcluster/ci/config.yml](../taskcluster/ci/config.yml). If this is the first xpi in your source repo, you need to add it.
+The source repository must be added to `taskgraph.repositories` in the xpi manifest repo's [taskcluster/ci/config.yml](../taskcluster/ci/config.yml). If this is the first xpi in your source repo, you need to add it.
 
-Then, the xpi needs to be added to the [xpi manifest](../xpi-manifest.yml). The `repo-prefix` will refer to the repository key name under `taskgraph.repositories` in `taskcluster/ci/config.yml`.
+Then, the xpi needs to be added to the [xpi manifest](../xpi-manifest.yml). The `repo-prefix` will refer to the repository key name under `taskgraph.repositories` in the xpi manifest repo's `taskcluster/ci/config.yml`.
 
 The commit should run sanity checks on pull request and push; make sure the decision task goes green.
 
