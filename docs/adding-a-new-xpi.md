@@ -34,21 +34,21 @@ Once Taskcluster CI automation is enabled, we'll generate a decision task and ta
 
     - The package directories must have unique names per repository. So a layout like
 
-    ```
-    ./xpis/one/package.json
-    ./xpis/two/package.json
-    ./three/package.json
-    ./package.json
-    ```
+        ```
+        ./xpis/one/package.json
+        ./xpis/two/package.json
+        ./three/package.json
+        ./package.json
+        ```
 
-    works, while a layout like
+        works, while a layout like
 
-    ```
-    xpis/one/package.json
-    more-xpis/one/package.json
-    ```
+        ```
+        xpis/one/package.json
+        more-xpis/one/package.json
+        ```
 
-    doesn't (duplicate `one` package directory names). A package directory at the root of the repository will be named `src`.
+        doesn't (duplicate `one` package directory names). A package directory at the root of the repository will be named `src`.
 
   - Read `package.json` and create a test task per entry in `scripts` that starts with either `test` or `lint`. (These test names must be either alphanumeric, or only include the special characters `:_-`).
 
