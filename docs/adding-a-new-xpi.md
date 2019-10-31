@@ -6,11 +6,9 @@ During this testing phase, the test template source repo is https://github.com/e
 
 The files we need are:
 
-    ```
-.cron.yml
-.taskcluster.yml
-CODE_OF_CONDUCT.md
-LICENSE
-taskcluster/*
-    ```
+    .cron.yml
+    .taskcluster.yml
+    CODE_OF_CONDUCT.md
+    LICENSE
+    taskcluster/*
 
