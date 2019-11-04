@@ -6,8 +6,8 @@ policy:
 tasks:
     - $let:
           taskgraph:
-              branch: taskgraph-try
-              revision: f443a8f389399601fc2cd75efd89726469812322
+              branch: taskgraph
+              revision: 8724fdf41562f6eea82d1b905072d4a7c1f5ebbf
           trustDomain: xpi
       in:
           $if: 'tasks_for in ["github-pull-request", "github-push", "action", "cron"]'
