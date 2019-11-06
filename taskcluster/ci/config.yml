@@ -57,15 +57,15 @@ taskgraph:
 workers:
     aliases:
         b-linux:
-            provisioner: aws-provisioner-v1
+            provisioner: xpi-{level}
             implementation: docker-worker
             os: linux
-            worker-type: 'xpi-{level}-b-linux'
+            worker-type: 'b-linux'
         images:
-            provisioner: aws-provisioner-v1
+            provisioner: xpi-{level}
             implementation: docker-worker
             os: linux
-            worker-type: 'xpi-{level}-images'
+            worker-type: 'images'
         dep-signing:
             provisioner: scriptworker-prov-v1
             implementation: scriptworker-signing
