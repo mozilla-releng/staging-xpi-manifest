@@ -16,6 +16,7 @@ from taskgraph.util.taskgraph import find_decision_task, find_existing_tasks_fro
 from xpi_taskgraph.xpi_manifest import get_manifest
 
 RELEASE_PROMOTION_PROJECTS = (
+    "https://github.com/mozilla-extensions/xpi-manifest",
     "https://github.com/escapewindow/xpi-manifest",
 )
 
