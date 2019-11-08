@@ -81,8 +81,8 @@ tasks:
               in:
                   $let:
                       level:
-                          $if: 'tasks_for in ["github-push"] && repoUrl == "https://github.com/escapewindow/xpitest-manifest"'
-                          then: '1'  # TODO: 3 when we're on the real repo
+                          $if: 'tasks_for in ["github-push", "cron", "action"] && repoUrl == "https://github.com/mozilla-extensions/xpi-manifest"'
+                          then: '3'
                           else:
                               $if: 'tasks_for in ["cron", "action"]'
                               then: '${repository.level}'
