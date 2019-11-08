@@ -39,20 +39,3 @@ xpis:
     addon-type: standard
     install-type: npm
     treeherder-symbol: private-helper
-  - name: multipreffer
-    description: multipreffer repo
-    repo-prefix: multipreffer
-    active: true
-    artifacts:
-      - dist/multipreffer-2.0.zip
-    addon-type: standard
-    install-type: npm
-  - name: fingerprinting-and-cryptomining-protections-retention-study
-    description: fingerprinting / cryptomining protections retention study repo
-    repo-prefix: fingerprinting
-    active: true
-    artifacts:
-      - dist/fingerprinting_and_cryptomining_protections_retention_study-1.1.zip
-    addon-type: standard
-    install-type: npm
-    treeherder-symbol: fingerprint
