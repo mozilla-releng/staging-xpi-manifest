@@ -70,12 +70,7 @@ def main():
         commands = sys.argv[1:]
 
     for command in commands:
-        # TODO remove
-        # `yarn test` appears to be busted across all my example repos.
-        if command == "test":
-            run_command(["echo", "yarn", command])
-        else:
-            run_command(["yarn", command])
+        run_command(["yarn", command])
 
 
 __name__ == '__main__' and main()
