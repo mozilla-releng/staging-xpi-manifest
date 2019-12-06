@@ -63,7 +63,7 @@ workers:
             provisioner: scriptworker-k8s
             implementation: scriptworker-signing
             os: scriptworker
-            worker-type: xpi-t-signing-dev
+            worker-type: xpi-t-signing
         signing:
             provisioner: scriptworker-k8s
             implementation: scriptworker-signing
