@@ -79,20 +79,8 @@ scriptworker:
     scope-prefix: project:xpi:releng
     signing-format:
         by-xpi-type:
-            standard:
-                by-kind:
-                    dep-signing: extension_rsa
-                    release-signing:
-                        by-level:
-                            "3": extension_rsa_rel
-                            default: extension_rsa
-            system:
-                by-kind:
-                    dep-signing: systemaddon_rsa_dep
-                    release-signing:
-                        by-level:
-                            "3": systemaddon_rsa_rel
-                            default: systemaddon_rsa_dep
+            standard: privileged_webextension
+            system: system_addon
 
 release-promotion:
     flavors:
