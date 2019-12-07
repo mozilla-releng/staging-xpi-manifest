@@ -45,7 +45,7 @@ taskgraph:
             default-repository: https://github.com/mozilla/fingerprinting-cryptomining-retention-study
             default-ref: master
             type: git
-    cached-task-prefix: xpi.xpi-manifest
+    cached-task-prefix: xpi
 
 workers:
     aliases:
