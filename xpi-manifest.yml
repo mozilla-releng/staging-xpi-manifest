@@ -20,18 +20,18 @@ xpis:
     # list of strings: A list of paths of xpis generated. Required.
     artifacts:
       - dist/multipreffer-2.0.zip
-    # enum: `standard` means privileged webextension; `system` means
+    # enum: `privileged` means privileged webextension; `system` means
     #       system addon. Required.
-    addon-type: standard
+    addon-type: privileged
     # enum: `npm` for `npm install` or `yarn` for
     #       `yarn install --frozen-lockfile`. Optional. Defaults to `yarn`.
     install-type: npm
-  - name: private-multipreffer
-    description: Private repo multipreffer
-    repo-prefix: private
+  - name: normandy-devtools
+    description: Normandy Devtools
+    repo-prefix: normandydevtools
     active: true
-    private-repo: true
+    private-repo: false
     artifacts:
-      - dist/multipreffer-2.0.zip
-    addon-type: standard
-    install-type: npm
+      - web-ext-artifacts/normandy-devtools-0.8.0.zip
+    addon-type: privileged
+    install-type: yarn
