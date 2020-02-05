@@ -25,6 +25,8 @@ taskgraph:
             name: "Normandy Devtools"
             project-regex: normandy-devtools$
             default-repository: https://github.com/mozilla-extensions/normandy-devtools
+            default-ref: master
+            type: git
         private:
             name: "Private repo test"
             project-regex: test-xpi-private$
