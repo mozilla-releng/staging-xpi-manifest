@@ -5,8 +5,7 @@
 loader: xpi_taskgraph.single_dep:loader
 
 transforms:
-    - taskgraph.transforms.release_deps:transforms
-    - taskgraph.transforms.release_mark_as_shipped:transforms
+    - xpi_taskgraph.release_mark_as_shipped:transforms
     - taskgraph.transforms.task:transforms
 
 kind-dependencies:
