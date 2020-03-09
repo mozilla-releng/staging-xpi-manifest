@@ -11,6 +11,13 @@ transforms = TransformSequence()
 
 
 @transforms.add
+def pop_primary_dependency(config, jobs):
+    for job in jobs:
+        job.pop("primary-dependency")
+        yield job
+
+
+@transforms.add
 def make_task_description(config, jobs):
     for job in jobs:
         resolve_keyed_by(

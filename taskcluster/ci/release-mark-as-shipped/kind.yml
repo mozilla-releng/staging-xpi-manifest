@@ -9,7 +9,6 @@ transforms:
     - taskgraph.transforms.task:transforms
 
 kind-dependencies:
-    - dep-signing
     - release-signing
 
 job-template:
@@ -27,3 +26,5 @@ job-template:
             default:
                 - project:releng:ship-it:server:staging
                 - project:releng:ship-it:action:mark-as-shipped
+    attributes:
+        shipping-phase: promote
