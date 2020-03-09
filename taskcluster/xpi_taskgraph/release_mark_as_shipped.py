@@ -6,28 +6,22 @@ from __future__ import absolute_import, print_function, unicode_literals
 
 from taskgraph.transforms.base import TransformSequence
 from taskgraph.util.schema import resolve_keyed_by
-from taskgraph.util.scriptworker import get_release_config
 
 transforms = TransformSequence()
 
 
 @transforms.add
 def make_task_description(config, jobs):
-    release_config = get_release_config(config)
     for job in jobs:
         resolve_keyed_by(
-            job, 'worker-type', item_name=job['name'],
-            **{'release-level': config.params.release_level()}
-        )
-        resolve_keyed_by(
             job, 'scopes', item_name=job['name'],
-            **{'release-level': config.params.release_level()}
+            **{'level': config.params["level"]}
         )
 
-        job['worker']['release-name'] = '{product}-{version}-build{build_number}'.format(
-            product=job['shipping-product'].capitalize(),
-            version=release_config['version'],
-            build_number=release_config['build_number']
+        job['worker']['release-name'] = '{xpi_name}-{version}-build{build_number}'.format(
+            xpi_name=config.params['xpi_name'],
+            version=config.params['version'],
+            build_number=config.params['build_number']
         )
 
         yield job
