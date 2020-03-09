@@ -21,10 +21,10 @@ job-template:
     scopes:
         by-level:
             "3":
-                - project:releng:ship-it:server:production
-                - project:releng:ship-it:action:mark-as-shipped
+                - project:xpi:releng:ship-it:server:production
+                - project:xpi:releng:ship-it:action:mark-as-shipped
             default:
-                - project:releng:ship-it:server:staging
-                - project:releng:ship-it:action:mark-as-shipped
+                - project:xpi:releng:ship-it:server:staging
+                - project:xpi:releng:ship-it:action:mark-as-shipped
     attributes:
         shipping-phase: promote
