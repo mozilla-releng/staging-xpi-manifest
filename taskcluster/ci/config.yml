@@ -85,7 +85,7 @@ workers:
             worker-type:
                 by-level:
                     "3": xpi-3-shipit
-                    default: xpi-1-shipit
+                    default: xpi-1-shipit-dev
 
 github_clone_secret: project/xpi/xpi-github-clone-ssh
 
