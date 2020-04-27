@@ -14,6 +14,19 @@ The files we need are:
 
 though other files may be helpful as well, e.g. `README.md`, `.gitignore`, `eslintrc.js`.
 
+### Existing repos
+
+If your repo is already existing, let's move it to the `mozilla-extensions` Github organization (`Settings -> Options -> Transfer Ownership`).
+Then copy over the above files into your repo. You can either do this by cloning the `xpi-template` repo and copying the files over and `git add`ing them, or by adding a new git remote and merging the two heads:
+
+```
+# in your repo clone
+git remote add template https://github.com/mozilla-extensions/xpi-template
+git fetch template
+git merge --allow-unrelated-histories template/master
+# fix conflicts, commit result
+```
+
 ### Branch protection
 
 We will use the `master` branch as the main branch for releasing XPIs. It's important to set branch protection for the `master` branch, and get code review for the source. Foxsec will be auditing the repositories in the `mozilla-extensions` organization for compliance.
@@ -81,11 +94,11 @@ Once Taskcluster CI automation is enabled, we'll generate a decision task and ta
 
 ## Enabling releases
 
-To enable releases for your new repo, go to the xpi manifest repo (this one).
+To enable releases for your new repo, go to the `xpi-manifest` repository (this one).
 
-The source repository must be added to `taskgraph.repositories` in the xpi manifest repo's [taskcluster/ci/config.yml](../taskcluster/ci/config.yml). If this is the first xpi in your source repo, you need to add it.
+The source repository must be added to `taskgraph.repositories` in the `xpi-manifest` repository's [taskcluster/ci/config.yml](../taskcluster/ci/config.yml). If this is the first xpi in your source repo, you need to add it.
 
-Then, the xpi needs to be added to the [xpi manifest](../xpi-manifest.yml). The `repo-prefix` will refer to the repository key name under `taskgraph.repositories` in the xpi manifest repo's `taskcluster/ci/config.yml`.
+Then, the xpi needs to be added to the [xpi manifest](../xpi-manifest.yml). The `repo-prefix` will refer to the repository key name under `taskgraph.repositories` in the `xpi-manifest` repository's `taskcluster/ci/config.yml`.
 
 The commit should run sanity checks on pull request and push; make sure the decision task goes green.
 
