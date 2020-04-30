@@ -26,6 +26,17 @@ xpis:
     # enum: `npm` for `npm install` or `yarn` for
     #       `yarn install --frozen-lockfile`. Optional. Defaults to `yarn`.
     install-type: npm
+  - name: template-example-1.x
+    description: Test template repo with on-push/on-pr automation 1.x branch
+    repo-prefix: template
+    active: true
+    private-repo: false
+    branch: "1.x"
+    directory: one
+    artifacts:
+      - dist/multipreffer-2.0.zip
+    addon-type: privileged
+    install-type: npm
   - name: normandy-devtools
     description: Normandy Devtools
     repo-prefix: normandydevtools
