@@ -2,15 +2,12 @@
 
 ## Creating the repo
 
-First, create a repository under the `mozilla-extensions` github organization. The template source repo is https://github.com/mozilla-extensions/xpi-template .
+First, create a repository under the `mozilla-extensions` github organization. Next, copy in the `.taskcluster.yml` from https://github.com/mozilla-extensions/xpi-template/blob/master/.taskcluster.yml .
 
-The files we need are:
+Other files we need are
 
-    .cron.yml
-    .taskcluster.yml
     CODE_OF_CONDUCT.md
     LICENSE
-    taskcluster/*
 
 though other files may be helpful as well, e.g. `README.md`, `.gitignore`, `eslintrc.js`.
 
@@ -34,6 +31,12 @@ We will use the `master` branch as the main branch for releasing XPIs. It's impo
 The github repository rules are [here](https://wiki.mozilla.org/GitHub/Repository_Security).
 
 When creating the repository, email [secops+github@mozilla.com](mailto:secops+github@mozilla.com) about adding the new repository to its checks.
+
+### Enable signing on push
+
+To enable signing on push, find the `xpiSigningType` in `.taskcluster.yml`, and set it to the appropriate addon type.
+
+We [may move this setting to `package.json`](https://github.com/mozilla-extensions/xpi-manifest/issues/33) in the future.
 
 ### Private repos
 
@@ -69,7 +72,7 @@ Once Taskcluster CI automation is enabled, we'll generate a decision task and ta
 
     - We create a build task per package directory. These will only be scheduled when `.taskcluster.yml`, a file under `taskcluster/`, or a file under the package directory have been changed since the previous build.
 
-  - We read `package.json` and create a test task per entry in `scripts` that starts with either `test` or `lint`. (These test names must be either alphanumeric, or only include the special characters `:_-`).
+  - We read `package.json` and create a test task per entry in `scripts` that starts with `test`. It will also create a test task for the `lint` target, if it exists. (These test names must be either alphanumeric, or only include the special characters `:_-`).
 
     So for a `package.json` that looks like
 
@@ -86,7 +89,7 @@ Once Taskcluster CI automation is enabled, we'll generate a decision task and ta
     }
     ```
 
-    would have the test tasks `test`, `test:foo`, `lint`, and `lint:foo`.
+    would have the test tasks `test`, `test:foo`, and `lint`.
 
     - The `test` script will be run in release build graphs. All test or lint scripts will be run on push or PR.
 
