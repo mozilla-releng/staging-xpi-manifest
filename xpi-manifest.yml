@@ -35,7 +35,7 @@ xpis:
     directory: one
     artifacts:
       - dist/multipreffer-2.0.zip
-    addon-type: privileged
+    addon-type: mozillaonline-privileged
     install-type: npm
   - name: normandy-devtools
     description: Normandy Devtools
