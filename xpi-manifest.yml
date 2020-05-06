@@ -32,9 +32,9 @@ xpis:
     active: true
     private-repo: false
     branch: "1.x"
-    directory: one
+    directory: two
     artifacts:
-      - dist/multipreffer-2.0.zip
+      - dist/multipreffer-two.xpi
     addon-type: mozillaonline-privileged
     install-type: npm
   - name: normandy-devtools
