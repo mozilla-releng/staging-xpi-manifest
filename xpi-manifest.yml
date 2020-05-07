@@ -34,7 +34,7 @@ xpis:
     branch: "1.x"
     directory: two
     artifacts:
-      - dist/multipreffer-two.xpi
+      - multipreffer-two.xpi
     addon-type: mozillaonline-privileged
     install-type: npm
   - name: normandy-devtools
