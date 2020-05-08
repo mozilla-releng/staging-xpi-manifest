@@ -37,6 +37,15 @@ xpis:
       - multipreffer-two.xpi
     addon-type: mozillaonline-privileged
     install-type: npm
+  - name: private-test
+    description: Test private repo
+    repo-prefix: private
+    active: true
+    private-repo: true
+    artifacts:
+      - multipreffer-2.0.0.xpi
+    addon-type: privileged
+    install-type: npm
   - name: normandy-devtools
     description: Normandy Devtools
     repo-prefix: normandydevtools
