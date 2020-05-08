@@ -43,7 +43,7 @@ xpis:
     active: true
     private-repo: true
     artifacts:
-      - multipreffer-2.0.0.xpi
+      - multipreffer.xpi
     addon-type: privileged
     install-type: npm
   - name: normandy-devtools
