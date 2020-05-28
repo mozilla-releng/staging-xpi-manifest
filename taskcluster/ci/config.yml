@@ -112,16 +112,16 @@ release-promotion:
         # notifications
         privileged:
             by-phase:
-                build: [aki+priv-webext-build@mozilla.com, aki+test2@mozilla.com]
-                promote: [aki+priv-webext-promote@mozilla.com, aki+test2@mozilla.com]
+                build: [aki+priv-webext-build@mozilla.com]
+                promote: [aki+priv-webext-promote@mozilla.com]
         # configure system addons email addresses for notifications
         system:
             by-phase:
-                build: [aki+system-addons-build@mozilla.com, aki+test2@mozilla.com]
-                promote: [aki+system-addons-promote@mozilla.com, aki+test2@mozilla.com]
+                build: [aki+system-addons-build@mozilla.com]
+                promote: [aki+system-addons-promote@mozilla.com]
         # configure mozillaonline-privileged webextension email addresses for
         # notifications
         mozillaonline-privileged:
             by-phase:
-                build: [aki+mozillaonline-priv-webext-build@mozilla.com, aki+test2@mozilla.com]
-                promote: [aki+mozillaonline-priv-webext-promote@mozilla.com, aki+test2@mozilla.com]
+                build: [aki+mozillaonline-priv-webext-build@mozilla.com]
+                promote: [aki+mozillaonline-priv-webext-promote@mozilla.com]
