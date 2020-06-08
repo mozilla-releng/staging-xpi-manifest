@@ -1,0 +1,9 @@
+---
+description: Test private repo
+repo-prefix: private
+active: true
+private-repo: true
+artifacts:
+  - multipreffer.xpi
+addon-type: privileged
+install-type: npm

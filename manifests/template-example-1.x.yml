@@ -1,0 +1,11 @@
+---
+description: Test template repo with on-push/on-pr automation 1.x branch
+repo-prefix: template
+active: true
+private-repo: false
+branch: "1.x"
+directory: two
+artifacts:
+  - multipreffer-two.xpi
+addon-type: mozillaonline-privileged
+install-type: npm

@@ -13,7 +13,7 @@ taskgraph:
             # string: the name of the repo, for humans
             name: "XPI manifest"
             # regex: to match the base name of the repo
-            project-regex: test-xpi-manifest$
+            project-regex: test-xpi-manifest(\.git)?$
             # string: the repo url. Use `git@github.com:org/repo` for private
             #         repositories.
             default-repository: https://github.com/escapewindow/test-xpi-manifest
@@ -29,7 +29,7 @@ taskgraph:
             type: git
         private:
             name: "Private repo test"
-            project-regex: test-xpi-private$
+            project-regex: test-xpi-private(\.git)?$
             default-repository: git@github.com:escapewindow/test-xpi-private
             default-ref: master
             type: git

@@ -1,0 +1,10 @@
+---
+description: Test template repo with on-push/on-pr automation
+repo-prefix: template
+active: true
+private-repo: false
+directory: one
+artifacts:
+  - multipreffer-one.xpi
+addon-type: privileged
+install-type: npm
