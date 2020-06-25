@@ -3,6 +3,8 @@ description: Test template repo with on-push/on-pr automation
 repo-prefix: template
 active: true
 private-repo: false
+additional-emails:
+  - aki+additional-template-example-email@mozilla.com
 directory: one
 artifacts:
   - multipreffer-one.xpi
