@@ -14,7 +14,7 @@ xpis:
     #          Defaults to `false`.
     private-repo: false
     # array: any additional emails to notify for this addon.
-    additional-emails: []
+    additional-emails: ["aki+template-example-additional-email@mozilla.com"]
     # string: path, relative to the root of the repository, where
     #            the xpi package.json lives. Optional. Defaults to the
     #            root of the repository.
