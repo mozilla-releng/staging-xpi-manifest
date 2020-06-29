@@ -52,6 +52,7 @@ xpis:
     description: Normandy Devtools
     repo-prefix: normandydevtools
     active: true
+    branch: main
     private-repo: false
     artifacts:
       - web-ext-artifacts/normandy-devtools.xpi
