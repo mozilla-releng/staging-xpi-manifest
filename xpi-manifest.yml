@@ -37,7 +37,7 @@ xpis:
     directory: two
     artifacts:
       - multipreffer-two.xpi
-    addon-type: mozillaonline-privileged
+    addon-type: normandy-privileged
     install-type: npm
   - name: private-test
     description: Test private repo
