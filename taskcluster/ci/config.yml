@@ -93,9 +93,10 @@ scriptworker:
     scope-prefix: project:xpi:releng
     signing-format:
         by-xpi-type:
+            mozillaonline-privileged: privileged_webextension
+            normandy-privileged: privileged_webextension
             privileged: privileged_webextension
             system: system_addon
-            mozillaonline-privileged: privileged_webextension
 
 release-promotion:
     flavors:
@@ -125,3 +126,7 @@ release-promotion:
             by-phase:
                 build: [aki+mozillaonline-priv-webext-build@mozilla.com]
                 promote: [aki+mozillaonline-priv-webext-promote@mozilla.com]
+        normandy-privileged:
+            by-phase:
+                build: [aki+normandy-priv-webext-build@mozilla.com]
+                promote: [aki+normandy-priv-webext-promote@mozilla.com]
