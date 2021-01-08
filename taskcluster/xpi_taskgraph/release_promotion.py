@@ -17,7 +17,7 @@ from xpi_taskgraph.xpi_manifest import get_manifest
 
 RELEASE_PROMOTION_PROJECTS = (
     "https://github.com/mozilla-extensions/xpi-manifest",
-    "https://github.com/escapewindow/test-xpi-manifest",
+    "https://github.com/escapewindow/xpi-manifest",
 )
 
 XPI_MANIFEST = get_manifest()
@@ -61,9 +61,7 @@ def is_release_promotion_available(parameters):
                 'title': 'The XPI to promote',
                 'default': 'FILLMEIN',
                 'description': ('The XPI to promote.'),
-                'enum': sorted(
-                    [xpi["name"] for xpi in XPI_MANIFEST["xpis"]]
-                ),
+                'enum': sorted(XPI_MANIFEST.keys()),
             },
             'revision': {
                 'type': 'string',
