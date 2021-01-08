@@ -13,25 +13,13 @@ taskgraph:
             # string: the name of the repo, for humans
             name: "XPI manifest"
             # regex: to match the base name of the repo
-            project-regex: test-xpi-manifest$
+            project-regex: xpi-manifest
             # string: the repo url. Use `git@github.com:org/repo` for private
             #         repositories.
-            default-repository: https://github.com/escapewindow/test-xpi-manifest
+            default-repository: https://github.com/mozilla-extensions/xpi-manifest
             # string: which branch is primary; should be `master`
             default-ref: master
             # enum: hg or git; should be `git`
-            type: git
-        normandydevtools:
-            name: "Normandy Devtools"
-            project-regex: normandy-devtools$
-            default-repository: https://github.com/mozilla-extensions/normandy-devtools
-            default-ref: master
-            type: git
-        private:
-            name: "Private repo test"
-            project-regex: test-xpi-private$
-            default-repository: git@github.com:escapewindow/test-xpi-private
-            default-ref: master
             type: git
         template:
             name: "template repo test"
@@ -39,18 +27,133 @@ taskgraph:
             default-repository: https://github.com/escapewindow/test-xpi-public
             default-ref: master
             type: git
-        multipreffer:
-            name: "Multipreffer"
-            project-regex: multipreffer
-            default-repository: https://github.com/mozilla/multipreffer
+        normandydevtools:
+            name: "Normandy Devtools"
+            project-regex: normandy-devtools$
+            default-repository: https://github.com/mozilla-extensions/normandy-devtools
+            default-ref: main
+            type: git
+        remotesettingsdevtools:
+            name: "Remote Settings Devtools"
+            project-regex: remote-settings-devtools$
+            default-repository: https://github.com/mozilla-extensions/remote-settings-devtools
             default-ref: master
             type: git
-        fingerprinting:
-            name: "Fingerprinting and cryptomining protections retention study"
-            project-regex: fingerprinting-cryptomining-retention-study
-            default-repository: https://github.com/mozilla/fingerprinting-cryptomining-retention-study
+        searchenginedevtools:
+            name: "Search Engine Devtools"
+            project-regex: searchengine-devtools$
+            default-repository: https://github.com/mozilla-extensions/searchengine-devtools
             default-ref: master
             type: git
+        httpsupgradestudyv2:
+            name: "HTTPS Upgrade Study (v2)"
+            project-regex: https-upgrade-study-v2$
+            default-repository: git@github.com:mozilla-extensions/https-upgrade-study-v2
+            default-ref: master
+            type: git
+        cpmanager:
+            name: "MozillaOnline cpmanager"
+            project-regex: cpmanager$
+            default-repository: git@github.com:mozilla-extensions/cpmanager
+            default-ref: master
+            type: git
+        cehomepage:
+            name: "MozillaOnline cehomepage"
+            project-regex: cehomepage$
+            default-repository: git@github.com:mozilla-extensions/cehomepage
+            default-ref: master
+            type: git
+        pioneerv2example:
+            name: "Pioneer v2 Example"
+            project-regex: pioneerv2example$
+            default-repository: git@github.com:mozilla-extensions/pioneer-v2-example
+            default-ref: master
+            type: git
+        chinanewtab:
+            name: "MozillaOnline China New Tab"
+            project-regex: china-newtab$
+            default-repository: https://github.com/mozilla-extensions/china-newtab
+            default-ref: master
+            type: git
+        loginstudy:
+            name: "Login Study"
+            project-regex: login-study$
+            default-repository: git@github.com:mozilla-extensions/login-study
+            default-ref: master
+            type: git
+        webcompat:
+            name: "Web Compat"
+            project-regex: webcompat-addon$
+            default-repository: https://github.com/mozilla-extensions/webcompat-addon
+            default-ref: master
+            type: git
+        secureproxy:
+            name: "Secure-Proxy"
+            project-regex: secure-proxy$
+            default-repository: https://github.com/mozilla-extensions/secure-proxy
+            default-ref: master
+            type: git
+        firefoxvoice:
+            name: "Firefox Voice"
+            project-regex: firefox-voice$
+            default-repository: https://github.com/mozilla-extensions/firefox-voice
+            default-ref: prod
+            type: git
+        dohresolverusagestudy:
+            name: "DoH Resolver Usage Study"
+            project-regex: doh-resolver-usage-study$
+            default-repository: https://github.com/mozilla-extensions/doh-resolver-usage-study
+            default-ref: master
+            type: git
+        dnssecinterferencestudy:
+            name: "DNSSEC Interference Study"
+            project-regex: dnssec-interference-study$
+            default-repository: https://github.com/mozilla-extensions/dnssec-interference
+            default-ref: master
+            type: git
+        newsdisinformationstudy:
+            name: "Princeton News Disinfo Study"
+            project-regex: newsdisinformationstudy$
+            default-repository: https://github.com/mozilla-extensions/news-disinformation-study
+            default-ref: master
+            type: git
+        rallycoreaddon:
+            name: "Rally Core Add-on"
+            project-regex: rallycoreaddon$
+            default-repository: https://github.com/mozilla-extensions/rally-core-addon
+            default-ref: master
+            type: git
+        telemetrytestingextension:
+            name: "Telemetry testing extension"
+            project-regex: telemetrytestingextension$
+            default-repository: https://github.com/mozilla-extensions/dynamic-probe-telemetry-extension
+            default-ref: main
+            type: git
+        searchdefaultaddon:
+            name: "Reset Search Default extension"
+            project-regex: searchdefaultaddon$
+            default-repository: git@github.com:mozilla-extensions/restore-search-defaults
+            default-ref: main
+            type: git
+        quicksuggestweather:
+            name: "Firefox Quick Suggest Weather"
+            project-regex:  firefox-quick-suggest-weather$
+            default-repository: git@github.com:mozilla-extensions/firefox-quick-suggest-weather
+            default-ref: master
+            type: git
+        quicksuggestadm:
+            name: "Firefox Quick Suggest Adm"
+            project-regex:  firefox-quick-suggest-adm$
+            default-repository: git@github.com:mozilla-extensions/firefox-quick-suggest-adm
+            default-ref: master
+            type: git
+        quicksuggestcalculator:
+            name: "Firefox Quick Suggest Calculator"
+            project-regex:  firefox-quick-suggest-calculator$
+            default-repository: https://github.com/mozilla-extensions/firefox-quick-suggest-calculator.git
+            default-ref: master
+            type: git
+
     cached-task-prefix: xpi
 
 workers:
@@ -109,24 +212,47 @@ release-promotion:
         promote:
             target-tasks-method: promote_xpi
     notifications:
-        # configure privileged webextension email addresses for
-        # notifications
-        privileged:
-            by-phase:
-                build: [aki+priv-webext-build@mozilla.com]
-                promote: [aki+priv-webext-promote@mozilla.com]
-        # configure system addons email addresses for notifications
-        system:
-            by-phase:
-                build: [aki+system-addons-build@mozilla.com]
-                promote: [aki+system-addons-promote@mozilla.com]
         # configure mozillaonline-privileged webextension email addresses for
         # notifications
         mozillaonline-privileged:
             by-phase:
-                build: [aki+mozillaonline-priv-webext-build@mozilla.com]
-                promote: [aki+mozillaonline-priv-webext-promote@mozilla.com]
+                build:
+                    - "aki+mozillaonline-priv-webext-build@mozilla.com"
+                    - "hectorz+mozillaonline-priv-webext-build@mozilla.com"
+                    - "mkaply+mozillaonline-priv-webext-build@mozilla.com"
+                    - "awagner+mozillaonline-priv-webext-build@mozilla.com"
+                promote:
+                    - "aki+mozillaonline-priv-webext-promote@mozilla.com"
+                    - "hectorz+mozillaonline-priv-webext-promote@mozilla.com"
+                    - "mkaply+mozillaonline-priv-webext-promote@mozilla.com"
+                    - "awagner+mozillaonline-priv-webext-promote@mozilla.com"
+        # configure normandy-privileged webextension email addresses for
+        # notifications
         normandy-privileged:
             by-phase:
-                build: [aki+normandy-priv-webext-build@mozilla.com]
-                promote: [aki+normandy-priv-webext-promote@mozilla.com]
+                build:
+                    - "aki+normandy-priv-webext-build@mozilla.com"
+                    - "rdalal+normandy-priv-webext-build@mozilla.com"
+                    - "mcooper+normandy-priv-webext-build@mozilla.com"
+                promote:
+                    - "aki+normandy-priv-webext-promote@mozilla.com"
+                    - "rdalal+normandy-priv-webext-promote@mozilla.com"
+                    - "mcooper+normandy-priv-webext-promote@mozilla.com"
+        # configure privileged webextension email addresses for notifications
+        privileged:
+            by-phase:
+                build:
+                    - "privileged-addon-reviewers+shipit-build@mozilla.com"
+                promote:
+                    - "privileged-addon-reviewers+shipit-promote@mozilla.com"
+        # configure system addons email addresses for notifications
+        system:
+            by-phase:
+                build:
+                    - "aki+system-addons-build@mozilla.com"
+                    - "rdalal+system-addons-build@mozilla.com"
+                    - "mcooper+system-addons-build@mozilla.com"
+                promote:
+                    - "aki+system-addons-promote@mozilla.com"
+                    - "rdalal+system-addons-promote@mozilla.com"
+                    - "mcooper+system-addons-promote@mozilla.com"
