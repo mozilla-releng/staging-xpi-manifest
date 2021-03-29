@@ -4,10 +4,4 @@
 
 ---
 
-jobs:
-    - name: aki-test-cron
-      job:
-          type: decision-task
-          target-tasks-method: build_xpi
-      when: []  # never (hook only)
-
+jobs: []
