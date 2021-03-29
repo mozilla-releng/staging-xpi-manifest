@@ -4,4 +4,10 @@
 
 ---
 
-jobs: []
+jobs:
+    - name: aki-test-cron
+      job:
+          type: decision-task
+          treeherder-symbol: build_xpi
+          target-tasks-method: build_xpi
+      when: []  # Force hook only
