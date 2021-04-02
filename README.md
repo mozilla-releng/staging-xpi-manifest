@@ -1,4 +1,4 @@
-# XPI manifest repo
+# STAGING XPI manifest repo
 
 This repository and Github organization allows for automating CI and release signing for privileged webextensions and system addons distributed through Balrog and Normandy.
 
