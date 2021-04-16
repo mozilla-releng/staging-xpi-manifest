@@ -64,11 +64,12 @@ def build_worker_definition(config, jobs):
             worker_definition["git-tag"] = "TODO"
 
         dep = job["primary-dependency"]
-        if not dep.task["payload"]["env"]["ARTIFACT_PREFIX"].startswith("public"):
-            scopes = job.setdefault('scopes', [])
-            scopes.append(
-                "queue:get-artifact:{}/*".format(dep.task["payload"]["env"]["ARTIFACT_PREFIX"].rstrip('/'))
-            )
+        if "payload" in dep.task and "env" in dep.task["payload"] and "ARTIFACT_PREFIX" in dep.task["payload"]["env"]:
+            if not dep.task["payload"]["env"]["ARTIFACT_PREFIX"].startswith("public"):
+                scopes = job.setdefault('scopes', [])
+                scopes.append(
+                    "queue:get-artifact:{}/*".format(dep.task["payload"]["env"]["ARTIFACT_PREFIX"].rstrip('/'))
+                )
 
         job["worker"].update(worker_definition)
         del job["primary-dependency"]
