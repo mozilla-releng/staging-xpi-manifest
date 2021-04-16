@@ -42,6 +42,7 @@ def build_worker_definition(config, jobs):
             and config.params.get('build_number')
         ):
             continue
+
         resolve_keyed_by(
             job, 'scopes', item_name=job['name'],
             **{'level': config.params["level"]}
@@ -57,13 +58,17 @@ def build_worker_definition(config, jobs):
             "artifact-map": _build_artifact_map(job),
             "git-tag": config.params["head_tag"].decode("utf-8"),
             "git-revision": config.params["head_rev"].decode("utf-8"),
-            "github-project": config.params["project"].decode("utf-8"),
+            "github-project": config.params["project"].decode("utf-8")
         }
         # TODO: figure out how to specify a tag
         if worker_definition["git-tag"] == "":
             worker_definition["git-tag"] = "TODO"
 
         dep = job["primary-dependency"]
+        worker_definition["upstream-artifacts"] = []
+        if "upstream-artifacts" in dep.attributes:
+            worker_definition["upstream-artifacts"] = dep.attributes["upstream-artifacts"]
+
         if "payload" in dep.task and "env" in dep.task["payload"] and "ARTIFACT_PREFIX" in dep.task["payload"]["env"]:
             if not dep.task["payload"]["env"]["ARTIFACT_PREFIX"].startswith("public"):
                 scopes = job.setdefault('scopes', [])
