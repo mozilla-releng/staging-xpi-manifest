@@ -4,15 +4,18 @@
 """
 Apply some defaults and minor modifications to the jobs defined in the github_release
 kind.
-
-TODO: copied directly from fenix transforms (if we keep this it is easier to make generic)
 """
-
 from __future__ import absolute_import, print_function, unicode_literals
 
+from taskgraph.config import load_graph_config
 from taskgraph.transforms.base import TransformSequence
 from taskgraph.util.schema import resolve_keyed_by
+from xpi_taskgraph.xpi_manifest import get_manifest
 
+import os
+
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.dirname(__file__)))
+ROOT = os.path.join(BASE_DIR, "ci")
 
 transforms = TransformSequence()
 
@@ -54,11 +57,20 @@ def build_worker_definition(config, jobs):
             build_number=config.params['build_number']
         )
 
+        # translate input xpi_name to get manifest and graph info
+        manifest = get_manifest()
+        manifest_config = manifest[config.params['xpi_name']]
+        repo_prefix = manifest_config["repo-prefix"]
+        graph_config = load_graph_config(ROOT)
+        xpi_config = graph_config["taskgraph"]["repositories"][repo_prefix]
+
+
+        # TODO: do we need git-revision from the actual manifest source, I think so
         worker_definition = {
             "artifact-map": _build_artifact_map(job),
             "git-tag": config.params["head_tag"].decode("utf-8"),
             "git-revision": config.params["head_rev"].decode("utf-8"),
-            "github-project": config.params["project"].decode("utf-8"),
+            "github-project": xpi_config["default-repository"],
             "is-prerelease": False
         }
         # TODO: figure out how to specify a tag
