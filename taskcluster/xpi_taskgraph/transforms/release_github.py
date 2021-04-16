@@ -62,17 +62,19 @@ def build_worker_definition(config, jobs):
         manifest_config = manifest[config.params['xpi_name']]
         repo_prefix = manifest_config["repo-prefix"]
         graph_config = load_graph_config(ROOT)
-        xpi_config = graph_config["taskgraph"]["repositories"][repo_prefix]
-
+        repo_url = graph_config["taskgraph"]["repositories"][repo_prefix]["default-repository"]
+        repo = repo_url.split('github.com')[-1]
+        repo = repo.strip(':/')
 
         # TODO: do we need git-revision from the actual manifest source, I think so
         worker_definition = {
             "artifact-map": _build_artifact_map(job),
             "git-tag": config.params["head_tag"].decode("utf-8"),
             "git-revision": config.params["head_rev"].decode("utf-8"),
-            "github-project": xpi_config["default-repository"],
+            "github-project": repo,
             "is-prerelease": False
         }
+        print("JMAHER: repo: %s" % repo)
         # TODO: figure out how to specify a tag
         if worker_definition["git-tag"] == "":
             worker_definition["git-tag"] = "TODO"
