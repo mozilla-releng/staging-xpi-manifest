@@ -83,6 +83,7 @@ def build_push_apk_payload(config, task, task_def):
         Required("git-tag"): text_type,
         Required("git-revision"): text_type,
         Required("github-project"): text_type,
+        Required("is-prerelease"): bool,
         Required("release-name"): text_type,
     },
 )
@@ -96,6 +97,7 @@ def build_github_release_payload(config, task, task_def):
         "gitTag": worker["git-tag"],
         "gitRevision": worker["git-revision"],
         "releaseName": worker["release-name"],
+        "isPrerelease": worker["is-prerelease"],
         "upstreamArtifacts": worker["upstream-artifacts"],
     }
 
