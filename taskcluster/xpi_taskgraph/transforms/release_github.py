@@ -58,7 +58,8 @@ def build_worker_definition(config, jobs):
             "artifact-map": _build_artifact_map(job),
             "git-tag": config.params["head_tag"].decode("utf-8"),
             "git-revision": config.params["head_rev"].decode("utf-8"),
-            "github-project": config.params["project"].decode("utf-8")
+            "github-project": config.params["project"].decode("utf-8"),
+            "is-prerelease": False
         }
         # TODO: figure out how to specify a tag
         if worker_definition["git-tag"] == "":
