@@ -195,8 +195,8 @@ workers:
             provisioner: scriptworker-k8s
             implementation: scriptworker-github
             os: scriptworker
-            # TODO: need to create xpi-3-github and xpi-1-github
-            worker-type: 'xpi-{level}-github'
+            # worker-type: 'xpi-{level}-github'
+            worker-type: 'xpi-1-github-dev'
         signing:
             provisioner: scriptworker-k8s
             implementation: scriptworker-signing
