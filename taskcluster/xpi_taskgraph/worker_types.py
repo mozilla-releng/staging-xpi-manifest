@@ -98,6 +98,8 @@ def build_github_release_payload(config, task, task_def):
         "gitRevision": worker["git-revision"],
         "releaseName": worker["release-name"],
         "isPrerelease": worker["is-prerelease"],
+        "githubOwner": 'mozilla-releng',
+        "githubRepoName": "staging-xpi-public",
         "upstreamArtifacts": worker["upstream-artifacts"],
     }
 
