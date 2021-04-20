@@ -70,11 +70,11 @@ def build_worker_definition(config, jobs):
         worker_definition = {
             "artifact-map": _build_artifact_map(job),
             "git-tag": config.params["head_tag"].decode("utf-8"),
-            "git-revision": config.params["head_rev"].decode("utf-8"),
+            "git-revision": config.params["xpi_revision"].decode("utf-8"),
             "github-project": repo,
             "is-prerelease": False
         }
-        print("JMAHER: repo: %s" % repo)
+
         # TODO: figure out how to specify a tag
         if worker_definition["git-tag"] == "":
             worker_definition["git-tag"] = "TODO"
