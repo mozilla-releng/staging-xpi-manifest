@@ -31,3 +31,8 @@ addon-type: normandy-privileged
 # enum: `npm` for `npm install` or `yarn` for
 #       `yarn install --frozen-lockfile`. Optional. Defaults to `yarn`.
 install-type: npm
+# boolean: true == release artifact to github,
+#          false == manually release artifact
+enable-github-release: True
+# string: specific tag use for uploading to github
+release-tag: v3.14

@@ -66,25 +66,32 @@ def build_worker_definition(config, jobs):
         repo = repo_url.split('github.com')[-1]
         repo = repo.strip(':/')
 
-        # TODO: do we need git-revision from the actual manifest source, I think so
+        # TODO: test this
+        # if this is false in the manifest, no need to create github-release task
+        if not manifest_config.get("enable-github-release", False):
+            continue
+
         worker_definition = {
             "artifact-map": _build_artifact_map(job),
             "git-tag": config.params["head_tag"].decode("utf-8"),
-            "git-revision": config.params["head_rev"].decode("utf-8"),
+            "git-revision": config.params["xpi_revision"].decode("utf-8"),
             "github-project": repo,
             "is-prerelease": False
         }
-        print("JMAHER: repo: %s" % repo)
-        # TODO: figure out how to specify a tag
-        if worker_definition["git-tag"] == "":
-            worker_definition["git-tag"] = "TODO"
 
+        # TODO: test this
+        if manifest_config.get("release-tag", ""):
+            worker_definition["git-tag"] = manifest_config.get("release-tag")
+        elif worker_definition["git-tag"] == "":
+            worker_definition["git-tag"] = config.params['version']
+            
         dep = job["primary-dependency"]
         worker_definition["upstream-artifacts"] = []
         if "upstream-artifacts" in dep.attributes:
             worker_definition["upstream-artifacts"] = dep.attributes["upstream-artifacts"]
 
-        if "payload" in dep.task and "env" in dep.task["payload"] and "ARTIFACT_PREFIX" in dep.task["payload"]["env"]:
+        # TODO: test this
+        if "env" in dep.task.get("payload", {}) and "ARTIFACT_PREFIX" in dep.task["payload"]["env"]:
             if not dep.task["payload"]["env"]["ARTIFACT_PREFIX"].startswith("public"):
                 scopes = job.setdefault('scopes', [])
                 scopes.append(

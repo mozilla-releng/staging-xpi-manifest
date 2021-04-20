@@ -43,6 +43,8 @@ base_schema = Schema(
                                     "privileged",
                                     "system"),
         Optional("install-type"): Any("npm", "yarn"),
+        Optional("enable-github-release"): bool,
+        Optional("release-tag"): basestring,
     }
 )
 
