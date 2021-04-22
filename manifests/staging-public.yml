@@ -33,6 +33,6 @@ addon-type: normandy-privileged
 install-type: npm
 # boolean: true == release artifact to github,
 #          false == manually release artifact
-enable-github-release: True
+enable-github-release: False
 # string: specific tag use for uploading to github
 release-tag: v3.14
