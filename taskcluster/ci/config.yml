@@ -39,6 +39,12 @@ taskgraph:
             default-repository: https://github.com/mozilla-releng/staging-xpi-public
             default-ref: master
             type: git
+        template-private:
+            name: "template private repo test"
+            project-regex: staging-xpi-private$
+            default-repository: https://github.com/mozilla-releng/staging-xpi-private
+            default-ref: master
+            type: git
         normandydevtools:
             name: "Normandy Devtools"
             project-regex: normandy-devtools$

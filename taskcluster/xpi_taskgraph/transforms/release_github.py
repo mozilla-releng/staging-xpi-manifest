@@ -66,7 +66,6 @@ def build_worker_definition(config, jobs):
         repo = repo_url.split('github.com')[-1]
         repo = repo.strip(':/')
 
-        # TODO: test this
         # if this is false in the manifest, no need to create github-release task
         if not manifest_config.get("enable-github-release", False):
             continue
@@ -79,7 +78,6 @@ def build_worker_definition(config, jobs):
             "is-prerelease": False
         }
 
-        # TODO: test this
         if manifest_config.get("release-tag", ""):
             worker_definition["git-tag"] = manifest_config.get("release-tag")
         elif worker_definition["git-tag"] == "":
