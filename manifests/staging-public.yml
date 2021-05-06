@@ -34,4 +34,3 @@ install-type: npm
 # boolean: true == release artifact to github,
 #          false == manually release artifact
 enable-github-release: True
-release-tag: v2.0.4
