@@ -99,7 +99,7 @@ def build_github_release_payload(config, task, task_def):
         "releaseName": worker["release-name"],
         "isPrerelease": worker["is-prerelease"],
         "githubOwner": 'mozilla-releng',
-        "githubRepoName": "staging-xpi-private",
+        "githubRepoName": "staging-xpi-public",
         "upstreamArtifacts": worker["upstream-artifacts"],
     }
 
