@@ -11,7 +11,6 @@ transforms:
 kind-dependencies:
     - dep-signing
     - release-signing
-    - release-github
 
 job-template:
     name: release-notify-completed
