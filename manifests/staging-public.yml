@@ -34,4 +34,9 @@ install-type: npm
 # boolean: true == release artifact to github,
 #          false == manually release artifact
 enable-github-release: True
-release-tag: devedition
+# string: branch name. Optional. Defaults to {version} from the
+#         addon repo.
+release-tag: 3.1.4
+# string: branch name. Optional. Defaults to:
+#         {xpi_name}-{version}-build{build_number}
+release-name: relengmagic
