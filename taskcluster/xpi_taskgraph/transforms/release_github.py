@@ -103,17 +103,22 @@ def _build_artifact_map(job):
     artifact_map = []
     dep = job["primary-dependency"]
 
-#    artifacts = {"paths": dep.attributes["xpis"].values(), "taskId": dep.task["extra"]["parent"]}
-#    for path in upstream_artifact_metadata["paths"]:
-#        artifacts["paths"][path] = {
-#            "destinations": [github_names_per_path[path]]
-#        }
-#    artifact_map.append(artifacts)
+    artifacts = {"paths": {}, "taskId": dep.task["extra"]["parent"]}
+    for path in dep.attributes["xpis"].values():
+        artifacts["paths"][dep.attributes["xpis"][pat]] = {
+            "destinations": [path]
+        }
+        artifact_map.append(artifacts)
     print("JMAHER: dep artifacts: %s" % dep.task)
     print("JMAHER: dep artifacts: %s" % dep.attributes)
-    print("JMAHER: upstream artifacts: %s" % job["worker"]["upstream-artifacts"])
-    for upstream_artifact_metadata in task["worker"]["upstream-artifacts"]:
-        artifacts = {"paths": {}, "taskId": upstream_artifact_metadata["taskId"]}
+    print("JMAHER: map: %s" % artifact_map)
+    print("JMAHER: upstream artifacts: %s" % job["payload"]["upstream-artifacts"])
+    for upstream_artifact_metadata in job["payload"]["upstream-artifacts"]:
+        if 'task-reference' in upstream_artifact_metadata["taskId"].values():
+            taskId = upstream_artifact_metadata["taskId"]["task-reference"]
+        else:
+            taskId = upstream_artifact_metadata["taskId"]
+        artifacts = {"paths": {}, "taskId": taskId}
         for path in upstream_artifact_metadata["paths"]:
             artifacts["paths"][path] = {
                 "destinations": path
