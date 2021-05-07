@@ -109,6 +109,7 @@ def _build_artifact_map(job):
             "destinations": [path.split('/')[-1]]
         }
         artifact_map.append(artifacts)
+    """
     print("JMAHER: dep artifacts: %s" % dep.task)
     print("JMAHER: dep artifacts: %s" % dep.attributes)
     print("JMAHER: map: %s" % artifact_map)
@@ -125,5 +126,5 @@ def _build_artifact_map(job):
             }
 
         artifact_map.append(artifacts)
-
+    """
     return artifact_map
