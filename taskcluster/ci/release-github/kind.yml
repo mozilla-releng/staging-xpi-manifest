@@ -14,8 +14,6 @@ kind-dependencies:
 job-template:
     name: release-github
     description: upload release artifacts to github and publish
-    index:
-        type: release-github
     run-on-tasks-for: ["action"]
     worker-type: github
     worker:
