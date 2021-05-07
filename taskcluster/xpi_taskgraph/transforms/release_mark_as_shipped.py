@@ -13,7 +13,8 @@ transforms = TransformSequence()
 @transforms.add
 def pop_primary_dependency(config, jobs):
     for job in jobs:
-        job.pop("primary-dependency")
+        dep = job.pop("primary-dependency")
+        job.setdefault("extra", {})["xpi-name"] = dep.task["extra"]["xpi-name"]
         yield job
 
 
