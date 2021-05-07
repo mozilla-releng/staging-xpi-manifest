@@ -109,7 +109,9 @@ def _build_artifact_map(job):
 #            "destinations": [github_names_per_path[path]]
 #        }
 #    artifact_map.append(artifacts)
-    print("JMAHER: upstream artifacts: %s" % task["worker"]["upstream-artifacts"])
+    print("JMAHER: dep artifacts: %s" % dep.task)
+    print("JMAHER: dep artifacts: %s" % dep.attributes)
+    print("JMAHER: upstream artifacts: %s" % job["worker"]["upstream-artifacts"])
     for upstream_artifact_metadata in task["worker"]["upstream-artifacts"]:
         artifacts = {"paths": {}, "taskId": upstream_artifact_metadata["taskId"]}
         for path in upstream_artifact_metadata["paths"]:
