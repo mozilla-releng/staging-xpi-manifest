@@ -105,7 +105,7 @@ def _build_artifact_map(job):
 
     artifacts = {"paths": {}, "taskId": dep.task["extra"]["parent"]}
     for path in dep.attributes["xpis"].values():
-        artifacts["paths"][dep.attributes["xpis"][pat]] = {
+        artifacts["paths"][dep.attributes["xpis"][path]] = {
             "destinations": [path]
         }
         artifact_map.append(artifacts)
