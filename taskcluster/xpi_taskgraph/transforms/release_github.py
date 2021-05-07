@@ -51,12 +51,6 @@ def build_worker_definition(config, jobs):
             **{'level': config.params["level"]}
         )
 
-        job['worker']['release-name'] = '{xpi_name}-{version}-build{build_number}'.format(
-            xpi_name=config.params['xpi_name'],
-            version=config.params['version'],
-            build_number=config.params['build_number']
-        )
-
         # translate input xpi_name to get manifest and graph info
         manifest = get_manifest()
         manifest_config = manifest[config.params['xpi_name']]
@@ -83,6 +77,12 @@ def build_worker_definition(config, jobs):
         elif worker_definition["git-tag"] == "":
             worker_definition["git-tag"] = config.params['version']
             
+        job['worker']['release-name'] = '{xpi_name}-{version}-build{build_number}'.format(
+            xpi_name=config.params['xpi_name'],
+            version=worker_definition["git-tag"],
+            build_number=config.params['build_number']
+        )
+
         dep = job["primary-dependency"]
         worker_definition["upstream-artifacts"] = []
         if "upstream-artifacts" in dep.attributes:
