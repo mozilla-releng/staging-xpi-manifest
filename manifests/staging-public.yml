@@ -34,4 +34,4 @@ install-type: npm
 # boolean: true == release artifact to github,
 #          false == manually release artifact
 enable-github-release: True
-release-tag: 2.0.8
+release-tag: devedition
