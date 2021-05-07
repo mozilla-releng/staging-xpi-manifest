@@ -109,10 +109,11 @@ def _build_artifact_map(job):
             "destinations": [path.split('/')[-1]]
         }
         artifact_map.append(artifacts)
-    """
     print("JMAHER: dep artifacts: %s" % dep.task)
     print("JMAHER: dep artifacts: %s" % dep.attributes)
     print("JMAHER: map: %s" % artifact_map)
+    print("JMAHER: dep: %s" % dep)
+    """
     print("JMAHER: upstream artifacts: %s" % job["payload"]["upstream-artifacts"])
     for upstream_artifact_metadata in job["payload"]["upstream-artifacts"]:
         if 'task-reference' in upstream_artifact_metadata["taskId"].values():
