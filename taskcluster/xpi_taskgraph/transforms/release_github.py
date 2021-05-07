@@ -72,16 +72,15 @@ def build_worker_definition(config, jobs):
             "is-prerelease": False
         }
 
-        if manifest_config.get("release-tag", ""):
-            worker_definition["git-tag"] = manifest_config.get("release-tag")
-        elif worker_definition["git-tag"] == "":
-            worker_definition["git-tag"] = config.params['version']
-            
-        job['worker']['release-name'] = '{xpi_name}-{version}-build{build_number}'.format(
-            xpi_name=config.params['xpi_name'],
-            version=worker_definition["git-tag"],
-            build_number=config.params['build_number']
-        )
+        release_variables = {
+            "xpi_name": config.params['xpi_name'],
+            "version": config.params['version'],
+            "build_number": config.params['build_number']
+        }
+        tagname = manifest_config.get("release-tag", "{version}").format(**release_variables)
+        worker_definition["git-tag"] = tag_name
+        release_name = manifest_config.get("release-name", "{xpi_name}-{version}-build{build_number}").format(**release_variables)
+        job['worker']['release-name'] = release_name
 
         dep = job["primary-dependency"]
         worker_definition["upstream-artifacts"] = []
@@ -104,6 +103,20 @@ def _build_artifact_map(job):
     artifact_map = []
     dep = job["primary-dependency"]
 
-    artifacts = {"paths": dep.attributes["xpis"].values(), "taskId": dep.task["extra"]["parent"]}
-    artifact_map.append(artifacts)
+#    artifacts = {"paths": dep.attributes["xpis"].values(), "taskId": dep.task["extra"]["parent"]}
+#    for path in upstream_artifact_metadata["paths"]:
+#        artifacts["paths"][path] = {
+#            "destinations": [github_names_per_path[path]]
+#        }
+#    artifact_map.append(artifacts)
+    print("JMAHER: upstream artifacts: %s" % task["worker"]["upstream-artifacts"])
+    for upstream_artifact_metadata in task["worker"]["upstream-artifacts"]:
+        artifacts = {"paths": {}, "taskId": upstream_artifact_metadata["taskId"]}
+        for path in upstream_artifact_metadata["paths"]:
+            artifacts["paths"][path] = {
+                "destinations": path
+            }
+
+        artifact_map.append(artifacts)
+
     return artifact_map
