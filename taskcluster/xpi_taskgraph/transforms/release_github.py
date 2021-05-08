@@ -102,30 +102,14 @@ def build_worker_definition(config, jobs):
 def _build_artifact_map(job):
     artifact_map = []
     dep = job["primary-dependency"]
-
-    artifacts = {"paths": {}, "taskId": dep.task["extra"]["parent"]}
+    
+    artifacts = {"paths": {},
+                 "taskId": {"task-reference": "<signing>"},
+                 "taskType": "signing"
+                }
     for path in dep.attributes["xpis"].values():
         artifacts["paths"][path] = {
             "destinations": [path.split('/')[-1]]
         }
         artifact_map.append(artifacts)
-    print("JMAHER: dep artifacts: %s" % dep.task)
-    print("JMAHER: dep artifacts: %s" % dep.attributes)
-    print("JMAHER: map: %s" % artifact_map)
-    print("JMAHER: dep: %s" % dep)
-    """
-    print("JMAHER: upstream artifacts: %s" % job["payload"]["upstream-artifacts"])
-    for upstream_artifact_metadata in job["payload"]["upstream-artifacts"]:
-        if 'task-reference' in upstream_artifact_metadata["taskId"].values():
-            taskId = upstream_artifact_metadata["taskId"]["task-reference"]
-        else:
-            taskId = upstream_artifact_metadata["taskId"]
-        artifacts = {"paths": {}, "taskId": taskId}
-        for path in upstream_artifact_metadata["paths"]:
-            artifacts["paths"][path] = {
-                "destinations": path
-            }
-
-        artifact_map.append(artifacts)
-    """
     return artifact_map
