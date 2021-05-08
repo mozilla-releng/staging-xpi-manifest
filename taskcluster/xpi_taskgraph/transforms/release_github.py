@@ -88,8 +88,8 @@ def build_worker_definition(config, jobs):
             taskId = upstream["taskId"]
             taskType = upstream["taskType"]
             if taskId is {"task-reference": "<build>"}:
-                taskId = {"task-reference": "<release-signing>"}
-                taskType = "release-signing"
+                taskId = {"task-reference": "<signing>"}
+                taskType = "signing"
             worker_definition["upstream-artifacts"].append([{
                 "taskId": taskId,
                 "taskType": taskType,
@@ -115,8 +115,8 @@ def _build_artifact_map(job):
     dep = job["primary-dependency"]
     
     artifacts = {"paths": {},
-                 "taskId": {"task-reference": "<release-signing>"},
-                 "taskType": "release-signing"
+                 "taskId": {"task-reference": "<signing>"},
+                 "taskType": "signing"
                 }
     for path in dep.attributes["xpis"].values():
         artifacts["paths"][path] = {
