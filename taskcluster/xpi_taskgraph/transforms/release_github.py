@@ -84,8 +84,19 @@ def build_worker_definition(config, jobs):
 
         dep = job["primary-dependency"]
         worker_definition["upstream-artifacts"] = []
-        if "upstream-artifacts" in dep.attributes:
-            worker_definition["upstream-artifacts"] = dep.attributes["upstream-artifacts"]
+        for upstream in dep.attributes.get("upstream-artifacts", []):
+            taskId = upstream["taskId"]
+            taskType = upstream["taskType"]
+            if taskId is {"task-reference": "<build>"}:
+                taskId = {"task-reference": "<release-signing>"}
+                taskType = "release-signing"
+            worker_definition["upstream-artifacts"].append([{
+                "taskId": taskId,
+                "taskType": taskType,
+                "paths": upstream["paths"],
+                "formats": upstream["format"],
+            }
+            ]
 
         # TODO: test this
         if "env" in dep.task.get("payload", {}) and "ARTIFACT_PREFIX" in dep.task["payload"]["env"]:
