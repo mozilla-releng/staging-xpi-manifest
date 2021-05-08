@@ -9,9 +9,9 @@ transforms:
     - taskgraph.transforms.task:transforms
 
 kind-dependencies:
-    - release-signing
+    - signing
 
-primary-dependency: release-signing
+primary-dependency: signing
 
 job-template:
     name: release-github
