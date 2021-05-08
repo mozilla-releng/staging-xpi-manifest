@@ -96,7 +96,7 @@ def build_worker_definition(config, jobs):
                 "paths": upstream["paths"],
                 "formats": upstream["format"],
             }
-            ]
+            ])
 
         # TODO: test this
         if "env" in dep.task.get("payload", {}) and "ARTIFACT_PREFIX" in dep.task["payload"]["env"]:
