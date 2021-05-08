@@ -104,8 +104,8 @@ def _build_artifact_map(job):
     dep = job["primary-dependency"]
     
     artifacts = {"paths": {},
-                 "taskId": {"task-reference": "<signing>"},
-                 "taskType": "signing"
+                 "taskId": {"task-reference": "<release-signing>"},
+                 "taskType": "release-signing"
                 }
     for path in dep.attributes["xpis"].values():
         artifacts["paths"][path] = {
