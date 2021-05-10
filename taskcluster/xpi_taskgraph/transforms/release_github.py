@@ -83,14 +83,11 @@ def build_worker_definition(config, jobs):
         job['worker']['release-name'] = release_name
 
         dep = job["primary-dependency"]
-        worker_definition["upstream-artifacts"] = []
-        taskId =  {"task-reference": "<release-signing>"}
-        taskType = "signing"
-        worker_definition["upstream-artifacts"].append({
-            "taskId": taskId,
-            "taskType": taskType,
+        worker_definition["upstream-artifacts"] = [{
+            "taskId":  {"task-reference": "<release-signing>"},
+            "taskType": "signing",
             "paths": dep.attributes["xpis"].values()
-        })
+        }]
 
         # TODO: test this
         if "env" in dep.task.get("payload", {}) and "ARTIFACT_PREFIX" in dep.task["payload"]["env"]:
