@@ -92,14 +92,19 @@ def build_github_release_payload(config, task, task_def):
 
     task_def["tags"]["worker-implementation"] = "scriptworker"
 
+    owner, repo_name = gh_project = worker["github-project"].split('/')
+    if owner not in ['mozilla-releng', 'mozilla-extensions']:
+        # TODO: throw an error here
+        pass
+
     task_def["payload"] = {
         "artifactMap": worker["artifact-map"],
         "gitTag": worker["git-tag"],
         "gitRevision": worker["git-revision"],
         "releaseName": worker["release-name"],
         "isPrerelease": worker["is-prerelease"],
-        "githubOwner": 'mozilla-releng',
-        "githubRepoName": "staging-xpi-public",
+        "githubOwner": owner
+        "githubRepoName": repo_name
         "upstreamArtifacts": worker["upstream-artifacts"],
     }
 
