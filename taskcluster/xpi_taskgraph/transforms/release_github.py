@@ -85,7 +85,7 @@ def build_worker_definition(config, jobs):
         dep = job["primary-dependency"]
         worker_definition["upstream-artifacts"] = []
         taskId =  {"task-reference": "<release-signing>"}
-        taskType = "release-signing"
+        taskType = "signing"
         worker_definition["upstream-artifacts"].append({
             "taskId": taskId,
             "taskType": taskType,
