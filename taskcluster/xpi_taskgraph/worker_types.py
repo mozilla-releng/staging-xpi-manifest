@@ -103,8 +103,8 @@ def build_github_release_payload(config, task, task_def):
         "gitRevision": worker["git-revision"],
         "releaseName": worker["release-name"],
         "isPrerelease": worker["is-prerelease"],
-        "githubOwner": owner
-        "githubRepoName": repo_name
+        "githubOwner": owner,
+        "githubRepoName": repo_name,
         "upstreamArtifacts": worker["upstream-artifacts"],
     }
 
