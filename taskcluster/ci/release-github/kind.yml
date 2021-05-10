@@ -11,11 +11,6 @@ transforms:
 kind-dependencies:
     - release-signing
 
-dependencies:
-    - release-signing
-
-primary-dependency: release-signing
-
 job-template:
     name: release-github
     description: upload release artifacts to github and publish
