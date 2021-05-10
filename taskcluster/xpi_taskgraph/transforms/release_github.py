@@ -107,6 +107,7 @@ def build_worker_definition(config, jobs):
                 )
 
         job["worker"].update(worker_definition)
+        job["dependencies"] = {"release-signing": dep.label}
         del job["primary-dependency"]
         yield job
 
