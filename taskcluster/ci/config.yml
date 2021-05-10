@@ -33,14 +33,14 @@ taskgraph:
             default-ref: master
             # enum: hg or git; should be `git`
             type: git
-        template:
-            name: "template repo test"
+        stagingpublic:
+            name: "Releng staging repo test"
             project-regex: staging-xpi-public$
             default-repository: https://github.com/mozilla-releng/staging-xpi-public
             default-ref: master
             type: git
-        template-private:
-            name: "template private repo test"
+        stagingprivate:
+            name: "Releng staging private repo test"
             project-regex: staging-xpi-private$
             default-repository: https://github.com/mozilla-releng/staging-xpi-private
             default-ref: master
