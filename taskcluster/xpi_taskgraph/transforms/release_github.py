@@ -84,19 +84,14 @@ def build_worker_definition(config, jobs):
 
         dep = job["primary-dependency"]
         worker_definition["upstream-artifacts"] = []
-        for upstream in dep.attributes.get("upstream-artifacts", []):
-            taskId = upstream["taskId"]
-            taskType = upstream["taskType"]
-            if taskId is {"task-reference": "<build>"}:
-                taskId = {"task-reference": "<signing>"}
-                taskType = "signing"
-            worker_definition["upstream-artifacts"].append([{
-                "taskId": taskId,
-                "taskType": taskType,
-                "paths": upstream["paths"],
-                "formats": upstream["format"],
-            }
-            ])
+        taskId =  {"task-reference": "<release-signing>"}
+        taskType = "release-signing"
+        worker_definition["upstream-artifacts"].append([{
+            "taskId": taskId,
+            "taskType": taskType,
+            "paths": dep.attributes["xpis"].values()
+        }
+        ])
 
         # TODO: test this
         if "env" in dep.task.get("payload", {}) and "ARTIFACT_PREFIX" in dep.task["payload"]["env"]:
@@ -116,8 +111,7 @@ def _build_artifact_map(job):
     dep = job["primary-dependency"]
     
     artifacts = {"paths": {},
-                 "taskId": {"task-reference": "<release-signing>"},
-                 "taskType": "release-signing"
+                 "taskId": {"task-reference": "<release-signing>"}
                 }
     for path in dep.attributes["xpis"].values():
         artifacts["paths"][path] = {
