@@ -92,7 +92,7 @@ def build_github_release_payload(config, task, task_def):
 
     task_def["tags"]["worker-implementation"] = "scriptworker"
 
-    owner, repo_name = gh_project = worker["github-project"].split('/')
+    owner, repo_name = worker["github-project"].split('/')
     if owner not in ['mozilla-releng', 'mozilla-extensions']:
         # TODO: throw an error here
         pass

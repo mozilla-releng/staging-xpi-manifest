@@ -201,8 +201,7 @@ workers:
             provisioner: scriptworker-k8s
             implementation: scriptworker-github
             os: scriptworker
-            # worker-type: 'xpi-{level}-github'
-            worker-type: 'xpi-1-github-dev'
+            worker-type: 'xpi-{level}-github'
         signing:
             provisioner: scriptworker-k8s
             implementation: scriptworker-signing

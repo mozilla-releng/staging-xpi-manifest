@@ -38,7 +38,6 @@ def resolve_keys(config, jobs):
 @transforms.add
 def build_worker_definition(config, jobs):
     for job in jobs:
-        # TODO: this section taken from release_mark_as_shipped
         if not (
             config.params.get('version')
             and config.params.get('xpi_name')
@@ -89,7 +88,7 @@ def build_worker_definition(config, jobs):
             "paths": dep.attributes["xpis"].values()
         }]
 
-        # TODO: test this
+        # TODO: test this once we can test on shipit
         if "env" in dep.task.get("payload", {}) and "ARTIFACT_PREFIX" in dep.task["payload"]["env"]:
             if not dep.task["payload"]["env"]["ARTIFACT_PREFIX"].startswith("public"):
                 scopes = job.setdefault('scopes', [])
