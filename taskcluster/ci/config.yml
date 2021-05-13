@@ -42,7 +42,7 @@ taskgraph:
         stagingprivate:
             name: "Releng staging private repo test"
             project-regex: staging-xpi-private$
-            default-repository: git@github.com:mozilla-releng/staging-xpi-private
+            default-repository: https://github.com/mozilla-releng/staging-xpi-private
             default-ref: master
             type: git
         normandydevtools:
