@@ -9,7 +9,7 @@ repo-prefix: stagingprivate
 active: true
 # boolean: whether this is a private Github repository. Optional.
 #          Defaults to `false`.
-private-repo: false
+private-repo: true
 # array: any additional emails to notify for this addon.
 additional-emails: []
 # string: path, relative to the root of the repository, where
@@ -34,6 +34,5 @@ install-type: npm
 # boolean: true == release artifact to github,
 #          false == manually release artifact
 enable-github-release: True
-release-tag: 1.0.3
+release-tag: 1.0.7
 release-name: releng-secret
-private-repo: true
