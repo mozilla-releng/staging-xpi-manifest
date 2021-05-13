@@ -4,10 +4,9 @@ repo-prefix: stagingprivate
 active: true
 private-repo: true
 additional-emails: []
-directory: privileged
 branch: master
 artifacts:
-  - multipreffer-one.xpi
+  - multipreffer.xpi
 addon-type: normandy-privileged
 install-type: npm
 enable-github-release: True
