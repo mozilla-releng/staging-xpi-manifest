@@ -13,22 +13,10 @@ taskgraph:
             # string: the name of the repo, for humans
             name: "XPI manifest"
             # regex: to match the base name of the repo
-            project-regex: "^xpi-manifest$"
+            project-regex: xpi-manifest$
             # string: the repo url. Use `git@github.com:org/repo` for private
             #         repositories.
             default-repository: https://github.com/mozilla-extensions/xpi-manifest
-            # string: which branch is primary; should be `master`
-            default-ref: master
-            # enum: hg or git; should be `git`
-            type: git
-        staging-manifest:
-            # string: the name of the repo, for humans
-            name: "Staging XPI manifest"
-            # regex: to match the base name of the repo
-            project-regex: staging-xpi-manifest
-            # string: the repo url. Use `git@github.com:org/repo` for private
-            #         repositories.
-            default-repository: https://github.com/mozilla-releng/staging-xpi-manifest
             # string: which branch is primary; should be `master`
             default-ref: master
             # enum: hg or git; should be `git`
@@ -171,12 +159,19 @@ taskgraph:
             default-repository: https://github.com/mozilla-extensions/firefox-quick-suggest-calculator.git
             default-ref: master
             type: git
-        bergamotbrowserextension:
-            name: "Bergamot Browser Extension"
-            project-regex: bergamot-browser-extension$
-            default-repository: https://github.com/mozilla-extensions/bergamot-browser-extension
+        balrogdryrun:
+            name: "Balrog Dry Run"
+            project-regex:  balrog-dryrun$
+            default-repository: https://github.com/mozilla-extensions/balrog-dryrun.git
             default-ref: main
             type: git
+        addonssearchexperiment:
+            name: "Add-ons Search Experiment extension"
+            project-regex: addonssearchexperiment$
+            default-repository: https://github.com/mozilla-extensions/addons-search-experiment
+            default-ref: main
+            type: git
+
 
     cached-task-prefix: xpi
 
@@ -268,13 +263,13 @@ release-promotion:
             by-phase:
                 build:
                     - "aki+normandy-priv-webext-build@mozilla.com"
-                    - "jmaher+normandy-priv-webext-build@mozilla.com"
+                    - "mcooper+normandy-priv-webext-build@mozilla.com"
                 promote:
                     - "aki+normandy-priv-webext-promote@mozilla.com"
-                    - "jmaher+normandy-priv-webext-promote@mozilla.com"
+                    - "mcooper+normandy-priv-webext-promote@mozilla.com"
                 ship:
                     - "aki+normandy-priv-webext-ship@mozilla.com"
-                    - "jmaher+normandy-priv-webext-ship@mozilla.com"
+                    - "mcooper+normandy-priv-webext-ship@mozilla.com"
         # configure privileged webextension email addresses for notifications
         privileged:
             by-phase:
@@ -289,13 +284,13 @@ release-promotion:
             by-phase:
                 build:
                     - "aki+system-addons-build@mozilla.com"
-                    - "rdalal+system-addons-build@mozilla.com"
-                    - "mcooper+system-addons-build@mozilla.com"
+                    - "awagner+system-addons-build@mozilla.com"
+                    - "pkewisch+system-addons-build@mozilla.com"
                 promote:
                     - "aki+system-addons-promote@mozilla.com"
-                    - "rdalal+system-addons-promote@mozilla.com"
-                    - "mcooper+system-addons-promote@mozilla.com"
+                    - "awagner+system-addons-promote@mozilla.com"
+                    - "pkewisch+system-addons-promote@mozilla.com"
                 ship:
                     - "aki+system-addons-ship@mozilla.com"
-                    - "rdalal+system-addons-ship@mozilla.com"
-                    - "mcooper+system-addons-ship@mozilla.com"
+                    - "awagner+system-addons-ship@mozilla.com"
+                    - "pkewisch+system-addons-ship@mozilla.com"
