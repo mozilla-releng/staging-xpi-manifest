@@ -53,6 +53,10 @@ def add_notifications(config, jobs):
             + additional_shipit_emails
         )
         notifications = evaluate_keyed_by(
+            job.pop('notifications'),
+            'notification config', dict(phase=shipping_phase, )
+        )
+        notifications = evaluate_keyed_by(
             job.pop("notifications"), "notification config", dict(phase=shipping_phase)
         )
         format_kwargs = dict(config=config.__dict__)
