@@ -18,6 +18,6 @@ job-template:
     worker-type: github
     worker:
         action: release
-        github-project: mozilla-releng/xpi-manifest
+        github-project: mozilla-releng/staging-xpi-manifest
     attributes:
         shipping-phase: ship
