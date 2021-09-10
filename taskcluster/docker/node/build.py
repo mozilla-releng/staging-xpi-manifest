@@ -126,6 +126,7 @@ def main():
         build_manifest["artifacts"].append(artifact_info)
         shutil.copyfile(artifact, target_path)
 
+    print("JMAHER: build_manifest: %s" % build_manifest)
     with open(os.path.join(artifact_dir, "manifest.json"), "w") as fh:
         fh.write(json.dumps(build_manifest, indent=2, sort_keys=True))
 
