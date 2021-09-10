@@ -89,7 +89,7 @@ def main():
         "name": xpi_name,
         "addon-type": xpi_type,
         "repo": os.environ[head_repo_env_var],
-        "revision": revision.rstrip(),
+        "revision": revision.decode("utf-8").rstrip(),
         "directory": os.path.relpath(base_src_dir, os.getcwd()),
         "version": package_info["version"],
         "artifacts": [],
@@ -126,7 +126,6 @@ def main():
         build_manifest["artifacts"].append(artifact_info)
         shutil.copyfile(artifact, target_path)
 
-    print("JMAHER: build_manifest: %s" % build_manifest)
     with open(os.path.join(artifact_dir, "manifest.json"), "w") as fh:
         fh.write(json.dumps(build_manifest, indent=2, sort_keys=True))
 
