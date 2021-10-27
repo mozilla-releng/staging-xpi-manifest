@@ -155,12 +155,12 @@ workers:
             provisioner: scriptworker-k8s
             implementation: scriptworker-signing
             os: scriptworker
-            worker-type: xpi-t-signing
+            worker-type: xpi-t-signing-dev
         github:
             provisioner: scriptworker-k8s
             implementation: scriptworker-github
             os: scriptworker
-            worker-type: 'xpi-{level}-github'
+            worker-type: 'xpi-{level}-github-dev'
         signing:
             provisioner: scriptworker-k8s
             implementation: scriptworker-signing
@@ -168,7 +168,7 @@ workers:
             worker-type:
                 by-level:
                     "3": xpi-3-signing
-                    default: xpi-t-signing
+                    default: xpi-t-signing-dev
         shipit:
             provisioner: scriptworker-k8s
             implementation: scriptworker-shipit
@@ -176,7 +176,7 @@ workers:
             worker-type:
                 by-level:
                     "3": xpi-3-shipit
-                    default: xpi-1-shipit
+                    default: xpi-1-shipit-dev
 
 github_clone_secret: project/xpi/xpi-github-clone-ssh
 
