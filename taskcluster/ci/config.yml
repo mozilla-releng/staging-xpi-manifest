@@ -22,16 +22,10 @@ taskgraph:
             # enum: hg or git; should be `git`
             type: git
         staging-xpi:
-            # string: the name of the repo, for humans
             name: "XPI manifest"
-            # regex: to match the base name of the repo
             project-regex: staging-xpi-manifest(.git)?$
-            # string: the repo url. Use `git@github.com:org/repo` for private
-            #         repositories.
             default-repository: https://github.com/mozilla-releng/staging-xpi-manifest
-            # string: which branch is primary; should be `master`
             default-ref: master
-            # enum: hg or git; should be `git`
             type: git
         stagingpublic:
             name: "Releng staging repo test"
@@ -155,12 +149,12 @@ workers:
             provisioner: scriptworker-k8s
             implementation: scriptworker-signing
             os: scriptworker
-            worker-type: xpi-t-signing-dev
+            worker-type: xpi-t-signing
         github:
             provisioner: scriptworker-k8s
             implementation: scriptworker-github
             os: scriptworker
-            worker-type: 'xpi-{level}-github-dev'
+            worker-type: 'xpi-{level}-github'
         signing:
             provisioner: scriptworker-k8s
             implementation: scriptworker-signing
@@ -168,7 +162,7 @@ workers:
             worker-type:
                 by-level:
                     "3": xpi-3-signing
-                    default: xpi-t-signing-dev
+                    default: xpi-t-signing
         shipit:
             provisioner: scriptworker-k8s
             implementation: scriptworker-shipit
@@ -176,7 +170,7 @@ workers:
             worker-type:
                 by-level:
                     "3": xpi-3-shipit
-                    default: xpi-1-shipit-dev
+                    default: xpi-1-shipit
 
 github_clone_secret: project/xpi/xpi-github-clone-ssh
 
