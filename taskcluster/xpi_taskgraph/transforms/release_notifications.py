@@ -50,9 +50,7 @@ def add_notifications(config, jobs):
         )
         if not emails:
             continue
-        emails = (
-            emails + additional_shipit_emails + xpi_config.get("additional-emails", [])
-        )
+        emails = emails + additional_shipit_emails + xpi_config.get("additional-emails", [])
         notifications = evaluate_keyed_by(
             job.pop("notifications"), "notification config", dict(phase=shipping_phase)
         )

@@ -105,18 +105,31 @@ taskgraph:
             default-repository: https://github.com/mozilla-rally/rally-core-addon
             default-ref: release
             type: git
+        telemetrytestingextension:
+            name: "Telemetry testing extension"
+            project-regex: telemetrytestingextension$
+            default-repository: https://github.com/mozilla-extensions/dynamic-probe-telemetry-extension
+            default-ref: main
+            type: git
+        searchdefaultaddon:
+            name: "Reset Search Default extension"
+            project-regex: searchdefaultaddon$
+            default-repository: https://github.com/mozilla-extensions/restore-search-defaults
+            default-ref: main
+            type: git
         balrogdryrun:
             name: "Balrog Dry Run"
             project-regex:  balrog-dryrun$
             default-repository: https://github.com/mozilla-extensions/balrog-dryrun.git
             default-ref: main
             type: git
-        searchengineusagestudy:
-            name: "Rally Search Engine Usage study extension"
-            project-regex: searchengineusagestudys$
-            default-repository: git@github.com:mozilla-extensions/search-engine-usage-study
-            default-ref: release
+        addonssearchdetection:
+            name: "Add-ons Search Detection extension"
+            project-regex: addonssearchdetection$
+            default-repository: https://github.com/mozilla-extensions/addons-search-detection
+            default-ref: main
             type: git
+
 
     cached-task-prefix: xpi
 
