@@ -15,17 +15,6 @@ transforms = TransformSequence()
 
 @transforms.add
 def add_beetmover_config(config, tasks):
-    # sys.stderr.write(("*"*80) + "\n")
-    # sys.stderr.write("\n_TransformConfig_\n")
-    # sys.stderr.write("\nkind = " + pf(config.kind) + "\n")
-    # sys.stderr.write("\npath = " + pf(config.path) + "\n")
-    # # config is the stuff in kind .yml
-    # sys.stderr.write("\nconfig = " + pf(config.config) + "\n")
-    # sys.stderr.write("\nparams = " + pf(config.params) + "\n")
-    # # sys.stderr.write(pf(tasks) + "\n")
-    # sys.stderr.write("\ntasks = " + pf(list(tasks)) + "\n")
-    # sys.stderr.write("\ntask = " + pf(list(tasks)[0]) + "\n")
-    # sys.stderr.write(("\n" + "*"*80) + "\n")
     for task in tasks:
         if (
             config.params.get("version")
