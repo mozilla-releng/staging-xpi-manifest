@@ -2,12 +2,11 @@
 # License, v. 2.0. If a copy of the MPL was not distributed with this
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 
-from voluptuous import Required
-
-from taskgraph.util.schema import taskref_or_string
 from taskgraph.transforms.task import payload_builder
-from six import text_type
-from voluptuous import Any, Required, Optional
+from taskgraph.util.schema import taskref_or_string
+from voluptuous import Any, Required
+
+
 @payload_builder(
     "scriptworker-signing",
     schema={
@@ -101,67 +100,50 @@ def build_github_release_payload(config, task, task_def):
         ]
     )
 
+
 @payload_builder(
     "scriptworker-beetmover",
     schema={
-        Required("action"): text_type,
-        Required("version"): text_type,
-        Required("artifact-map"): [{
-            Required("paths"): {
-                Any(text_type): {
-                    Required("destinations"): [text_type],
+        Required("action"): str,
+        Required("version"): str,
+        Required("artifact-map"): [
+            {
+                Required("paths"): {
+                    Any(str): {
+                        Required("destinations"): [str],
+                    },
                 },
-            },
-            Required("taskId"): taskref_or_string,
-        }],
-        Required("beetmover-application-name"): text_type,
-        Required("bucket"): text_type,
-        Required("upstream-artifacts"): [{
-            Required("taskId"): taskref_or_string,
-            Required("taskType"): text_type,
-            Required("paths"): [text_type],
-        }],
+                Required("taskId"): taskref_or_string,
+            }
+        ],
+        Required("app-name"): str,
+        Required("bucket"): str,
+        Required("upstream-artifacts"): [
+            {
+                Required("taskId"): taskref_or_string,
+                Required("taskType"): str,
+                Required("paths"): [str],
+            }
+        ],
     },
 )
 def build_scriptworker_beetmover_payload(config, task, task_def):
-    breakpoint()
-    pass
-    # dependency = task.pop("primary-dependency")
-    # task_def["worker"]["upstream-artifacts"] = [
-    #     {
-    #         "taskId": {"task-reference": "<release-signing>"},
-    #         "taskType": "signing",
-    #         "paths": list(dependency.attributes["xpis"].values()),
-    #         "locale": "multi",
-    #     }
-    # ]
-    # task_def["worker"]["release-properties"] = {
-    #     "app-name": config.params.get("xpi_name"),
-    #     "app-version": config.params.get("version"),
-    #     "branch": basename(config.params.get("head_ref")),
-    #     "build-id": str(config.params.get("build_number")),
-    #     "hash-type": "sha512",  # ?
-    #     "platform": "gecko",  # ?
-    # }
-    # worker = task["worker"]
-
-    # task_def["tags"]["worker-implementation"] = "scriptworker"
-
-    # # Needed by beetmover-scriptworker
-    # for map_ in worker["artifact-map"]:
-    #     map_["locale"] = "multi"
-    #     for path_config in map_["paths"].values():
-    #         path_config["checksums_path"] = ""
-
-    # task_def["payload"] = {
-    #     "artifactMap": worker["artifact-map"],
-    #     "releaseProperties": {"appName": worker.pop("beetmover-application-name")},
-    #     "upstreamArtifacts": worker["upstream-artifacts"],
-    #     "version": worker["version"]
-    # }
-
-    # scope_prefix = config.graph_config["scriptworker"]["scope-prefix"]
-    # task_def["scopes"].extend([
-    #     "{}:beetmover:action:{}".format(scope_prefix, worker["action"]),
-    #     "{}:beetmover:bucket:{}".format(scope_prefix, worker["bucket"]),
-    # ])
+    worker = task["worker"]
+    task_def["tags"]["worker-implementation"] = "scriptworker"
+    for map_ in worker["artifact-map"]:
+        map_["locale"] = "multi"
+        for path_config in map_["paths"].values():
+            path_config["checksums_path"] = "TODO"
+    task_def["payload"] = {
+        "artifactMap": worker["artifact-map"],
+        "releaseProperties": {"appName": worker.pop("app-name")},
+        "upstreamArtifacts": worker["upstream-artifacts"],
+        "version": worker["version"],
+    }
+    scope_prefix = config.graph_config["scriptworker"]["scope-prefix"]
+    task_def["scopes"].extend(
+        [
+            "{}:beetmover:action:{}".format(scope_prefix, worker["action"]),
+            "{}:beetmover:bucket:{}".format(scope_prefix, worker["bucket"]),
+        ]
+    )

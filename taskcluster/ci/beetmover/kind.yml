@@ -5,7 +5,7 @@
 loader: xpi_taskgraph.loader.single_dep:loader
 
 transforms:
-    - xpi_taskgraph.transforms.release_beetmover:transforms
+    - xpi_taskgraph.transforms.beetmover:transforms
     - taskgraph.transforms.task:transforms
 
 kind-dependencies:
@@ -13,8 +13,7 @@ kind-dependencies:
 
 job-template:
     run-on-tasks-for: ["action"]
-    worker:
-        implementation: beetmover
     worker-type: beetmover
+    bucket-scope: project:xpi:beetmover:bucket:dep
     attributes:
         shipping-phase: ship
