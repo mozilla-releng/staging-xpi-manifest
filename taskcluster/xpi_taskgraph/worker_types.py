@@ -138,7 +138,7 @@ def build_github_release_payload(config, task, task_def):
 )
 def build_scriptworker_beetmover_payload(config, task, task_def):
     worker = task["worker"]
-    task_def["tags"]["worker-implementation"] = "scriptworker"
+    task_def["tags"]["worker-implementation"] = "scriptworker-beetmover"
     artifact_map = worker["artifact-map"]
     for map_ in artifact_map:
         map_["locale"] = "multi"
