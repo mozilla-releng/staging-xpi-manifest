@@ -16,7 +16,7 @@ schema = Schema(
         Required("attributes"): dict,
         Required("run-on-tasks-for"): [str],
         Required("bucket-scope"): str,
-    }
+    },
 )
 transforms = TransformSequence()
 transforms.add_validate(schema)
@@ -74,7 +74,7 @@ def add_beetmover_worker_config(config, tasks):
                             {
                                 "taskId": task_ref,
                                 "paths": artifact_map_paths,
-                            }
+                            },
                         ],
                     },
                     "scopes": [
