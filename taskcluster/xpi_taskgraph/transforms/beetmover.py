@@ -37,7 +37,7 @@ def add_beetmover_worker_config(config, tasks):
         xpi_name = config.params["xpi_name"]
         xpi_manifest = manifest[xpi_name]
         xpi_addon_type = xpi_manifest["addon-type"]
-        if xpi_addon_type == "privileged":
+        if xpi_addon_type == "system":
             xpi_version = config.params["version"]
             xpi_destination = (
                 "pub/system-addons/{xpi_name}/"
