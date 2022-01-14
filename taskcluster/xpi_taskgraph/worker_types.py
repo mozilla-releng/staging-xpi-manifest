@@ -173,3 +173,26 @@ def build_scriptworker_beetmover_payload(config, task, task_def):
             "project:xpi:beetmover:bucket:{}".format(worker["bucket-scope"]),
         ]
     )
+
+
+@payload_builder(
+    "scriptworker-balrog",
+    schema={
+        Required("action"): str,
+        Required("channel"): str,
+        Required("server"): str,
+    }
+)
+def build_scriptworker_balrog_payload(config, task, task_def):
+    worker = task["worker"]
+    task_def["tags"]["worker-implementation"] = "scriptworker-beetmover"
+    task_def["payload"] = {
+        "maxRunTime": 600,
+    }  
+    task_def["scopes"].extend(
+        [
+            "project:xpi:balrog:action:{}".format(worker["action"]),
+            "project:xpi:balrog:channel:{}".format(worker["channel"]),
+            "project:xpi:balrog:server:{}".format(worker["server"]),
+        ]
+    )
