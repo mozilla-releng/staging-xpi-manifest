@@ -80,6 +80,14 @@ def add_beetmover_worker_config(config, tasks):
                         },
                     ],
                 }
+                resolve_keyed_by(
+                    worker,
+                    "bucket-scope",
+                    item_name=task_label,
+                    **{
+                        "level": config.params["level"],
+                    },
+                )
                 task = {
                     "label": task_label,
                     "name": task_label,
@@ -90,12 +98,4 @@ def add_beetmover_worker_config(config, tasks):
                     "attributes": task["attributes"],
                     "run-on-tasks-for": task["run-on-tasks-for"],
                 }
-                resolve_keyed_by(
-                    task["worker"],
-                    "bucket-scope",
-                    item_name=task["name"],
-                    **{
-                        "level": config.params["level"],
-                    },
-                )
                 yield task
