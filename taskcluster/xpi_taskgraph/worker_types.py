@@ -2,9 +2,12 @@
 # License, v. 2.0. If a copy of the MPL was not distributed with this
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 
+
+from datetime import datetime
+
 from taskgraph.transforms.task import payload_builder
 from taskgraph.util.schema import taskref_or_string
-from voluptuous import Any, Required
+from voluptuous import Any, Optional, Required
 
 
 @payload_builder(
@@ -105,7 +108,6 @@ def build_github_release_payload(config, task, task_def):
     "scriptworker-beetmover",
     schema={
         Required("action"): str,
-        Required("version"): str,
         Required("artifact-map"): [
             {
                 Required("paths"): {
@@ -116,8 +118,15 @@ def build_github_release_payload(config, task, task_def):
                 Required("taskId"): taskref_or_string,
             }
         ],
-        Required("app-name"): str,
-        Required("bucket"): str,
+        Required("release-properties"): {
+            Required("app-name"): str,
+            Required("app-version"): str,
+            Required("branch"): str,
+            Required("build-id"): str,
+            Optional("hash-type"): str,
+            Optional("platform"): str,
+        },
+        Required("bucket-scope"): str,
         Required("upstream-artifacts"): [
             {
                 Required("taskId"): taskref_or_string,
@@ -130,20 +139,37 @@ def build_github_release_payload(config, task, task_def):
 def build_scriptworker_beetmover_payload(config, task, task_def):
     worker = task["worker"]
     task_def["tags"]["worker-implementation"] = "scriptworker"
-    for map_ in worker["artifact-map"]:
+    artifact_map = worker["artifact-map"]
+    for map_ in artifact_map:
         map_["locale"] = "multi"
         for path_config in map_["paths"].values():
-            path_config["checksums_path"] = "TODO"
-    task_def["payload"] = {
-        "artifactMap": worker["artifact-map"],
-        "releaseProperties": {"appName": worker.pop("app-name")},
-        "upstreamArtifacts": worker["upstream-artifacts"],
-        "version": worker["version"],
+            path_config["checksums_path"] = ""
+    if worker["release-properties"].get("hash-type"):
+        hash_type = worker["release-properties"]["hash-type"]
+    else:
+        hash_type = "sha512"
+    if worker["release-properties"].get("platform"):
+        platform = worker["release-properties"]["platform"]
+    else:
+        platform = "xpi"
+    release_properties = {
+        "appName": worker["release-properties"]["app-name"],
+        "appVersion": worker["release-properties"]["app-version"],
+        "branch": worker["release-properties"]["branch"],
+        "buildid": worker["release-properties"]["build-id"],
+        "hashType": hash_type,
+        "platform": platform,
     }
-    scope_prefix = config.graph_config["scriptworker"]["scope-prefix"]
+    task_def["payload"] = {
+        "maxRunTime": 600,
+        "artifactMap": artifact_map,
+        "releaseProperties": release_properties,
+        "upstreamArtifacts": worker["upstream-artifacts"],
+        "upload_date": int(datetime.now().timestamp()),
+    }
     task_def["scopes"].extend(
         [
-            "{}:beetmover:action:{}".format(scope_prefix, worker["action"]),
-            "{}:beetmover:bucket:{}".format(scope_prefix, worker["bucket"]),
+            "project:xpi:beetmover:action:{}".format(worker["action"]),
+            "project:xpi:beetmover:bucket:{}".format(worker["bucket-scope"]),
         ]
     )

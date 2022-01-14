@@ -3,8 +3,11 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 
 
+from os.path import basename
+
 from taskgraph.task import Task
 from taskgraph.transforms.base import TransformSequence
+from taskgraph.util.schema import resolve_keyed_by
 from voluptuous import Required, Schema
 from xpi_taskgraph.xpi_manifest import get_manifest
 
@@ -15,7 +18,7 @@ schema = Schema(
         Required("worker-type"): str,
         Required("attributes"): dict,
         Required("run-on-tasks-for"): [str],
-        Required("bucket-scope"): str,
+        Required("bucket-scope"): dict,
     },
 )
 transforms = TransformSequence()
@@ -27,14 +30,15 @@ def add_beetmover_worker_config(config, tasks):
     if (
         config.params.get("version")
         and config.params.get("xpi_name")
-        and config.params.get("build_number")
+        and config.params.get("head_ref")
+        and config.params.get("moz_build_date")
     ):
         manifest = get_manifest()
         xpi_name = config.params["xpi_name"]
         xpi_manifest = manifest[xpi_name]
         xpi_addon_type = xpi_manifest["addon-type"]
-        if xpi_addon_type == "system":
-            xpi_version = config.params.get("version")
+        if xpi_addon_type == "privileged":
+            xpi_version = config.params["version"]
             xpi_destination = (
                 "pub/system-addons/{xpi_name}/"
                 "{xpi_name}@mozilla.org-{xpi_version}-signed.xpi"
@@ -48,9 +52,33 @@ def add_beetmover_worker_config(config, tasks):
             for task in tasks:
                 dep = task["primary-dependency"]
                 task_ref = {"task-reference": "<release-signing>"}
+                branch = basename(config.params["head_ref"])
                 paths = list(dep.attributes["xpis"].values())
                 artifact_map_paths = {
                     path: {"destinations": xpi_destinations} for path in paths
+                }
+                worker = {
+                    "upstream-artifacts": [
+                        {
+                            "taskId": task_ref,
+                            "taskType": "signing",
+                            "paths": paths,
+                        },
+                    ],
+                    "action": "direct-push-to-bucket",
+                    "bucket-scope": task["bucket-scope"],
+                    "release-properties": {
+                        "app-name": xpi_name,
+                        "app-version": xpi_version,
+                        "branch": branch,
+                        "build-id": config.params["moz_build_date"],
+                    },
+                    "artifact-map": [
+                        {
+                            "taskId": task_ref,
+                            "paths": artifact_map_paths,
+                        },
+                    ],
                 }
                 task = {
                     "label": task_label,
@@ -58,30 +86,16 @@ def add_beetmover_worker_config(config, tasks):
                     "description": task_description,
                     "dependencies": {"release-signing": dep.label},
                     "worker-type": task["worker-type"],
-                    "worker": {
-                        "upstream-artifacts": [
-                            {
-                                "taskId": task_ref,
-                                "taskType": "signing",
-                                "paths": paths,
-                            },
-                        ],
-                        "action": "direct-push-to-bucket",
-                        "version": xpi_version,
-                        "bucket": "net-mozaws-stage-delivery-archive",
-                        "app-name": xpi_name,
-                        "artifact-map": [
-                            {
-                                "taskId": task_ref,
-                                "paths": artifact_map_paths,
-                            },
-                        ],
-                    },
-                    "scopes": [
-                        task["bucket-scope"],
-                        "project:xpi:beetmover:action:direct-push-to-bucket",
-                    ],
+                    "worker": worker,
                     "attributes": task["attributes"],
                     "run-on-tasks-for": task["run-on-tasks-for"],
                 }
+                resolve_keyed_by(
+                    task["worker"],
+                    "bucket-scope",
+                    item_name=task["name"],
+                    **{
+                        "level": config.params["level"],
+                    },
+                )
                 yield task
