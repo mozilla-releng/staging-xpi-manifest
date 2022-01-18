@@ -126,7 +126,6 @@ def build_github_release_payload(config, task, task_def):
             Optional("hash-type"): str,
             Optional("platform"): str,
         },
-        Required("bucket-scope"): str,
         Required("upstream-artifacts"): [
             {
                 Required("taskId"): taskref_or_string,

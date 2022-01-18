@@ -18,7 +18,6 @@ schema = Schema(
         Required("worker-type"): str,
         Required("attributes"): dict,
         Required("run-on-tasks-for"): [str],
-        Required("bucket-scope"): dict,
     },
 )
 transforms = TransformSequence()
@@ -66,7 +65,6 @@ def add_beetmover_worker_config(config, tasks):
                         },
                     ],
                     "action": "direct-push-to-bucket",
-                    "bucket-scope": task["bucket-scope"],
                     "release-properties": {
                         "app-name": xpi_name,
                         "app-version": xpi_version,
@@ -80,14 +78,6 @@ def add_beetmover_worker_config(config, tasks):
                         },
                     ],
                 }
-                resolve_keyed_by(
-                    worker,
-                    "bucket-scope",
-                    item_name=task_label,
-                    **{
-                        "level": config.params["level"],
-                    },
-                )
                 task = {
                     "label": task_label,
                     "name": task_label,

@@ -14,9 +14,5 @@ kind-dependencies:
 job-template:
     run-on-tasks-for: ["action"]
     worker-type: beetmover
-    bucket-scope:
-        by-level:
-            "3": release
-            default: dep
     attributes:
         shipping-phase: ship
