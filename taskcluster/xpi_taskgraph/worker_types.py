@@ -167,9 +167,3 @@ def build_scriptworker_beetmover_payload(config, task, task_def):
         "upstreamArtifacts": worker["upstream-artifacts"],
         "upload_date": int(datetime.now().timestamp()),
     }
-    task_def["scopes"].extend(
-        [
-            "project:xpi:beetmover:action:{}".format(worker["action"]),
-            "project:xpi:beetmover:bucket:{}".format(worker["bucket-scope"]),
-        ]
-    )
