@@ -1,0 +1,18 @@
+---
+loader: xpi_taskgraph.loader.single_dep:loader
+
+transforms:
+    - xpi_taskgraph.transforms.balrog:transforms
+    - taskgraph.transforms.task:transforms
+
+kind-dependencies:
+    - beetmover
+
+job-template:
+    run-on-tasks-for: ["action"]
+    worker-type: balrog
+    balrog:
+        server: staging
+        channel: release
+    attributes:
+        shipping-phase: ship
