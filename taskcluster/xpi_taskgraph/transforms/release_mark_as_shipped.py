@@ -27,8 +27,8 @@ def make_task_description(config, jobs):
         xpi_name = config.params["xpi_name"]
         xpi_manifest = manifest[xpi_name]
         xpi_addon_type = xpi_manifest.get("addon-type")
-        if xpi_name == "system":
-            job["dependencies"] = {"beetmover": dep.label}
+        if xpi_addon_type == "system":
+            job["dependencies"] = {"balrog": dep.label}
         job["worker"][
             "release-name"
         ] = "{xpi_name}-{version}-build{build_number}".format(

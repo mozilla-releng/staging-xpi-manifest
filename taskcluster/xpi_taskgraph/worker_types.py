@@ -179,3 +179,19 @@ def build_scriptworker_beetmover_payload(config, task, task_def):
         "upstreamArtifacts": worker["upstream-artifacts"],
         "upload_date": int(datetime.now().timestamp()),
     }
+
+
+@payload_builder(
+    "scriptworker-balrog",
+    schema={
+        Required("action"): str,
+        Required("channel"): str,
+        Required("server"): str,
+    }
+)
+def build_scriptworker_balrog_payload(config, task, task_def):
+    worker = task["worker"]
+    task_def["tags"]["worker-implementation"] = "scriptworker-balrog"
+    task_def["payload"] = {
+        "maxRunTime": 600,
+    }
