@@ -187,6 +187,13 @@ def build_scriptworker_beetmover_payload(config, task, task_def):
         Required("action"): str,
         Required("channel"): str,
         Required("server"): str,
+        Required("upstream-artifacts"): [
+            {
+                Required("taskId"): taskref_or_string,
+                Required("taskType"): str,
+                Required("paths"): [str],
+            }
+        ], 
     }
 )
 def build_scriptworker_balrog_payload(config, task, task_def):
@@ -194,4 +201,5 @@ def build_scriptworker_balrog_payload(config, task, task_def):
     task_def["tags"]["worker-implementation"] = "scriptworker-balrog"
     task_def["payload"] = {
         "maxRunTime": 600,
+        "upstreamArtifacts": worker["upstream-artifacts"],
     }
