@@ -146,7 +146,6 @@ def build_scriptworker_beetmover_payload(config, task, task_def):
         for path_config in map_["paths"].values():
             for destination in path_config["destinations"]:
                 path_config["checksums_path"] = basename(destination)
-                path_config["update_balrog_manifest"] = True
     if worker["release-properties"].get("hash-type"):
         hash_type = worker["release-properties"]["hash-type"]
     else:
@@ -203,3 +202,12 @@ def build_scriptworker_balrog_payload(config, task, task_def):
         "maxRunTime": 600,
         "upstreamArtifacts": worker["upstream-artifacts"],
     }
+    prefix = "project:xpi:balrog:"
+    task_def["scopes"] = [
+        "{prefix}action:{action}".format(
+            prefix=prefix, action=worker["action"]
+        ),
+        "{prefix}server:{server}".format(
+            prefix=prefix, server=worker["server"]
+        ),
+    ]
