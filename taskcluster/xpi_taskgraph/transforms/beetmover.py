@@ -87,13 +87,13 @@ def add_beetmover_worker_config(config, tasks):
                         "locale": "multi",
                     },
                 ],
-                "action-scope": "push-to-nightly",
+                "action-scope": "push-to-system-addons",
                 "bucket-scope": task["bucket-scope"],
                 "release-properties": {
                     "app-name": "xpi",
                     "app-version": xpi_version,
                     "branch": branch,
-                    "build-id": build_id,
+                    "build-id": 'build{}'.format(build_number),
                 },
                 "artifact-map": [
                     {
