@@ -61,7 +61,7 @@ def add_balrog_worker_config(config, tasks):
                 "public/target.checksums",
             ]
             worker = {
-                "action": "make-release",
+                "action": "submit-locale",
                 "server": task["balrog"]["server"],
                 "channel": task["balrog"]["channel"],
                 "upstream-artifacts": [
@@ -72,6 +72,12 @@ def add_balrog_worker_config(config, tasks):
                     },
                 ],
             }
+            resolve_keyed_by(
+                worker,
+                "server",
+                item_name=task_label,
+                **{"level": config.params["level"]},
+            )
             task = {
                 "label": task_label,
                 "name": task_label,
