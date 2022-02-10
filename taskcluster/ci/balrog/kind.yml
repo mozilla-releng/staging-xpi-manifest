@@ -13,7 +13,10 @@ job-template:
     only-for-addon-types: ["system"]
     worker-type: balrog
     balrog:
-        server: staging
+        server:
+            by-level:
+                '3': "release"
+                default: "staging"
         channel: release
     attributes:
         shipping-phase: ship
