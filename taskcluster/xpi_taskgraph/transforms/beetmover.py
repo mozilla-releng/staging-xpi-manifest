@@ -41,7 +41,9 @@ def add_beetmover_worker_config(config, tasks):
         xpi_addon_type = xpi_manifest["addon-type"]
         build_number = config.params["build_number"]
         xpi_version = config.params["version"]
-        build_id = "{xpi_name}-{xpi_version}-build{build_number}".format(
+        release_name = (
+            "{xpi_name}-{xpi_version}-build{build_number}"
+        ).format(
             xpi_name=xpi_name,
             xpi_version=xpi_version,
             build_number=build_number,
@@ -53,18 +55,18 @@ def add_beetmover_worker_config(config, tasks):
             for artifact in xpi_manifest["artifacts"]:
                 artifact_name = basename(artifact)
                 xpi_destination = (
-                    "pub/system-addons/{xpi_name}/{build_id}/{artifact_name}"
+                    "pub/system-addons/{xpi_name}/{release_name}/{artifact_name}"
                 ).format(
                     xpi_name=xpi_name,
                     artifact_name=artifact_name,
-                    build_id=build_id,
+                    release_name=release_name,
                 )
                 xpi_destinations.append(xpi_destination)
             task_label = f"beetmover-{xpi_name}"
             task_description = (
                 "Upload signed XPI artifacts to "
-                "pub/system-addons/{xpi_name}/{build_id}"
-            ).format(xpi_name=xpi_name, build_id=build_id)
+                "pub/system-addons/{xpi_name}/{release_name}"
+            ).format(xpi_name=xpi_name, release_name=release_name)
             resolve_keyed_by(
                 task,
                 "bucket-scope",
@@ -93,7 +95,7 @@ def add_beetmover_worker_config(config, tasks):
                     "app-name": "xpi",
                     "app-version": xpi_version,
                     "branch": branch,
-                    "build-id": 'build{}'.format(build_number),
+                    "build-id": release_name,
                 },
                 "artifact-map": [
                     {
