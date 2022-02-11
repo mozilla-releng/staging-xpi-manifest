@@ -146,12 +146,12 @@ workers:
             provisioner: scriptworker-k8s
             implementation: scriptworker-beetmover
             os: scriptworker
-            worker-type: 'xpi-{level}-beetmover'
+            worker-type: 'xpi-{level}-beetmover-dev'
         balrog:
             provisioner: scriptworker-k8s
             implementation: scriptworker-balrog
             os: scriptworker
-            worker-type: 'xpi-{level}-balrog'
+            worker-type: 'xpi-{level}-balrog-dev'
         signing:
             provisioner: scriptworker-k8s
             implementation: scriptworker-signing
