@@ -33,6 +33,7 @@ def add_balrog_worker_config(config, tasks):
         and config.params.get("xpi_name")
         and config.params.get("head_ref")
         and config.params.get("build_number")
+        and config.params.get("level")
     ):
         manifest = get_manifest()
         xpi_name = config.params["xpi_name"]
@@ -40,7 +41,9 @@ def add_balrog_worker_config(config, tasks):
         xpi_addon_type = xpi_manifest["addon-type"]
         xpi_version = config.params["version"]
         build_number = config.params["build_number"]
-        build_id = "{xpi_name}-{xpi_version}-build{build_number}".format(
+        release_name = (
+            "{xpi_name}-{xpi_version}-build{build_number}"
+        ).format(
             xpi_name=xpi_name,
             xpi_version=xpi_version,
             build_number=build_number,
@@ -49,8 +52,8 @@ def add_balrog_worker_config(config, tasks):
         task_description = (
             "Create a Balrog release for the signed "
             "XPI artifacts uploaded to "
-            "pub/system-addons/{xpi_name}/{build_id}/"
-        ).format(xpi_name=xpi_name, build_id=build_id)
+            "pub/system-addons/{xpi_name}/{release_name}/"
+        ).format(xpi_name=xpi_name, release_name=release_name)
         for task in tasks:
             if xpi_addon_type not in task["only-for-addon-types"]:
                 continue
@@ -61,7 +64,7 @@ def add_balrog_worker_config(config, tasks):
                 "public/target.checksums",
             ]
             worker = {
-                "action": "submit-locale",
+                "action": "submit-system-addons",
                 "server": task["balrog"]["server"],
                 "channel": task["balrog"]["channel"],
                 "upstream-artifacts": [
