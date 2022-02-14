@@ -197,7 +197,7 @@ def build_scriptworker_beetmover_payload(config, task, task_def):
 )
 def build_scriptworker_balrog_payload(config, task, task_def):
     worker = task["worker"]
-    task_def["tags"]["worker-implementation"] = "scriptworker-balrog"
+    task_def["tags"]["worker-implementation"] = "scriptworker"
     task_def["payload"] = {
         "maxRunTime": 600,
         "upstreamArtifacts": worker["upstream-artifacts"],
