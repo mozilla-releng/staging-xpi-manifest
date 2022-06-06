@@ -131,6 +131,11 @@ taskgraph:
             type: git
 
     cached-task-prefix: xpi
+    task-index:
+        all: true
+        eager: true
+        labels: []
+        kinds: []
 
 workers:
     aliases:
@@ -180,6 +185,14 @@ workers:
                 by-level:
                     "3": xpi-3-shipit
                     default: xpi-1-shipit
+        # could be renamed to "index-worker"
+        # dunno if stand alone TG consumers use "misc" already
+        misc:
+            provisioner: xpi-{level}
+            implementation: docker-worker
+            os: linux
+            worker-type: 'b-linux'
+
 
 github_clone_secret: project/xpi/xpi-github-clone-ssh
 
