@@ -165,8 +165,6 @@ def main():
     ])
     artifact_prefix = os.environ["ARTIFACT_PREFIX"]
     xpi_name = os.environ["XPI_NAME"]
-    if xpi_name == "balrog-dryrun":
-        exit(1) # testing a failed build
     xpi_type = os.environ.get("XPI_TYPE")
     repo_prefix = os.environ.get("REPO_PREFIX", "xpi")
     head_repo_env_var = f"{repo_prefix.upper()}_HEAD_REPOSITORY"
