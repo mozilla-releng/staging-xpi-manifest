@@ -2,17 +2,19 @@
 # License, v. 2.0. If a copy of the MPL was not distributed with this
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 
+from functools import partial
 
 from taskgraph.actions.registry import register_callback_action
-
-from taskgraph.util.taskcluster import get_artifact
-from taskgraph.taskgraph import TaskGraph
+from taskgraph.config import GraphConfig
 from taskgraph.decision import taskgraph_decision
 from taskgraph.parameters import Parameters
+from taskgraph.taskgraph import TaskGraph
+from taskgraph.util.taskcluster import get_artifact
 from taskgraph.util.taskgraph import (
     find_decision_task,
     find_existing_tasks_from_previous_kinds,
 )
+
 from xpi_taskgraph.xpi_manifest import get_manifest
 
 RELEASE_PROMOTION_PROJECTS = (
@@ -20,11 +22,101 @@ RELEASE_PROMOTION_PROJECTS = (
     "https://github.com/mozilla-releng/staging-xpi-manifest",
 )
 
-XPI_MANIFEST = get_manifest()
-
 
 def is_release_promotion_available(parameters):
     return parameters["head_repository"] in RELEASE_PROMOTION_PROJECTS
+
+
+def build_schema(system: bool, graph_config: GraphConfig):
+    manifests = get_manifest()
+    xpi_names = [
+        xpi
+        for xpi, manifest in manifests.items()
+        if (manifest["addon-type"] == "system") is system
+    ]
+
+    promotion_flavors = list(graph_config["release-promotion"]["flavors"].keys())
+    if system:
+        promotion_flavors.remove("promote")
+
+    return (
+        {
+            "type": "object",
+            "properties": {
+                "build_number": {
+                    "type": "integer",
+                    "default": 1,
+                    "minimum": 1,
+                    "title": "The release build number",
+                    "description": (
+                        "The release build number. Starts at 1 per "
+                        "release version, and increments on rebuild."
+                    ),
+                },
+                "do_not_optimize": {
+                    "type": "array",
+                    "description": (
+                        "Optional: a list of labels to avoid optimizing out "
+                        "of the graph (to force a rerun of, say, "
+                        "funsize docker-image tasks)."
+                    ),
+                    "items": {"type": "string"},
+                },
+                "xpi_name": {
+                    "type": "string",
+                    "title": "The XPI to promote",
+                    "default": "FILLMEIN",
+                    "description": ("The XPI to promote."),
+                    "enum": xpi_names,
+                },
+                "revision": {
+                    "type": "string",
+                    "title": "Optional: revision to promote",
+                    "description": ("Optional: the revision to promote."),
+                },
+                "release_promotion_flavor": {
+                    "type": "string",
+                    "description": "The flavor of release promotion to perform.",
+                    "default": "build",
+                    "enum": promotion_flavors,
+                },
+                "rebuild_kinds": {
+                    "type": "array",
+                    "description": (
+                        "Optional: an array of kinds to ignore from the previous "
+                        "graph(s)."
+                    ),
+                    "default": graph_config["release-promotion"].get(
+                        "rebuild-kinds", []
+                    ),
+                    "items": {"type": "string"},
+                },
+                "previous_graph_ids": {
+                    "type": "array",
+                    "description": (
+                        "Optional: an array of taskIds of decision or action "
+                        "tasks from the previous graph(s) to use to populate "
+                        "our `previous_graph_kinds`."
+                    ),
+                    "items": {"type": "string"},
+                },
+                "version": {
+                    "type": "string",
+                    "description": ("The expected version to promote."),
+                    "default": "",
+                },
+                "additional_shipit_emails": {
+                    "type": "array",
+                    "description": (
+                        "Optional: an array of email strings that "
+                        "should be notified when releases change status"
+                    ),
+                    "default": [],
+                },
+            },
+            "required": ["release_promotion_flavor", "xpi_name", "build_number"],
+        },
+    )
 
 
 @register_callback_action(
@@ -36,80 +128,18 @@ def is_release_promotion_available(parameters):
     order=500,
     context=[],
     available=is_release_promotion_available,
-    schema=lambda graph_config: {
-        "type": "object",
-        "properties": {
-            "build_number": {
-                "type": "integer",
-                "default": 1,
-                "minimum": 1,
-                "title": "The release build number",
-                "description": (
-                    "The release build number. Starts at 1 per "
-                    "release version, and increments on rebuild."
-                ),
-            },
-            "do_not_optimize": {
-                "type": "array",
-                "description": (
-                    "Optional: a list of labels to avoid optimizing out "
-                    "of the graph (to force a rerun of, say, "
-                    "funsize docker-image tasks)."
-                ),
-                "items": {"type": "string"},
-            },
-            "xpi_name": {
-                "type": "string",
-                "title": "The XPI to promote",
-                "default": "FILLMEIN",
-                "description": ("The XPI to promote."),
-                "enum": sorted(XPI_MANIFEST.keys()),
-            },
-            "revision": {
-                "type": "string",
-                "title": "Optional: revision to promote",
-                "description": ("Optional: the revision to promote."),
-            },
-            "release_promotion_flavor": {
-                "type": "string",
-                "description": "The flavor of release promotion to perform.",
-                "default": "build",
-                "enum": sorted(graph_config["release-promotion"]["flavors"].keys()),
-            },
-            "rebuild_kinds": {
-                "type": "array",
-                "description": (
-                    "Optional: an array of kinds to ignore from the previous "
-                    "graph(s)."
-                ),
-                "default": graph_config["release-promotion"].get("rebuild-kinds", []),
-                "items": {"type": "string"},
-            },
-            "previous_graph_ids": {
-                "type": "array",
-                "description": (
-                    "Optional: an array of taskIds of decision or action "
-                    "tasks from the previous graph(s) to use to populate "
-                    "our `previous_graph_kinds`."
-                ),
-                "items": {"type": "string"},
-            },
-            "version": {
-                "type": "string",
-                "description": ("The expected version to promote."),
-                "default": "",
-            },
-            "additional_shipit_emails": {
-                "type": "array",
-                "description": (
-                    "Optional: an array of email strings that "
-                    "should be notified when releases change status"
-                ),
-                "default": [],
-            },
-        },
-        "required": ["release_promotion_flavor", "xpi_name", "build_number"],
-    },
+    schema=partial(build_schema, False),
+)
+@register_callback_action(
+    name="release-promotion-system",
+    title="Promote a System Addon",
+    symbol="${input.release_promotion_flavor}_${input.xpi_name}",
+    description="Promote a System Addon.",
+    generic=False,
+    order=500,
+    context=[],
+    available=is_release_promotion_available,
+    schema=partial(build_schema, True),
 )
 def release_promotion_action(parameters, graph_config, input, task_group_id, task_id):
     release_promotion_flavor = input["release_promotion_flavor"]
