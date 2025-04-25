@@ -105,9 +105,10 @@ def get_buildid_version(version):
     return buildid_version
 
 
-def find_manifests():
+def find_manifests(xpi_dir=None):
+    xpi_dir = xpi_dir or "."
     manifest_list = []
-    for dir_name, subdir_list, file_list in os.walk("."):
+    for dir_name, subdir_list, file_list in os.walk(xpi_dir):
         for dir_ in subdir_list:
             if dir_ in (".git", "node_modules"):
                 subdir_list.remove(dir_)
@@ -117,13 +118,13 @@ def find_manifests():
     return manifest_list
 
 
-def find_update_manifest_json(buildid_version):
+def find_update_manifest_json(buildid_version, xpi_dir=None):
     """We also have manifest.json files; let's update them as well."""
-    for manifest in find_manifests():
+    for manifest in find_manifests(xpi_dir):
         print(f"Updating {manifest} version...")
         with open(manifest) as fh:
             contents = json.load(fh)
-        old_version = contents["version"]
+        old_version = "139.0.0"  # contents["version"]
         contents["version"] = buildid_version
         with open(manifest, "w") as fh:
             json.dump(contents, fh)
@@ -224,6 +225,7 @@ def main():
     artifact_prefix = os.environ["ARTIFACT_PREFIX"]
     xpi_name = os.environ["XPI_NAME"]
     xpi_type = os.environ.get("XPI_TYPE")
+    xpi_dir = f"browser/extensions/{xpi_name}"
     repo_prefix = os.environ.get("REPO_PREFIX", "xpi")
     head_repo_env_var = f"{repo_prefix.upper()}_HEAD_REPOSITORY"
     test_var_set([head_repo_env_var])
@@ -234,7 +236,8 @@ def main():
     package_info = get_package_info()
 
     revision = get_output(["git", "rev-parse", "HEAD"])
-    orig_version = package_info["version"]
+    orig_version = "139.0.0"  # package_info["version"]
+
     # The function `get_buildid_version` appends the current date and time as a build ID to ensure a unique version compatible with MV3.
     # The addon's in-tree `package.json` file specifies the version as `major.minor.0`.
     # The pipeline overrides the third part of the version string (0) with the first part of the build ID.
@@ -246,7 +249,7 @@ def main():
     package_info["version"] = buildid_version
     print(f"Updating package.json version from {orig_version} to {buildid_version}...")
     write_package_info(package_info)
-    find_update_manifest_json(buildid_version)
+    find_update_manifest_json(buildid_version, xpi_dir)
 
     build_manifest = {
         "name": xpi_name,
@@ -258,7 +261,26 @@ def main():
         "artifacts": [],
     }
 
-    if os.environ.get("XPI_INSTALL_TYPE", "yarn") == "yarn":
+    install_type = os.environ.get("XPI_INSTALL_TYPE")
+    if install_type == "mach":
+        env = os.environ.copy()
+        env.update({
+            "MOZCONFIG": "browser/config/mozconfigs/linux64/browser-extensions",
+            "MOZBUILD_STATE_PATH": "/builds/worker/.mozbuild",
+            "MOZ_OBJDIR": "objdir",
+        })
+        run_command(
+            [sys.executable, "mach", "build"],
+            env=env,
+        )
+
+        dest = os.environ['XPI_ARTIFACTS']
+        os.makedirs(os.path.dirname(dest))
+        shutil.copyfile(
+            f"objdir/dist/xpi-stage/{xpi_name}@mozilla.org.xpi",
+            dest
+        )
+    elif install_type == "yarn":
         run_command(["yarn", "install", "--frozen-lockfile"])
         run_command(["yarn", "build"])
     else:
