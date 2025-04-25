@@ -19,4 +19,4 @@ extend_parameters_schema(xpi_schema)
 
 
 def decision_parameters(graph_config, parameters):
-    pass
+    parameters["xpi_name"] = "webcompat"
