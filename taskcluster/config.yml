@@ -79,8 +79,8 @@ taskgraph:
         webcompat:
             name: "Web Compat"
             project-regex: webcompat-addon$
-            default-repository: https://github.com/mozilla-firefox/firefox
-            default-ref: main
+            default-repository: https://github.com/ahal/firefox
+            default-ref: build_extensions
             type: git
         dnssecinterferencestudy:
             name: "DNSSEC Interference Study"
