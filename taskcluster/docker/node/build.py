@@ -59,20 +59,6 @@ def get_output(command, **kwargs):
     return subprocess.check_output(command, **kwargs)
 
 
-def get_package_info():
-    if not os.path.exists("package.json"):
-        raise Exception(f"Can't find package.json in {os.getcwd()}!")
-    with open("package.json") as fh:
-        contents = json.load(fh)
-    return contents
-
-
-def write_package_info(package_info):
-    with open("package.json", "w") as fh:
-        json.dump(package_info, fh)
-    assert get_package_info() == package_info
-
-
 def get_buildid():
     now = datetime.utcnow()
     # note the `-` (hyphen) in `%-H`
@@ -83,7 +69,7 @@ def get_buildid():
 
 def get_buildid_version(version):
     """Check the version's formating and append `date.time` as a buildid to ensure a unique version.
-    The addon's in-tree `package.json` file specifies `major.minor.0`.
+    The addon's in-tree manifest files specify `major.minor.0`.
     The format of the resulting version field is:
         <number>.<number>.%Y%m%d.%-H%M%S
     """
@@ -106,28 +92,52 @@ def get_buildid_version(version):
 
 
 def find_manifests():
-    manifest_list = []
     for dir_name, subdir_list, file_list in os.walk("."):
         for dir_ in subdir_list:
             if dir_ in (".git", "node_modules"):
                 subdir_list.remove(dir_)
                 continue
         if "manifest.json" in file_list:
-            manifest_list.append(f"{dir_name}/manifest.json")
-    return manifest_list
+            yield f"{dir_name}/manifest.json"
+        if "package.json" in file_list:
+            yield f"{dir_name}/package.json"
 
 
-def find_update_manifest_json(buildid_version):
-    """We also have manifest.json files; let's update them as well."""
+def find_and_update_version() -> str:
+    """Find the original version number, change it to include a buildid,
+    then update all references to the version.
+
+    Returns:
+        str: the new version with a buildid.
+    """
+    orig_version = None
+    new_version = None
     for manifest in find_manifests():
-        print(f"Updating {manifest} version...")
         with open(manifest) as fh:
             contents = json.load(fh)
-        old_version = contents["version"]
-        contents["version"] = buildid_version
+
+        if "version" not in contents:
+            continue
+
+        if not orig_version:
+            orig_version = contents["version"]
+            new_version = get_buildid_version(orig_version)
+            print(f"Updating version from {orig_version} to {new_version}...")
+        elif contents["version"] != orig_version:
+            raise Exception(
+                "Version mismatch between some manifest.json / package.json files, "
+                f"{orig_version} != {contents['version']}!"
+            )
+
         with open(manifest, "w") as fh:
             json.dump(contents, fh)
-        print(f"    was {old_version}, now {buildid_version}")
+
+    if not new_version:
+        raise Exception(
+            "Could not detect a version number in any manifest.json / package.json files!"
+        )
+
+    return new_version
 
 
 def cd(path):
@@ -231,22 +241,10 @@ def main():
     artifact_dir = "/builds/worker/artifacts"
     base_src_dir = "/builds/worker/checkouts/src"
 
-    package_info = get_package_info()
-
     revision = get_output(["git", "rev-parse", "HEAD"])
-    orig_version = package_info["version"]
-    # The function `get_buildid_version` appends the current date and time as a build ID to ensure a unique version compatible with MV3.
-    # The addon's in-tree `package.json` file specifies the version as `major.minor.0`.
-    # The pipeline overrides the third part of the version string (0) with the first part of the build ID.
-    # We must specify the third part in the addon's `package.json` file to conform with the semantic versioning specification, which requires a version to have three parts.
-    # The resulting version generated for the addon's manifest is: <major>.<minor>.<build_id>, where <build_id> is %Y%m%d.%-H%M%S
-    buildid_version = get_buildid_version(orig_version)
 
-    # Make sure we use the buildid_version during the build
-    package_info["version"] = buildid_version
-    print(f"Updating package.json version from {orig_version} to {buildid_version}...")
-    write_package_info(package_info)
-    find_update_manifest_json(buildid_version)
+    # Make sure we update the version to include a buildid.
+    version = find_and_update_version()
 
     build_manifest = {
         "name": xpi_name,
@@ -254,7 +252,7 @@ def main():
         "repo": os.environ[head_repo_env_var],
         "revision": str(revision.rstrip()),
         "directory": os.path.relpath(base_src_dir, os.getcwd()),
-        "version": buildid_version,
+        "version": version,
         "artifacts": [],
     }
 
@@ -287,7 +285,7 @@ def main():
         }
         build_manifest["artifacts"].append(artifact_info)
         shutil.copyfile(artifact, target_path)
-        check_manifest(target_path, buildid_version)
+        check_manifest(target_path, version)
 
     with open(os.path.join(artifact_dir, "manifest.json"), "w") as fh:
         fh.write(json.dumps(build_manifest, indent=2, sort_keys=True))
