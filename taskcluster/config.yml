@@ -127,7 +127,7 @@ taskgraph:
         newtab:
             name: "Firefox Newtab"
             project-regex: newtab$
-            default-repository: https://github.com/mozilla-firefox/firefox
+            default-repository: https://github.com/mozilla-releng/staging-firefox
             default-ref: main
             type: git
         autofilldevtools:
