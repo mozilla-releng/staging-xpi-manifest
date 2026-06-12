@@ -198,7 +198,7 @@ workers:
             worker-type:
                 by-level:
                     "3": xpi-3-lando
-                    default: xpi-1-lando
+                    default: xpi-1-lando-dev
 
 github_clone_secret: project/xpi/xpi-github-clone-ssh
 
